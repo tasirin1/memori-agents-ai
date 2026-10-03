@@ -80,3 +80,11 @@
   jaringan blokir ICMP); (8) kandidat: port web apa pun dilabeli panel router;
   (9) kandidat: checkpoint tanpa kedaluwarsa; (10) kandidat: lastPtr lintas
   section di parseDns. Rincian di laporan chat sesi ini.
+
+## Perbaikan audit lanjutan 2026-10-03 (sudah push master)
+- 1 commit (9 file): SSDP dibedakan dari isi paket + negative caching + reset
+  lastPtr; Router blank-break + buang TCP 161/1900 + filter hanya host mirip
+  router; Discover buang TCP 161/1900; CIDR invalid ditolak + uji; widget online
+  hanya yg jelas; internet ~30 dtk paralel + skip bila gateway offline;
+  checkpoint kedaluwarsa 48 jam; 2 uji baru; CHANGELOG [Unreleased].
+- Verifikasi: tanpa JDK lokal (review diff + balance); kompilasi + uji di CI.
