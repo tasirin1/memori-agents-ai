@@ -51,3 +51,15 @@
 - Temuan: 11 bug/kandidat (3 tinggi, 5 sedang, 3+ rendah). Rincian lengkap di laporan chat sesi ini.
 - Sorotan: (1) scan PING/TRACE menghapus openPorts via mergeHost otoritatif — regresi; (2) Traceroute probeHop waitFor() tanpa timeout → gantung; (3) rescanHost hilangkan osGuess + reset lastSeenScan; (4) probe kamera/RTSP baca 25 baris tanpa stop di baris kosong → tahan thread IO; (5) notif favorit offline timestamp global tunggal; (6) diff antar-mode menyesatkan; (7) deep scan abaikan pause; (8) onCleared tulis prefs di main thread; (9) notif ID hashCode tabrakan; (10) label terhapus hidup lagi; (11) kandidat regex traceroute EXCEEDED butuh ":" (format-dependent) + UDP SSDP/mDNS unicast false-negative + scanIps await berurutan.
 - Belum ada perbaikan/push repo netradar sesi ini (murni audit).
+
+## Perbaikan audit 2026-10-03 (sesi malam, sudah push master)
+- 1 commit `657eb63` (8 file, +99/-34): perbaiki 11 temuan audit pagi.
+  ViewModel: HostFound warisi port lama utk PING/TRACE, label milik pengguna,
+  rescan warisi osGuess + lastSeenScan, alert offline per-IP, onCleared tulis di IO.
+  PortScanner: scanHost isi osGuess dari TTL, deepScan cek pause, banner stop di
+  baris kosong. Traceroute: waitFor timeout 5 dtk + baca output sesudahnya,
+  regex ":" opsional. ScanLoop: lapor urutan selesai via Channel. Camera: stop di
+  baris kosong. Udp: skip 1900/5353 unicast. Notifier: stableId positif per jenis.
+  CHANGELOG [Unreleased] diperbarui (guard changelog).
+- Verifikasi: tanpa JDK lokal (cek impresi + balance kurawal/kurung saja);
+  kompilasi + unit test diserahkan ke CI (push master picu Build + Release v2.0).
