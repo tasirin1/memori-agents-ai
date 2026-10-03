@@ -20,3 +20,7 @@
 
 - Awal sesi: baca file ini, lalu `git status --short` + `git log --oneline -5`.
 - Akhir sesi: update tanggal, status terakhir, dan tugas terbuka.
+
+## Audit bug 2026-10-03
+- Audit statis seluruh kode (tanpa perubahan file): ditemukan ~14 bug/kandidat, dilaporkan ke user, belum diperbaiki.
+- Fokus berikutnya bila user setuju: DNS di main thread, Semaphore blokir, UdpScanner tanpa semaphore, mergeHost tak pernah lupa port, retry double-count, subList resume crash.
