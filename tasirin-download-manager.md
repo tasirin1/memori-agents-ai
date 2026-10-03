@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03 13:54 UTC, HEAD 99b65d6)
+## Status terakhir (2026-10-03 14:05 UTC, HEAD e20f925)
 
-- HEAD: `99b65d6` fix(audit) jilid 11.
+- HEAD: `e20f925` fix(remote) galeri duplikat.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
 - Sesi audit → 7 bug ditemukan → SEMUA diperbaiki dan SUDAH push (commit 32d5165 + 41aa4b9, 2026-10-03):
   1. `util/MediaLibrary.kt` — total galeri = distinct penuh sebelum `take(3000)` (`hasMore`/load-more tidak berhenti palsu).
@@ -32,6 +32,14 @@
   3. `remote/HttpControlServer.kt` — `pruneLoginAttempts()` dalam `synchronized(loginAttempts)` (minBy+remove luar lock bisa buang entry baru → throttle lolos).
 - Guard: `security_audit.py` 0 error/0 warning; `git diff --check` bersih; `check_repo --pre-commit` full run tertunda sesi (satuan cepat hijau). Push main sukses tanpa pantau workflow (aturan 19).
 - Pola langganan baru: eviksi cache di luar lock pembuatan → pindahkan ke dalam lock yang sama; hapus-job-setelah-flush → hapus-sebelum-flush; prune tanpa lock → samakan lock dengan writer.
+
+
+## Sesi remote lanjutan (2026-10-03 14:05 UTC, commit e20f925, push main sukses)
+
+- Perintah user: "lanjutkan" — audit `remote.src.html` (6584 baris).
+- Guard lama utuh: `fmtDate` tunggal, handler `tabDownloads` ada, argumen `uploadFiles()` urut, `resetFileProgress()` + `postFsAction` rethrow + SSE counter + select-mode in-place (tanpa `reRenderGalleryLoaded`). `prepare_remote --check` + smoke upload hijau.
+- 1 bug baru diperbaiki: `loadGallery()` naikkan tiket sebelum guard → panggilan drop ikut naikkan tiket + bersihkan flag prematur → dua fetch halaman sama paralel + `concat` ganda (galeri duplikat). Tiket naik hanya setelah lolos guard. `remote.html` diregenerasi via `prepare_remote.py`.
+- Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
 
 ## Tugas terbuka
 
