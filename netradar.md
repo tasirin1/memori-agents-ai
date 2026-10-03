@@ -23,10 +23,10 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI; semua Bahasa Indonesia; commit `type: deskripsi` (`feat`/`fix`/`refactor`/`test`/`perf`/`docs`); `versionName` tetap `"2.0"`, `versionCode` otomatis; guard changelog di CI (perubahan `app/src`, `scripts/`, `.github/workflows/`, `app/build.gradle.kts` wajib sertakan `CHANGELOG.md`); unit test logika murni tanpa Robolectric.
 - Workflow Build docs-only skip (`**.md`, `LICENSE`, `.gitignore`) — selaras repo Tasirin lain.
 
-## Status terakhir (2026-10-03 13:35 UTC = sesi #7)
+## Status terakhir (2026-10-03 14:05 UTC = sesi #8)
 
-- HEAD master `bc81098`; working tree bersih; CI Build berjalan pasca-push.
-- Memori ini baru ditulis ulang dengan stempel absolut (sesi #7).
+- HEAD master `913a77e` (empty trigger) + kode `0f03035`; Build `37127110377`
+  success, Release `v2.0` terbit. Working tree bersih.
 
 ## Tugas terbuka
 
@@ -91,3 +91,12 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Perbaiki SEMUA file memori: tulis ulang `netradar.md` ini dengan stempel
   absolut + nomor sesi (masalah: label relatif "pagi/sore/malam/kemarin" untuk
   kejadian satu hari yang sama); tambah aturan anti-bingung waktu di `SOUL.md`.
+
+### Sesi #8 — 2026-10-03 ~13:36–14:05 UTC — selesai
+- Build gagal 3× pasca-sesi #6: (a) `ScanLoop` kurang `import launch` + `cycles`
+  Long vs Int (commit `2508359`); (b) guard changelog karena commit fix tanpa
+  CHANGELOG (commit `0f03035` docs-only → Build skip by design); (c) picu manual
+  via `workflow_dispatch` (Build `37127110377`) — success ±17 mnt, Release
+  `v2.0` terbit ulang. Empty commit TIDAK memicu Build (paths-ignore vakum).
+- Pelajaran: tiap commit kode wajib sertakan CHANGELOG; verifikasi lokal tanpa
+  JDK tak bisa tangkap error kompilasi — andalkan CI.
