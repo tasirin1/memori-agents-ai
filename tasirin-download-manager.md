@@ -7,7 +7,7 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03 15:00 UTC, HEAD 004f63c)
+## Status terakhir (2026-10-03 15:15 UTC, HEAD 004f63c)
 
 - HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
@@ -80,6 +80,13 @@
 - Yang dicek dan aman: cache prefs app-context, secret acak 256-bit, rotasi sesi saat PIN berubah, migrasi hash lama, clamp semua angka, save tunggal anti ganda, cek-saja update via browser.
 - 1 drift diperbaiki (docs-only, tanpa build): daftar kunci aktif di `AGENTS.md` memuat `recent_urls` + `sort_mode` yang sudah tak ada di kode (nol referensi), dan kehilangan `auto_open_on_complete` + `user_agent` + `gallery_folders` yang hidup. Kini 32 kunci sinkron.
 - Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
+
+
+## Sesi sapuan luas (2026-10-03 15:15 UTC, tanpa commit kode — bersih)
+
+- Perintah user: "jangan satu satu" — audit SEKALIGUS semua sisa: `App` + `MainActivity` (1735) + `LogActivity` + `DownloadAdapter` + `DownloadService` + `BootReceiver`/`BootResumeJobService` + `ShareToken`/`ServerLog`/`HttpBody` + `NotificationHelper` + `Crypto`/`PinHash` + manifest/permissions.
+- Verdict: BERSIH, tanpa perbaikan. Yang diverifikasi: init background + callback GC-safe, SEND/URL extract, dialog probe anti-basi, installer 3 fallback, ekspor log tanpa yatim/0-byte, adapter main-thread + tanpa animator, wake lock refcount-off + release, job boot API 35, redaksi token log, batas body 4MB + drain/close disiplin, PendingIntent immutable, enkripsi GCM + prefix eksplisit, PBKDF2 clamp iterasi, izin manifest lengkap (termasuk RECEIVE_BOOT_COMPLETED untuk job persisted).
+- Guard: `security_audit` 0/0 (dari sesi sebelumnya, kode tak berubah). Tanpa push main (tak ada perubahan).
 
 ## Tugas terbuka
 
