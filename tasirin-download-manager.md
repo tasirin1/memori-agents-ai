@@ -130,3 +130,13 @@
 - Repo ke-4 dikelola: `tasirin1/netradar` di `/root/netradar` (branch `master`!) — onboarding 2026-10-03: pointer MEMORY.md + workflow docs-only skip (d6a75aa). Guard changelog netradar: perubahan `app/src`, `scripts/`, `.github/workflows/`, `app/build.gradle.kts` wajib sertakan `CHANGELOG.md`.
 - Tata kelola diseragamkan (2026-10-03): download-manager `build.yml` docs-only skip + aturan 16 selaras model 19 (3dba05d); Red-Eye pengecualian rilis docs-only (243e976); vaultwarden sudah benar, tak diubah.
 - Migrasi memori ke repo pusat (2026-10-03): repo `tasirin1/memori-agents-ai` dibuat; 4 memori lokal dipindah ke sini (c3f7af3); pointer `AGENTS.md` keempat repo dialihkan ke sini + file lokal dihapus (download-manager c615b1f, vaultwarden f84dc3e, Red-Eye c7c8961, netradar 009e31a). Alur: awal sesi pull repo memori, akhir sesi update + commit/push.
+
+## Sesi audit sapuan penuh (2026-10-03 23:49 UTC, tanpa ubah kode — temuan minor)
+
+- Perintah user: "cek seluruh kode temukan bug" — sapuan semua area: `DownloadEngine` (jobs/segProgress/throttle), `HttpControlServer` (upload chunk + reservasi + lock + itemsJson/SSE), `FileSaver` (merge staging + unique claim), `MediaLibrary`/`ServerThumbnail` (cache/TTL/lock), `ServerSecurity`/`HttpBody`/`ZipCreator`/`ServerLog`, `Updater`, `DownloadRepository`, `StoragePrefs`, `DownloadService`, `GalleryActivity`, `MainActivity` dialog probe, `WebExtractActivity`, `remote.src.html` (SSE/tab/upload/fmtDate), `BootResumeJobService`.
+- Guard: `security_audit` 0 error / 0 warning; area berat (race/throttle/upload-lock/galeri-total/staging-merge) sudah bersih dari sesi sebelumnya.
+- Temuan baru (semua minor, BELUM diperbaiki — tunggu pilihan owner):
+  1. `DownloadEngine.importStream` mencatat `length` deklarasi sebagai `bytesDownloaded/totalBytes`; upload single-shot chunked (length 0) tampil 0 byte. Fix: stat ukuran file hasil publish.
+  2. `HttpControlServer.handleUpload` menerima `chunk` negatif selain -1 (mis. -5) sebagai single-shot diam-diam; harusnya ditolak eksplisit. Fix: validasi `chunkIdx < -1`.
+  3. `App.onCreate` menulis cap `thumb_cleanup_last` walau `cleanupOldThumbs` gagal; gagal bersih tak dicoba lagi 7 hari. Fix: update cap hanya bila sukses.
+- Tanpa push ke `main` (tak ada perubahan kode); guard `check_repo.py` tak selesai dibaca penuh sesi ini (hanya `security_audit` yang terkonfirmasi hijau).
