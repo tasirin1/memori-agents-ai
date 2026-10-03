@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03, HEAD a133b8f)
+## Status terakhir (2026-10-03 13:54 UTC, HEAD 99b65d6)
 
-- HEAD: `e2d54c2` fix(audit) jilid 8.
+- HEAD: `99b65d6` fix(audit) jilid 11.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
 - Sesi audit → 7 bug ditemukan → SEMUA diperbaiki dan SUDAH push (commit 32d5165 + 41aa4b9, 2026-10-03):
   1. `util/MediaLibrary.kt` — total galeri = distinct penuh sebelum `take(3000)` (`hasMore`/load-more tidak berhenti palsu).
@@ -22,6 +22,17 @@
   - `util/UpdaterTest.kt` — test baru: rilis tanpa APK → null; kode tertinggi lintas rilis.
 - Guard: `security_audit.py` 0 error/0 warning; `check_readme_sync.py` sinkron; `prepare_remote --check` tak jalan penuh (remote tak disentuh).
 
+
+## Sesi audit jilid 11 (2026-10-03 13:54 UTC, commit 99b65d6, push main sukses)
+
+- Perintah user: "cek seluruh kode temukan bug" — audit menyeluruh ke-11.
+- 3 race diperbaiki:
+  1. `remote/ServerThumbnail.kt` — eviksi + `getOrPut` dalam satu `synchronized(thumbLocks)` (eviksi luar lock bisa buang lock baru → decode ganda + JPEG interleave korup).
+  2. `download/DownloadEngine.kt` — `scheduleSegFlush()` kunci sempit `segFlushJobs` bukan `synchronized(this)` + hapus job SEBELUM flush (lock global = jank, record susulan hilang).
+  3. `remote/HttpControlServer.kt` — `pruneLoginAttempts()` dalam `synchronized(loginAttempts)` (minBy+remove luar lock bisa buang entry baru → throttle lolos).
+- Guard: `security_audit.py` 0 error/0 warning; `git diff --check` bersih; `check_repo --pre-commit` full run tertunda sesi (satuan cepat hijau). Push main sukses tanpa pantau workflow (aturan 19).
+- Pola langganan baru: eviksi cache di luar lock pembuatan → pindahkan ke dalam lock yang sama; hapus-job-setelah-flush → hapus-sebelum-flush; prune tanpa lock → samakan lock dengan writer.
+
 ## Tugas terbuka
 
 - [x] `check_repo.py` 10/10 hijau; push ke `main` sukses (tidak pantau workflow).
@@ -29,6 +40,10 @@
 - [x] Soul lintas-repo: user minta 1 soul nyambung semua repo — ternyata sudah ada (`SOUL.md` + 4 memori + pointer `AGENTS.md` di 4 repo). Perbaiki 1 yang belum sinkron: `AGENTS.md` download-manager belum baca `SOUL.md` (commit a133b8f, docs-only, push sukses tanpa pantau workflow).
 
 ## Pola bug langganan (jangan ulangi)
+
+- Eviksi di luar lock pembuatan → eviksi + getOrPut satu lock.
+- Hapus job setelah flush → hapus sebelum flush + reschedule otomatis.
+- Prune tanpa lock → synchronized sama dengan writer.
 
 - Cache dua field volatil bisa sobek → satu holder `Pair` atomik.
 - `getOrPut` Kotlin tak atomik di `ConcurrentHashMap` → `synchronized` eksplisit.
