@@ -2,6 +2,10 @@
 
 Memori terpusat antar-sesi dan antar-mesin untuk agen AI yang mengelola repo Tasirin.
 
+## Soul
+
+- `SOUL.md` — identitas tetap agen (1 soul untuk semua repo). Dibaca tiap awal sesi sebelum file memori.
+
 ## File
 
 - `tasirin-download-manager.md` — memori repo download manager.
