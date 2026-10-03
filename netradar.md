@@ -45,3 +45,9 @@
   VirusTotal, artifact, cek 5MB). Release v2.0 terbit.
 - Sempat gagal 1× (return eksplisit probe kamera/router), +1× guard changelog
   pada push uji — diatasi via commit susulan + uji ScanLoopTest.
+
+## Audit bug 2026-10-03 (sesi sore, read-only, belum diperbaiki)
+- Minta user: "cek seluruh kode temukan bug". Audit statis ~8.300 baris, tanpa ubah file repo.
+- Temuan: 11 bug/kandidat (3 tinggi, 5 sedang, 3+ rendah). Rincian lengkap di laporan chat sesi ini.
+- Sorotan: (1) scan PING/TRACE menghapus openPorts via mergeHost otoritatif — regresi; (2) Traceroute probeHop waitFor() tanpa timeout → gantung; (3) rescanHost hilangkan osGuess + reset lastSeenScan; (4) probe kamera/RTSP baca 25 baris tanpa stop di baris kosong → tahan thread IO; (5) notif favorit offline timestamp global tunggal; (6) diff antar-mode menyesatkan; (7) deep scan abaikan pause; (8) onCleared tulis prefs di main thread; (9) notif ID hashCode tabrakan; (10) label terhapus hidup lagi; (11) kandidat regex traceroute EXCEEDED butuh ":" (format-dependent) + UDP SSDP/mDNS unicast false-negative + scanIps await berurutan.
+- Belum ada perbaikan/push repo netradar sesi ini (murni audit).
