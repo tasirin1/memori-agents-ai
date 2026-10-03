@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03 14:40 UTC, HEAD 50dda62)
+## Status terakhir (2026-10-03 14:50 UTC, HEAD 59620ce)
 
-- HEAD: `50dda62` fix(gallery) thumbnail tertukar.
+- HEAD: `59620ce` fix(social) extract timeout.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
 - Sesi audit → 7 bug ditemukan → SEMUA diperbaiki dan SUDAH push (commit 32d5165 + 41aa4b9, 2026-10-03):
   1. `util/MediaLibrary.kt` — total galeri = distinct penuh sebelum `take(3000)` (`hasMore`/load-more tidak berhenti palsu).
@@ -63,6 +63,14 @@
 - Perintah user: "lanjutkan" — audit `MediaLibrary` (701) + `GalleryActivity` (434) + `ServerThumbnail` + `ServerVideoDurations`.
 - Yang dicek dan aman: cache scan TTL + lock, dedupe path, fallback filesystem, observer seumur proses, LRU thumbnail + lock per media, staging thumbnail, tanggal main-thread, izin baca intent.
 - 1 bug diperbaiki: job thumbnail `GalleryAdapter` hanya cek posisi — job lama lolos cancel bisa timpa cell yang rebind ke item lain di posisi sama (flash gambar tetangga). Kini cek token juga.
+- Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
+
+
+## Sesi ekstraksi lanjutan (2026-10-03 14:50 UTC, commit 59620ce, push main sukses)
+
+- Perintah user: "lanjutkan" — audit `WebExtractActivity` (295) + `SocialMediaExtractor` (1476) + `extract.js`.
+- Yang dicek dan aman: kunci skema http(s), blokir navigasi luar host (batas dot), tanpa JS bridge, cookie host final, redirect manual + buang kredensial lintas host, blokir host berbahaya, batas body 16MB, header user first-party saja, regex domain presisi.
+- 1 bug diperbaiki: `extract()` tanpa batas total (rantai fallback menahan worker), `extractAll()` sudah 60 detik. Kini sama via `withTimeoutOrNull`, timeout = null.
 - Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
 
 ## Tugas terbuka
