@@ -38,3 +38,10 @@
   M sebelum sesi (tidak disentuh).
 - Verifikasi: tanpa JDK lokal; kompilasi + unit test diserahkan ke CI
   (`testDebugUnitTest` via workflow Build). Belum commit/push repo netradar.
+
+## Rilis 2026-10-03 12:20 UTC — sukses
+- Push master 6 commit (fix audit + test + docs): Build 37122297630 success
+  semua 13 step (guard changelog, keystore, test, lint, R8, apksigner,
+  VirusTotal, artifact, cek 5MB). Release v2.0 terbit.
+- Sempat gagal 1× (return eksplisit probe kamera/router), +1× guard changelog
+  pada push uji — diatasi via commit susulan + uji ScanLoopTest.
