@@ -42,6 +42,10 @@
 - Verifikasi: 4 repo (`tasirin-download-manager`, `tasirin-vaultwarden-host`, `Red-Eye-Mobile`, `netradar`) semua pointer `AGENTS.md` sudah ke `memori-agents-ai` + `SOUL.md`; hanya download-manager yang tertinggal satu kata (`SOUL.md`) di working tree — sudah di-commit/push (a133b8f).
 - Tidak ada perubahan `SOUL.md` — identitas tetap sudah tepat.
 
+## Sesi tanya soul (2026-10-03)
+
+- User tanya soal 1 soul lintas-repo, lalu tanya "gaya bicara?" — dijelaskan isi `SOUL.md` bagian Gaya bicara.
+
 ## Cara pakai file ini
 
 - Awal sesi: baca file ini, lalu `git status --short` + `git log --oneline -5` untuk konteks.
