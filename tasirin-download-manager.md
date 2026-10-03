@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03 14:50 UTC, HEAD 59620ce)
+## Status terakhir (2026-10-03 15:00 UTC, HEAD 004f63c)
 
-- HEAD: `59620ce` fix(social) extract timeout.
+- HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
 - Sesi audit → 7 bug ditemukan → SEMUA diperbaiki dan SUDAH push (commit 32d5165 + 41aa4b9, 2026-10-03):
   1. `util/MediaLibrary.kt` — total galeri = distinct penuh sebelum `take(3000)` (`hasMore`/load-more tidak berhenti palsu).
@@ -71,6 +71,14 @@
 - Perintah user: "lanjutkan" — audit `WebExtractActivity` (295) + `SocialMediaExtractor` (1476) + `extract.js`.
 - Yang dicek dan aman: kunci skema http(s), blokir navigasi luar host (batas dot), tanpa JS bridge, cookie host final, redirect manual + buang kredensial lintas host, blokir host berbahaya, batas body 16MB, header user first-party saja, regex domain presisi.
 - 1 bug diperbaiki: `extract()` tanpa batas total (rantai fallback menahan worker), `extractAll()` sudah 60 detik. Kini sama via `withTimeoutOrNull`, timeout = null.
+- Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
+
+
+## Sesi prefs lanjutan (2026-10-03 15:00 UTC, commit 004f63c, push main sukses, docs-only)
+
+- Perintah user: "lanjutkan terus" — audit `SettingsActivity` (986) + `StoragePrefs` (486) + `Updater` (182).
+- Yang dicek dan aman: cache prefs app-context, secret acak 256-bit, rotasi sesi saat PIN berubah, migrasi hash lama, clamp semua angka, save癞 tunggal anti ganda, cek-saja update via browser.
+- 1 drift diperbaiki (docs-only, tanpa build): daftar kunci aktif di `AGENTS.md` memuat `recent_urls` + `sort_mode` yang sudah tak ada di kode (nol referensi), dan kehilangan `auto_open_on_complete` + `user_agent` + `gallery_folders` yang hidup. Kini 32 kunci sinkron.
 - Guard: `security_audit` 0/0, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
 
 ## Tugas terbuka
