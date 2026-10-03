@@ -2,15 +2,31 @@
 
 > Memori terpusat antar-sesi dan antar-mesin. Update tiap akhir sesi, commit + push. Dibaca tiap awal sesi, di-update tiap akhir sesi.
 
+## Konvensi waktu (wajib —(generator kebingungan 2026-10-03)
+
+Semua sesi repo ini pernah terjadi dalam SATU hari (2026-10-03, 11:00–13:35 UTC),
+tapi dulu dilabeli "pagi/sore/malam/kemarin" sehingga agen mengira aksi
+barusan adalah aksi kemarin. Aturan perbaikan:
+
+- Setiap entri memakai stempel absolut `YYYY-MM-DD HH:MM UTC` (zona UTC; ambil
+  via `date -u`, JANGAN pakai jam lokal mesin).
+- DILARANG kata waktu relatif tanpa stempel absolut: kemarin, tadi, barusan,
+  pagi/sore/malam, "sesi sebelumnya", "yang baru saja".
+- Sesi diberi nomor urut (#1, #2, …); tiap sesi berstatus jelas
+  (`selesai` / `dilanjutkan sesi #N`). Entri lama yang statusnya berubah
+  (mis. "belum push" lalu sudah push) wajib ditandai, jangan dibiarkan menggantung.
+- "Status terakhir" selalu = ringkasan sesi bernomor tertinggi.
+
 ## Proyek
 
 - Repo: `tasirin1/netradar` — radar jaringan Android, Jetpack Compose (minSdk 29, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI; semua Bahasa Indonesia; commit `type: deskripsi` (`feat`/`fix`/`refactor`/`test`/`perf`/`docs`); `versionName` tetap `"2.0"`, `versionCode` otomatis; guard changelog di CI (perubahan `app/src`, `scripts/`, `.github/workflows/`, `app/build.gradle.kts` wajib sertakan `CHANGELOG.md`); unit test logika murni tanpa Robolectric.
 - Workflow Build docs-only skip (`**.md`, `LICENSE`, `.gitignore`) — selaras repo Tasirin lain.
 
-## Status terakhir (2026-10-03)
+## Status terakhir (2026-10-03 13:35 UTC = sesi #7)
 
-- Onboarding ke mesin: clone + pointer `MEMORY.md` di `AGENTS.md` + docs-only skip CI.
+- HEAD master `bc81098`; working tree bersih; CI Build berjalan pasca-push.
+- Memori ini baru ditulis ulang dengan stempel absolut (sesi #7).
 
 ## Tugas terbuka
 
@@ -19,72 +35,59 @@
 ## Cara pakai file ini
 
 - Awal sesi: baca file ini, lalu `git status --short` + `git log --oneline -5`.
-- Akhir sesi: update tanggal, status terakhir, dan tugas terbuka.
+- Akhir sesi: tambah sesi bernomor baru + update "Status terakhir", commit + push.
 
-## Audit bug 2026-10-03
-- Audit statis seluruh kode (tanpa perubahan file): ditemukan ~14 bug/kandidat, dilaporkan ke user, belum diperbaiki.
-- Fokus berikutnya bila user setuju: DNS di main thread, Semaphore blokir, UdpScanner tanpa semaphore, mergeHost tak pernah lupa port, retry double-count, subList resume crash.
+## Riwayat sesi
 
-## Perbaikan audit 2026-10-03 (belum push — perubahan di working tree /root/netradar)
-- Perbaiki 15 temuan audit: race ScannerManager (jobLock + null identitas), DNS di
-  main thread (startScan/startSingleMonitor/refreshNetworkInfo ke IO), Semaphore
-  blokir → kotlinx.coroutines.sync di 4 scanner + semaphore baru UdpScanner,
-  retry double-count + missed cap 2000 + clamp checkpoint di ScanLoop, RTSP 25 baris,
-  mergeHost otoritatif (ganti union/OR), uptime/ping append + throttle 10 dtk,
-  cap CustomPortParser 1000, tolak IPv6, IP penuh → sisa /24 sendiri, PingUtil
-  waitFor budget + PingSweep pakai speed.timeoutMs, traceroute IPv6 + selesai longgar.
-- Test: NetworkUtilsTest (IP-/24, IPv6, IP:port) + CustomPortParserTest (cap).
-  CHANGELOG [Unreleased] + README lintas-subnet diperbarui. AGENTS.md sudah
-  M sebelum sesi (tidak disentuh).
-- Verifikasi: tanpa JDK lokal; kompilasi + unit test diserahkan ke CI
-  (`testDebugUnitTest` via workflow Build). Belum commit/push repo netradar.
+### Sesi #1 — 2026-10-03 ~11:00–12:10 UTC — selesai (dilanjutkan sesi #2)
+- Audit statis + perbaiki 15 temuan: race ScannerManager (jobLock), DNS di main
+  thread ke IO, Semaphore blokir → `kotlinx.coroutines.sync` (4 scanner + baru di
+  UdpScanner), retry double-count + cap 2000 + clamp checkpoint, RTSP 25 baris,
+  mergeHost otoritatif, uptime/ping append + throttle 10 dtk, cap CustomPortParser
+  1000, tolak IPv6, IP penuh → sisa /24, PingUtil waitFor + PingSweep timeout,
+  traceroute IPv6 + selesai longgar.
+- Test: NetworkUtilsTest + CustomPortParserTest; CHANGELOG + README diperbarui.
+- Status akhir sesi: perubahan di working tree, BELUM push (didorong di sesi #2).
 
-## Rilis 2026-10-03 12:20 UTC — sukses
-- Push master 6 commit (fix audit + test + docs): Build 37122297630 success
-  semua 13 step (guard changelog, keystore, test, lint, R8, apksigner,
-  VirusTotal, artifact, cek 5MB). Release v2.0 terbit.
-- Sempat gagal 1× (return eksplisit probe kamera/router), +1× guard changelog
-  pada push uji — diatasi via commit susulan + uji ScanLoopTest.
+### Sesi #2 — 2026-10-03 12:11–12:20 UTC — selesai
+- Push master 6 commit; Build `37122297630` success 13 step
+  (guard changelog, keystore, test, lint, R8, apksigner, VirusTotal, artifact,
+  cek 5MB); Release `v2.0` terbit. Sempat gagal 1× (return eksplisit probe
+  kamera/router) + 1× guard changelog — diatasi via commit susulan + ScanLoopTest.
+- Onboarding mesin ini: clone + pointer `MEMORY.md` + docs-only skip CI.
 
-## Audit bug 2026-10-03 (sesi sore, read-only, belum diperbaiki)
-- Minta user: "cek seluruh kode temukan bug". Audit statis ~8.300 baris, tanpa ubah file repo.
-- Temuan: 11 bug/kandidat (3 tinggi, 5 sedang, 3+ rendah). Rincian lengkap di laporan chat sesi ini.
-- Sorotan: (1) scan PING/TRACE menghapus openPorts via mergeHost otoritatif — regresi; (2) Traceroute probeHop waitFor() tanpa timeout → gantung; (3) rescanHost hilangkan osGuess + reset lastSeenScan; (4) probe kamera/RTSP baca 25 baris tanpa stop di baris kosong → tahan thread IO; (5) notif favorit offline timestamp global tunggal; (6) diff antar-mode menyesatkan; (7) deep scan abaikan pause; (8) onCleared tulis prefs di main thread; (9) notif ID hashCode tabrakan; (10) label terhapus hidup lagi; (11) kandidat regex traceroute EXCEEDED butuh ":" (format-dependent) + UDP SSDP/mDNS unicast false-negative + scanIps await berurutan.
-- Belum ada perbaikan/push repo netradar sesi ini (murni audit).
+### Sesi #3 — 2026-10-03 ~12:30–12:54 UTC — selesai (dilanjutkan sesi #4)
+- Audit statis read-only ~8.300 baris, tanpa ubah file: 11 temuan
+  (PING/TRACE hapus port; traceroute gantung; rescan hilangkan osGuess;
+  RTSP 25 baris; timestamp favorit global; diff antar-mode; deep scan abaikan
+  pause; onCleared di main thread; ID notif tabrakan; label hidup lagi;
+  regex traceroute + UDP multicast + await berurutan).
 
-## Perbaikan audit 2026-10-03 (sesi malam, sudah push master)
-- 1 commit `657eb63` (8 file, +99/-34): perbaiki 11 temuan audit pagi.
-  ViewModel: HostFound warisi port lama utk PING/TRACE, label milik pengguna,
-  rescan warisi osGuess + lastSeenScan, alert offline per-IP, onCleared tulis di IO.
-  PortScanner: scanHost isi osGuess dari TTL, deepScan cek pause, banner stop di
-  baris kosong. Traceroute: waitFor timeout 5 dtk + baca output sesudahnya,
-  regex ":" opsional. ScanLoop: lapor urutan selesai via Channel. Camera: stop di
-  baris kosong. Udp: skip 1900/5353 unicast. Notifier: stableId positif per jenis.
-  CHANGELOG [Unreleased] diperbarui (guard changelog).
-- Verifikasi: tanpa JDK lokal (cek impresi + balance kurawal/kurung saja);
-  kompilasi + unit test diserahkan ke CI (push master picu Build + Release v2.0).
+### Sesi #4 — 2026-10-03 ~13:00–13:15 UTC — selesai
+- Perbaiki 11 temuan sesi #3, commit `657eb63` (8 file, +99/-34), push master:
+  waris port PING/TRACE, label pengguna, rescan osGuess+lastSeenScan, alert
+  per-IP, onCleared di IO, scanHost isi osGuess, deepScan cek pause, banner stop
+  di baris kosong, traceroute timeout 5 dtk + regex longgar, progres urutan
+  selesai via Channel, blank-break kamera, skip UDP 1900/5353, stableId,
+  CHANGELOG [Unreleased].
 
-## Audit bug 2026-10-03 (sesi malam-2, read-only, belum diperbaiki)
-- Minta user: "cek seluruh kode temukan bug" (pasca-fix 657eb63). Fokus area yg
-  belum tersentuh: RouterScanner, NetworkUtils CIDR, Mdns SSDP, gateway/monitor,
-  backup/restore, widget, manifest, UI (filter/sort/dialog aman, tanpa !!).
-- Perbaikan kemarin terverifikasi masih utuh di kode (waris port PING/TRACE,
-  traceroute timeout, rescan osGuess, stableId, Channel, blank-break, skip UDP).
-- 10 temuan baru, BELUM diperbaiki: (1) SSDP mati total — when(pkt.port)==1900
-  tak pernah cocok (balasan unicast dari port ephemeral), hanya mDNS yg jalan;
-  (2) RouterScanner lolos blank-break 25 baris; (3) TCP probe ke port UDP-only
-  161/1900 di Router+Discover (buang timeout); (4) CIDR prefix invalid (/33, /99,
-  negatif) diam-diam jadi /24 penuh; (5) widget hitung uptime unknown sbg online;
-  (6) refreshIfStale tanpa negative caching (discovery kosong diulang tiap scan);
-  (7) checkInternet ping 1.1.1.1+8.8.8.8 berurutan tiap 5 dtk (boros + salah di
-  jaringan blokir ICMP); (8) kandidat: port web apa pun dilabeli panel router;
-  (9) kandidat: checkpoint tanpa kedaluwarsa; (10) kandidat: lastPtr lintas
-  section di parseDns. Rincian di laporan chat sesi ini.
+### Sesi #5 — 2026-10-03 ~13:15–13:23 UTC — selesai (dilanjutkan sesi #6)
+- Audit ulang read-only pasca-`657eb63` (area belum tersentuh: RouterScanner,
+  CIDR, SSDP, gateway/monitor, backup, widget, manifest, UI): 10 temuan
+  (SSDP mati total via `pkt.port`; Router lolos blank-break; TCP ke 161/1900;
+  CIDR invalid jadi /24; widget hitung unknown online; tanpa negative caching;
+  checkInternet tiap 5 dtk; label panel router generik; checkpoint abadi;
+  lastPtr lintas section). Perbaikan sesi #4 terverifikasi utuh.
 
-## Perbaikan audit lanjutan 2026-10-03 (sudah push master)
-- 1 commit (9 file): SSDP dibedakan dari isi paket + negative caching + reset
-  lastPtr; Router blank-break + buang TCP 161/1900 + filter hanya host mirip
-  router; Discover buang TCP 161/1900; CIDR invalid ditolak + uji; widget online
-  hanya yg jelas; internet ~30 dtk paralel + skip bila gateway offline;
-  checkpoint kedaluwarsa 48 jam; 2 uji baru; CHANGELOG [Unreleased].
-- Verifikasi: tanpa JDK lokal (review diff + balance); kompilasi + uji di CI.
+### Sesi #6 — 2026-10-03 ~13:23–13:26 UTC — selesai
+- Perbaiki 10 temuan sesi #5, commit `bc81098` (9 file, +90/-24), push master:
+  SSDP dari isi paket + negative caching + reset lastPtr; Router blank-break +
+  buang TCP 161/1900 + filter host mirip router; Discover buang TCP 161/1900;
+  CIDR invalid ditolak + uji; widget online eksplisit; internet ~30 dtk paralel
+  + skip bila gateway offline; checkpoint kedaluwarsa 48 jam; 2 uji baru;
+  CHANGELOG [Unreleased].
+
+### Sesi #7 — 2026-10-03 13:35 UTC — selesai
+- Perbaiki SEMUA file memori: tulis ulang `netradar.md` ini dengan stempel
+  absolut + nomor sesi (masalah: label relatif "pagi/sore/malam/kemarin" untuk
+  kejadian satu hari yang sama); tambah aturan anti-bingung waktu di `SOUL.md`.
