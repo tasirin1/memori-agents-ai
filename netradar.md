@@ -63,3 +63,20 @@
   CHANGELOG [Unreleased] diperbarui (guard changelog).
 - Verifikasi: tanpa JDK lokal (cek impresi + balance kurawal/kurung saja);
   kompilasi + unit test diserahkan ke CI (push master picu Build + Release v2.0).
+
+## Audit bug 2026-10-03 (sesi malam-2, read-only, belum diperbaiki)
+- Minta user: "cek seluruh kode temukan bug" (pasca-fix 657eb63). Fokus area yg
+  belum tersentuh: RouterScanner, NetworkUtils CIDR, Mdns SSDP, gateway/monitor,
+  backup/restore, widget, manifest, UI (filter/sort/dialog aman, tanpa !!).
+- Perbaikan kemarin terverifikasi masih utuh di kode (waris port PING/TRACE,
+  traceroute timeout, rescan osGuess, stableId, Channel, blank-break, skip UDP).
+- 10 temuan baru, BELUM diperbaiki: (1) SSDP mati total — when(pkt.port)==1900
+  tak pernah cocok (balasan unicast dari port ephemeral), hanya mDNS yg jalan;
+  (2) RouterScanner lolos blank-break 25 baris; (3) TCP probe ke port UDP-only
+  161/1900 di Router+Discover (buang timeout); (4) CIDR prefix invalid (/33, /99,
+  negatif) diam-diam jadi /24 penuh; (5) widget hitung uptime unknown sbg online;
+  (6) refreshIfStale tanpa negative caching (discovery kosong diulang tiap scan);
+  (7) checkInternet ping 1.1.1.1+8.8.8.8 berurutan tiap 5 dtk (boros + salah di
+  jaringan blokir ICMP); (8) kandidat: port web apa pun dilabeli panel router;
+  (9) kandidat: checkpoint tanpa kedaluwarsa; (10) kandidat: lastPtr lintas
+  section di parseDns. Rincian di laporan chat sesi ini.
