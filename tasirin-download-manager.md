@@ -7,7 +7,7 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-04 21:05 UTC, HEAD df78baa — feat Scribd tanpa langganan, push sukses)
+## Status terakhir (2026-10-04 21:20 UTC, HEAD cb630de — revert kompatibilitas Scribd, push sukses)
 
 - HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
@@ -299,3 +299,10 @@
 - Implementasi: `SocialMediaExtractor` (`SCRIBD_HOST_RE`/`isScribdUrl`/cabang extract/`parseScribdPage`/`parseDocPages`+`DocPage`, cap 300, host-lock scribdassets); `extract.js` kolektor gambar halaman (src/data-src/srcset, filter chrome, urut nomor); `WebExtractActivity` (`EXTRA_PAGES_JSON`/`onPagesOnly`/trim 300); `MainActivity` (badge Scribd, skip probe, `offerPagesBatch` antre langsung + cookie/Referer, nama `Scribd_<judul>_p001.jpg`); strings `platform_scribd`+`batch_pages_*`; 4 unit test; `docs/index.html` FAQ ID+EN.
 - Batas jujur: hanya halaman pratinjau yang ter-render untuk sesi anonim (terkunci = tak ada URL di DOM = tak terunduh); tanpa bypass paywall/kredensial.
 - Guard: `security_audit` 0/0, `prepare_remote --check` OK, `check_readme_sync` OK, `node --check extract.js` OK, `check_repo.py --pre-commit` 10/10, `diff --check` bersih. Compile penuh milik CI (tanpa SDK lokal).
+
+## Sesi revert kompatibilitas Scribd (2026-10-04 21:20 UTC, push main sukses)
+
+- Perintah user: "revert kompatibilitas scribd" — kondisi awal: HEAD df78baa (feat Scribd) sudah di-revert di working tree dan ter-staged (7 file kode identik dengan 638424f pra-Scribd, tinggal commit); diverifikasi lalu di-commit + push.
+- 1 commit satu tujuan cb630de + 1 entri CHANGELOG.md revert(social), push main df78baa..cb630de tanpa pantau workflow (aturan 19).
+- Revert: URL scribd.com kembali diperlakukan sebagai URL biasa; cabang isScribdUrl/parseScribdPage/parseDocPages, kolektor halaman extract.js, alur batch WebExtractActivity/MainActivity, strings platform_scribd/batch_pages_*, unit test, FAQ docs/index.html dihapus. Riwayat CHANGELOG lama tetap ada (7 baris), kode/test/docs bersih dari scribd (rg kosong).
+- Guard: security_audit full 0 error/0 warning (24 rules), audit self-test OK, prepare_remote --check OK (sinkron + JS valid + UI Inggris + smoke upload), check_readme_sync OK (9 heading), node smoke OK, git diff --check bersih; 4 cek instan OK (struktur, no local SDK, AGENTS completeness, admin konsisten). Java tak tersedia sehingga android checks terlewati (sesuai aturan: compile penuh milik CI).
