@@ -436,3 +436,10 @@
 - Validasi: brace semua `.kt` seimbang, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
 - Rilis: commit `cb2a537` + bump `versionCode` 107/`1.6.80` + tag `v1.6.80` (`75dca24`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.80` rilis, menunggu hasil CI.
+
+## Sesi #59 (2026-10-04 20:08 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif, temukan bug (tanpa patch).
+- Cakupan: `MonitoringService` (polling, gate perintah, SMS multipart, `/history`, pause-cap, `sendFitted`/`sendToTelegram`), `NotificationForwarderService` (counter, fallback), `CameraService` (thread lifecycle), `SendMessageWorker` (cred-error clear), `SetupActivity` (test-persist, mask), `MainActivity` (kalkulator, DEBUG early-return), repo SMS/call, `CrashReporter` (overwrite), `MessageScheduler` (KEEP), manifest.
+- Hasil: 9 temuan baru dilaporkan ke user (multipart `FLAG_CANCEL_CURRENT`, premium `1900` lolos, `/history` fallback 100, test menimpa interval, clear cred-error tanpa `credsSame`, `CrashReporter` overwrite, `photoPausedElapsed` cap 480, divergensi `safeCut`/`splitChunk`, `CameraService` thread-leak); tanpa perubahan kode repo ini.
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.81` bila ya).
