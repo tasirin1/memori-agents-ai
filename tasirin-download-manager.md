@@ -141,6 +141,13 @@
   3. `App.onCreate` menulis cap `thumb_cleanup_last` walau `cleanupOldThumbs` gagal; gagal bersih tak dicoba lagi 7 hari. Fix: update cap hanya bila sukses.
 - Tanpa push ke `main` (tak ada perubahan kode); guard `check_repo.py` tak selesai dibaca penuh sesi ini (hanya `security_audit` yang terkonfirmasi hijau).
 
+## Sesi tombol remote lanjutan (2026-10-04 00:06 UTC, push main sukses)
+
+- Perintah user: "lanjutkan" — audit saudara bug `moveHere` (commit 96b8c0a) di `remote.src.html`: semua situs `disabled = true` dicek satu per satu.
+- 1 bug sekeluarga ditemukan & diperbaiki (commit 005f1c8): `fsLoadMore()` hanya mengaktifkan lagi tombol di jalur error — load-more sukses yang masih menyisakan halaman, dan respons basi (`seq !== fsLoadSeq` saat navigasi di tengah fetch), membuat tombol "Load more" lumpuh sampai reload. Kini tombol dipulihkan di `finally` selama masih menempel di DOM (`isConnected`; tombol yang di-remove karena tak ada sisa dilewati).
+- Yang dicek dan aman: `runFsActions`/`fsTaskCancelBtn` (diaktifkan lagi tiap `showFsTask`), tombol upload (callback + catch), `moveYes` (sudah `finally` di 96b8c0a).
+- Guard: `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke upload), `security_audit` 0/0, `check_readme_sync` sinkron, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
+
 ## Sesi fix 3 temuan minor (2026-10-04 00:05 UTC, push main sukses)
 
 - Perintah user: "perbaiki semuanya" — 3 commit terpisah (satu tujuan per commit) + entri `CHANGELOG.md` tiap commit, push `main` `004f63c..00a903f` tanpa pantau workflow (aturan 19).
