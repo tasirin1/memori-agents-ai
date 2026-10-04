@@ -443,3 +443,10 @@
 - Hasil: 9 temuan baru dilaporkan ke user (multipart `FLAG_CANCEL_CURRENT`, premium `1900` lolos, `/history` fallback 100, test menimpa interval, clear cred-error tanpa `credsSame`, `CrashReporter` overwrite, `photoPausedElapsed` cap 480, divergensi `safeCut`/`splitChunk`, `CameraService` thread-leak); tanpa perubahan kode repo ini.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.81` bila ya).
+
+## Sesi #60 (2026-10-04 20:20 UTC) — selesai
+- Permintaan: perbaiki semuanya (9 temuan audit agresif jilid 27 / sesi #59).
+- Perbaikan: SMS multipart `FLAG_UPDATE_CURRENT` + `smsReqSeq` monotonik; `isPremiumSmsNumber` blokir `1900` eksplisit; fallback `/history` SMS/call 100 ke 500; tes koneksi via `saveTestCredentials`; clear `credentialError` digate kredensial-sama; `CrashReporter` append + cap; cap `photoPausedUntil` 480 ke 1440 mnt; `MessageScheduler` `APPEND` saat delay>0; `CameraService` `join` thread lama. Satu kandidat gugur: `safeCut`/`splitChunk` terbukti identik, diganti bug scheduler `KEEP`.
+- Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
+- Rilis: commit `47b183b` + bump `versionCode` 108/`1.6.81` + tag `v1.6.81`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.81` rilis, menunggu hasil CI.
