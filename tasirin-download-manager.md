@@ -182,3 +182,9 @@
   4. (catatan/teoretis) `TlsCompat` fallback `extraTm.checkServerTrusted` hanya lawan 3 root bundle, bukan gabungan system+extra — rantai cross-signed yang butuh keduanya tetap gagal; plus exception asli system hilang.
 - Yang diverifikasi bersih: reservasi buffer upload + finally, lock upload atomik, login throttle per-IP, zip strip-lock, signature/cache itemsJson, resume/ETag/CDN-refresh, merge staging, watchdog/throttle, PIN PBKDF2 + cookie sesi acak, `uploadUniqueName` traversal-safe, tombol remote (`fsLoadMore`/`moveYes`/upload sudah `finally`), `Updater` (bufferedReader default UTF-8 Kotlin, cache 24 jam), `scanCacheFolderKey` di dalam `scanLock`.
 - Guard: `security_audit` 0/0. Tanpa push repo (tak ada perubahan kode).
+
+## Sesi fix 4 temuan jilid 13 (2026-10-04 01:10 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `005f546` (precedent `73ea48f`) + 4 entri `CHANGELOG.md`, push `main` sukses tanpa pantau workflow (aturan 19).
+- Fix: (1) `writeReservedUploadChunk` 2 jalur reject kuras body dulu, tutup koneksi hanya bila kuras gagal; (2) `serveGallery` `hasMore = matched > pageEnd` bila `q` non-kosong; (3) hapus dead branch `oldObj.has("error")`; (4) `TlsCompat` satu store gabungan (salin anchor sistem + 3 root bundle), hapus import tak terpakai.
+- Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
