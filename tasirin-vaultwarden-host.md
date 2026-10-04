@@ -45,3 +45,9 @@
   - `75f0975 fix: flag susulan start tak hangus bila gagal` (MainActivity hapus START_TERTUNDA hanya bila start sukses; gagal = coba lagi saat buka berikut).
   - `3cac864 fix: verifikasi PIN lawan hash segar` (Main/Settings baca hash di worker; TgBot nilai ulang bila hash berganti selama PBKDF2).
 - Verifikasi milik CI; tidak memantau build sesuai aturan.
+
+## Sesi #5 — 2026-10-04 07:15 UTC (selesai)
+- Audit super-agresif: cek otomatis ID/string/drawable/warna/layout-land/night-sync/vektor (semua cocok; `stat_notify_sync` milik framework), plus telusur health/restart, resume/SHA, restore-streaming, kirim-Telegram, latestVersion, saveAndStart.
+- Temuan: 1 bug sedang — `saveAndStart` menerima port 1-1023 lalu server diam-diam jalan di default (prefs/UI/server tak sepakat); fix `b5478ae` sembuhkan ke default di depan + set ulang field + toast/log.
+- `d20832e docs:` lengkapi CHANGELOG untuk 6 fix audit terakhir (lolos CI, hanya md).
+- Verifikasi milik CI; tidak memantau build sesuai aturan.
