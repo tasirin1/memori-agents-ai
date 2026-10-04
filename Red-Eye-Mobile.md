@@ -478,3 +478,10 @@
 - Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `e6e0821` + bump `versionCode` 110/`1.6.83` + tag `v1.6.83`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.83` rilis, menunggu hasil CI.
+
+## Sesi #65 (2026-10-04 21:38 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `MonitoringService` (`sendFitted`/`sendToTelegram`/`safeCut`, offset `lastUpdateId`, gate owner/`/ping`, `checkAndSendNewData`, `sendInitialData` 5-page cap, `fetchLocation` 2-provider, `isPremiumSmsNumber`/`numbersEqualFast`, poll saat pause), `NotificationForwarderService` (spam filter vs `record`, dedup 30 dtk, wake offset `mainLast+1`), repo SMS (`LIKE %..%` + fallback 500), `SetupActivity` (`TOKEN_REGEX`/`CHAT_ID_REGEX`), `MessageScheduler` (`APPEND` chain), manifest/workflow, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan ke user (sendFitted selalu-true + `else break` mati; rekursi `sendToTelegram` buang `replyMarkup`/`queueOnFail`; owner auto-learn first-come; `/resume` tertunda 5 mnt saat pause; `fetchLocation` seri 40 dtk; spam-drop tanpa `record`; dedup 30 dtk telan OTP resend; `LIKE %` scan + fallback 500; suffix-match 9-digit over-broad; initial-sync 500 terpotong tapi klaim complete; wake re-fetch offset sama; `TOKEN_REGEX`/`CHAT_ID` longgar). Koreksi audit: klaim `/photointerval`/`/pause` stale-cache gugur (listener `KEY_CAMERA_INTERVAL`/`KEY_PHOTO_PAUSED_UNTIL` sudah `refreshLoopConfig`+`restartCameraLoop`), klaim 400-notice abaikan `queueOnFail` gugur (cabang `if (queueOnFail)` ada).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.84` bila ya).
