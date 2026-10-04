@@ -200,3 +200,10 @@
 - Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `5d50788` + bump `versionCode` 92/`1.6.65` + tag `v1.6.65`, push main + tag, susulan `2bc00e2`; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.65` rilis, menunggu hasil CI.
+
+## Sesi #28 (2026-10-04 09:39 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: regresi patch `v1.6.65`, `photoPausedElapsed`/migrasi, `fetchLocation`, `ringDevice`+stale-restore, `recordAndSendAudio`, `sendSmsPending`, `searchContacts`/`listLaunchableApps`, `pruneAudioCache`, `CrashReporter.flushPending`, `MessageScheduler`, `ParentalMonitorApp`, `SendMessageWorker` gates, `SetupActivity` save/test/clear/status, `SpeedMonitorActivity`, manifest, XML + grep secret.
+- Hasil: 5 temuan minor baru (fallback crash pakai `report` bukan `fitted`; clear-credentials lupa `pendingSmsOwner`; `scheduleMessageSendNext` identik APPEND; crash report kirim HTML mentah; `wakeUpdateId` persisten jadi dead-write) + koreksi (`/pause` 480 konsisten; ring/SMS/contact escaping baik; manifest exported baik).
+- Validasi: XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.66` bila ya).
