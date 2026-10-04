@@ -221,3 +221,10 @@
 - Hasil: 4 temuan minor baru (`sendAudioFile` telan cancel; `/log` crash HTML mentah; `/notif` lowercase tanpa locale; watchdog tak awasi initial-sync) + 1 kosmetik (session overflow guard) + verifikasi area lain baik.
 - Validasi: XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.67` bila ya).
+
+## Sesi #31 (2026-10-04 10:05 UTC) — selesai
+- Permintaan: perbaiki semuanya (5 temuan audit jilid 15 / sesi #30).
+- Perbaikan: `sendAudioFile` rethrow cancel; `/log` crash plain; `/notif` locale; watchdog initial-sync; session saturasi.
+- Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `fdec29d` + bump `versionCode` 94/`1.6.67` + tag `v1.6.67`, push main + tag, susulan rilis; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.67` rilis, menunggu hasil CI.
