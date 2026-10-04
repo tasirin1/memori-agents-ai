@@ -413,3 +413,10 @@
 - Regresi baik: konsolidasi tanpa sisa tak-terkualifikasi; `versionCode` 105/`1.6.78` konsisten dengan `CHANGELOG.md` + tag.
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul buang 2 fungsi mati di `v1.6.79` bila ya).
+
+## Sesi #56 (2026-10-04 13:08 UTC) — selesai
+- Permintaan: perbaiki semuanya (2 fungsi mati jilid 25 / sesi #55).
+- Perbaikan: buang `PreferencesManager.putValue` (~16 baris) + `SmsRepository.numbersEqual` (3 baris); -21/+3 baris, tanpa perubahan perilaku.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
+- Rilis: commit `5b4a115` + bump `versionCode` 106/`1.6.79` + tag `v1.6.79` (`ad59b53`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.79` rilis, menunggu hasil CI.
