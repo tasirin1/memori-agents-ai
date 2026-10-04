@@ -207,3 +207,10 @@
 - Hasil: 5 temuan minor baru (fallback crash pakai `report` bukan `fitted`; clear-credentials lupa `pendingSmsOwner`; `scheduleMessageSendNext` identik APPEND; crash report kirim HTML mentah; `wakeUpdateId` persisten jadi dead-write) + koreksi (`/pause` 480 konsisten; ring/SMS/contact escaping baik; manifest exported baik).
 - Validasi: XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.66` bila ya).
+
+## Sesi #29 (2026-10-04 09:52 UTC) — selesai
+- Permintaan: perbaiki semuanya (5 temuan audit jilid 14 / sesi #28).
+- Perbaikan: crash report plain-text + fallback `fitted`; clear-credentials reset `pendingSmsOwner`; `scheduleMessageSendNext` pakai `KEEP`; stop dead-write `wakeUpdateId` persisten.
+- Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `fee6e59` + bump `versionCode` 93/`1.6.66` + tag `v1.6.66`, push main + tag, susulan rilis; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.66` rilis, menunggu hasil CI.
