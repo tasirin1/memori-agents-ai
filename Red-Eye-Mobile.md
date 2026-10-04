@@ -457,3 +457,10 @@
 - Hasil: 7 temuan signifikan dilaporkan (long-poll pendek 2 loop, poll saat pause, tanpa batching notif, persist per-pesan, `wakeUpdateId` tak dipersist + wake tanpa freshness, pause foto gugur saat reboot); tanpa perubahan kode repo ini.
 - Validasi: `git status` bersih, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.82` bila ya).
+
+## Sesi #62 (2026-10-04 20:30 UTC) — selesai
+- Permintaan: perbaiki semuanya (7 temuan audit baterai+runtime sesi #61, nilai dikunci via plan-mode).
+- Perbaikan: long-poll `timeout=30` (3 URL); pause-poll 5 mnt; batching notif 15 dtk + `forwardLocked` Boolean + buang `inFlight`; worker persist tiap 5 + flush akhir; wake persist `wakeUpdateId` + freshness 900 dtk; pause foto wall-clock + migrasi.
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `b1126fd` + bump `versionCode` 109/`1.6.82` + tag `v1.6.82`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.82` rilis, menunggu hasil CI.
