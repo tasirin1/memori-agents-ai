@@ -171,3 +171,14 @@
 - Perintah user: "perbaiki semuanya" — 3 commit terpisah (satu tujuan per commit) + entri `CHANGELOG.md` tiap commit, push `main` `004f63c..00a903f` tanpa pantau workflow (aturan 19).
 - Commit: `0bace1c` fix(download) ukuran importStream dari stat file asli; `dd5acde` fix(server) tolak `chunk < -1`; `00a903f` fix(app) cap thumb-cleanup hanya bila sukses.
 - Guard: `security_audit` 0/0, `check_repo.py` 10/10 SEMUA SEHAT.
+
+## Sesi sapuan penuh jilid 13 (2026-10-04 01:00 UTC, tanpa ubah kode — 2 minor + 2 catatan)
+
+- Perintah user: "cek seluruh kode temukan bug lagi" — sapuan semua file: `HttpControlServer` (upload-chunk/offset/itemsJson/galeri/login/zip), `DownloadEngine`, `FileSaver`, `MediaLibrary`, `ServerSecurity`, `Updater`, `TlsCompat`, `DownloadRepository`/`DownloadItemCodec`, `MainActivity`, `GalleryActivity`, `LogActivity`, `SettingsActivity`, `WebExtractActivity`, `SocialMediaExtractor`, `remote.src.html` (tombol/fs/galeri/upload).
+- Temuan (BELUM diperbaiki — tunggu pilihan owner):
+  1. (minor) `HttpControlServer.writeReservedUploadChunk`: 2 jalur reject (`invalid offset`, `invalid upload range`) tanpa `drainBody` langsung `closeConnection` — benar tak desync, tapi bunuh keep-alive sia-sia + klien berisiko tak baca JSON error bersih (jalur tetangga semuanya drain dulu).
+  2. (minor) `serveGallery` `hasMore` salah di halaman terakhir hasil filter `q`: `matched < scan.total` membandingkan hitungan terfilter vs total tanpa filter → fetch halaman kosong sia-sia sekali. Fix: bila `q` non-kosong, `hasMore = matched > pageEnd`.
+  3. (catatan/cleanup) `itemsJson`: `else if (oldObj.has("error")) oldObj.remove("error")` dead branch — `oldObj` objek baru, tak pernah punya `error` basi (tak ada bug fungsional, komentar menyesatkan).
+  4. (catatan/teoretis) `TlsCompat` fallback `extraTm.checkServerTrusted` hanya lawan 3 root bundle, bukan gabungan system+extra — rantai cross-signed yang butuh keduanya tetap gagal; plus exception asli system hilang.
+- Yang diverifikasi bersih: reservasi buffer upload + finally, lock upload atomik, login throttle per-IP, zip strip-lock, signature/cache itemsJson, resume/ETag/CDN-refresh, merge staging, watchdog/throttle, PIN PBKDF2 + cookie sesi acak, `uploadUniqueName` traversal-safe, tombol remote (`fsLoadMore`/`moveYes`/upload sudah `finally`), `Updater` (bufferedReader default UTF-8 Kotlin, cache 24 jam), `scanCacheFolderKey` di dalam `scanLock`.
+- Guard: `security_audit` 0/0. Tanpa push repo (tak ada perubahan kode).
