@@ -287,3 +287,10 @@
 - Gugur/by-design: wake cursor memori-only itu by-design (`CHANGELOG 1.6.66`, offset ikut `lastUpdateId` + `wakePingIds`); `dropNoticeAt` bounded (cap 64 + evict); `MY_PACKAGE_REPLACED` ada `<data scheme=package>`; backup excludes ok; kalkulator 12-digit/desimal/`1234=` ok; `pendingSmsAt`/`lastSmsSendAt`/`credentialErrorAt` wall-clock ok; `photoPausedUntil` ada clear-reboot + cap 480 mnt.
 - Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (di luar `KEY_*`/regex nihil), `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.71` bila ya).
+
+## Sesi #40 (2026-10-04 11:28 UTC) — selesai
+- Permintaan: perbaiki semuanya (4 temuan audit jilid 20 / sesi #39).
+- Perbaikan: `BootReceiver` throttle persisten ke wall-clock + skip debounce saat guard nol (restart pasca-reboot pulih); `BootRestartWorker.postResumeReminder` akar sama (notif buka Setup pulih); `forwardLocked` plain-fallback `400` ala `MonitoringService`; `CrashReporter.safeTake` anti-belah surrogate/entity di `buildReport` + `flushPending`.
+- Validasi: brace 4 file seimbang, 19 XML OK, grep secret bersih (di luar `KEY_*`/regex nihil), tanpa Gradle lokal.
+- Rilis: commit `9d5ddd1` + bump `versionCode` 98/`1.6.71` + tag `v1.6.71` (`ecc8024`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.71` rilis, menunggu hasil CI.
