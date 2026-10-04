@@ -7,6 +7,12 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #13 (2026-10-04 07:32 UTC) — selesai
+- Permintaan: perbaiki semua temuan audit jilid 6 (regresi `v1.6.57` + sisa forensik).
+- Perbaikan: crash tulis tanpa IO `boot_meta` (elapsed disemat di berkas); wipe reset kursor SMS/panggilan/sync/foto + flag sync; antrean forwarder dibatasi 64; save/test pakai nomor generasi; backoff worker 60 dtk + retry `KEEP`; `boot_meta` di-exclude backup; fallback `USER_PRESENT` kembali + throttle 60 dtk; satu connection pool + dispatcher 4/3 dan 2/1; `/ping` owner-only; varian nomor khusus seluler `628`/`08` tanpa alokasi per baris; banner initial sync dilewati bila tak ada history baru.
+- Rilis: commit `9e3370e` + tag `v1.6.58` (`versionCode` 85), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.58` rilis, menunggu hasil CI.
+
 ## Sesi #12 (2026-10-04 07:25 UTC) — selesai
 - Permintaan: audit jilid 6, lebih agresif seluruh area (tanpa patch).
 - Cakupan: regresi `v1.6.57` (crash IO, wipe sisa, serial unbounded, cancel race, boot_meta backup, USER_PRESENT, double pool, help/pong, wake double, idVariants, worker priority), manifest, workflow, repo query.
