@@ -351,3 +351,12 @@
 - Gugur/baik: invalidasi interval via listener, semua busy ada `finally`, multipart confirm per-part + timeout proporsional, `isRunning` volatile, Setup tanpa hardcode + save/test aman, tema `calc_*` lengkap 9/9 dua moda, tanpa TODO.
 - Validasi: brace semua `.kt` seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.75` bila ya).
+
+## Sesi #49 (2026-10-04 12:12 UTC) — selesai
+- Permintaan: perbaiki temuan baru sesi #48 (minor worker + info unreachable); tradeoff lama tetap berlaku.
+- Perbaikan: `SendMessageWorker` hapus inkremental per pesan terkirim/ditolak via `removeMessage` langsung di loop (`Sent`/`Rejected`), `removeMessages` akhir dipertahankan sebagai jaring pengaman; kill tengah batch tak lagi kirim ulang duplikat selain pesan in-flight yang memang tak terhindarkan.
+- Perbaikan: hapus `SpeedMonitorActivity` unreachable beserta `NetSpeed`, `activity_speed_monitor.xml`, entri manifest, dan 3 string (`speed_title`, `speed_unavailable`, `netspeed_session_fmt`) yang mati sejak tap notif pindah ke kalkulator (`v1.6.73`); tak ada referensi sisa.
+- Tak disentuh (masih berlaku): tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal; sebut build via GitHub Actions.
+- Rilis: commit `f91316d` + bump `versionCode` 102/`1.6.75` + tag `v1.6.75` (`927f920`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.75` rilis, menunggu hasil CI.
