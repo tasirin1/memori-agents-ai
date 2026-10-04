@@ -7,6 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #17 (2026-10-04 08:06 UTC) — selesai
+- Permintaan: audit jilid 9, lebih agresif seluruh area (tanpa patch).
+- Cakupan: regresi `v1.6.60` (offset-reset, callback `1L`, boot-SDK, operator secret, dispatcher `6`/`4`, `APPEND`, busy-reset, `lastSyncTime`, notif `400`, kursor chunked, forwarder `BIG_TEXT`, foto `.tmp`), `ParentalMonitorApp`, `AdminReceiver`, `AppPermissions`, `SpeedMonitorActivity`, `NetSpeed`, `CrashReporter`, `BootRestartWorker`, `SendMessageWorker`, `SetupActivity` save/test, `SmsRepository`, manifest, workflow, `app/build.gradle`, `README`, `builder.sh`.
+- Koreksi klaim: `CrashReporter` hormati blokir auth (cek `401`/`403` ada); `builder.sh` sudah ada banner legacy.
+- Temuan baru: tag tanpa keystore (`assertReleaseKeystore` vs fallback debugsigned); nama artefak workflow vs `README`/`CHANGELOG`; gate `POST_NOTIFICATIONS` Setup vs Main; test sukses ikut `saveCoreConfig` (reset offset sebelum Save eksplisit); `APPEND` + delay 30 mnt head-of-line; worker/`CrashReporter` abaikan `400`; sisa OEM stale-pause; duplikat chunk worker; balap save/test seq; `tools:targetApi` basi; kosmetik speed.
+- Validasi: XML OK, grep secret bersih, tanpa perubahan kode repo ini.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.61` bila ya).
+
 ## Sesi #16 (2026-10-04 08:00 UTC) — selesai
 - Permintaan: audit jilid 8 lebih agresif seluruh area, lalu perbaiki semuanya.
 - Audit jilid 8: 14 temuan (2 dikoreksi tidak jadi bug: owner-learning ternyata hidup karena `rememberOwner` di luar gerbang `chatOk||ownerOk`; fallback `400` ke plain ternyata sudah tangani `401`/`403`).
