@@ -471,3 +471,10 @@
 - Hasil: 6 temuan baru (ring sekali-bunyi, clear pause vs wall-clock, throttle jegal watchdog, drop-notice tanpa fallback, volume stuck, capture tanpa callback); tanpa perubahan kode repo ini.
 - Validasi: `git status` bersih, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.83` bila ya).
+
+## Sesi #64 (2026-10-04 20:35 UTC) — selesai
+- Permintaan: perbaiki semuanya (6 temuan audit agresif sesi #63).
+- Perbaikan: `/ring` replay sampai durasi; hapus reset pause di `BootReceiver` + restore volume stuck; `restartAllLoops(fromWatchdog)` lewati throttle; drop-notice fallback antrean; capture callback ke `onError`.
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `e6e0821` + bump `versionCode` 110/`1.6.83` + tag `v1.6.83`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.83` rilis, menunggu hasil CI.
