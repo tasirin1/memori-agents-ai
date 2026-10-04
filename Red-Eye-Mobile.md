@@ -429,3 +429,10 @@
 - Regresi baik: `onDestroy` lepas listener + reset flag + cancel scope; `builder.sh` ber-banner legacy; `versionCode` 106/`1.6.79` + tag konsisten sampai `v1.6.79`.
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul buang 4 import di `v1.6.80` bila ya).
+
+## Sesi #58 (2026-10-04 13:22 UTC) — selesai
+- Permintaan: perbaiki semuanya (4 import mati jilid 26 / sesi #57).
+- Perbaikan: buang `android.database.Cursor` (`CallLogRepository.kt`) + `CoroutineScope`/`Dispatchers`/`launch` (`CameraService.kt`); import sama di file lain terbukti dipakai, tak tersentuh.
+- Validasi: brace semua `.kt` seimbang, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
+- Rilis: commit `cb2a537` + bump `versionCode` 107/`1.6.80` + tag `v1.6.80` (`75dca24`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.80` rilis, menunggu hasil CI.
