@@ -264,3 +264,10 @@
 - Validasi: brace seimbang, 20 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `f124582` + bump `versionCode` 97/`1.6.70` + tag `v1.6.70` (`27b6e9c`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.70` rilis, menunggu hasil CI.
+
+## Sesi #37 (2026-10-04 11:11 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: regresi 11 kontrak `v1.6.70` + `/ping` + log revive, `SmsRepository` LIKE-escape, Setup toggle/battery/notif, `BootRestartWorker` retry+reminder, `MessageQueue.persistLocked`, `MessageScheduler` policy, forwarder wake/dedup, XML + grep secret.
+- Hasil: 1 minor (tradeoff `v1.6.70`: kursor maju saat antre -> outage lama + >100 backlog = drop permanen; dulu duplikat tapi tak hilang) + 1 info (window volatile-queue + kill) + 1 kosmetik (fragmen antre worker tanpa header) + gugur: scheduler policy benar, retry bounded + watchdog, escape benar, Log.w ada.
+- Validasi: brace seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.71` bila ya).
