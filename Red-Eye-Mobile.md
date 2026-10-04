@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #18 (2026-10-04 08:09 UTC) — selesai
+- Permintaan: perbaiki semua temuan audit jilid 9.
+- Perbaikan 10: keystore tag jadi warning; Setup kecualikan `POST_NOTIFICATIONS`; Save/Test cross-invalidate; `scheduleMessageSendCoalesced` (`KEEP`) untuk cooldown auth + `APPEND` untuk rate-limit; `authBlocked`+`CrashReporter` hormati `400`; `README` nama debugsigned; pause basi >`480` mnt dibuang; chunk berhenti di gagal pertama; `tools:targetApi` `35`; reskala speed per-counter.
+- Koreksi audit: Test-ikut-save dan tier GB `NetSpeed` ternyata sudah benar, tanpa perubahan.
+- Rilis: commit `ba0cb97` + tag `v1.6.61` (`versionCode` 88), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.61` rilis, menunggu hasil CI.
+
 ## Sesi #17 (2026-10-04 08:06 UTC) — selesai
 - Permintaan: audit jilid 9, lebih agresif seluruh area (tanpa patch).
 - Cakupan: regresi `v1.6.60` (offset-reset, callback `1L`, boot-SDK, operator secret, dispatcher `6`/`4`, `APPEND`, busy-reset, `lastSyncTime`, notif `400`, kursor chunked, forwarder `BIG_TEXT`, foto `.tmp`), `ParentalMonitorApp`, `AdminReceiver`, `AppPermissions`, `SpeedMonitorActivity`, `NetSpeed`, `CrashReporter`, `BootRestartWorker`, `SendMessageWorker`, `SetupActivity` save/test, `SmsRepository`, manifest, workflow, `app/build.gradle`, `README`, `builder.sh`.
