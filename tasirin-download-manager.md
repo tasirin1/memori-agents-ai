@@ -204,3 +204,10 @@
 - 1 bug ditemukan & diperbaiki (commit `03494c8`, +1 entri `CHANGELOG.md`, +2 unit test `StreamsTest`, push main tanpa pantau workflow): `readBounded` busy-loop pada `read() = 0` ( imports engine HLS probe, body ekstraktor, cache durasi, extract.js) — kini 32 nol beruntun = kembalikan parsial, selaras guard `HttpBody` jilid 12.
 - Diverifikasi bersih (temuan nihil): FGS/job boot, wake lock, throttle notifikasi monotonik, resume/segmen/HLS staging, publish atomik + orphan-guard, scanLock + observer tunggal, AES-GCM + plaintext eksplisit, PIN PBKDF2, tombol remote + SSE give-up + upload retry/finalisasi, ChainInputStream fd, ZIP budget/symlink, ekspor log tanpa yatim.
 - Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
+
+## Sesi sapuan jilid 16 (2026-10-04 01:50 UTC, push main sukses)
+
+- Perintah user: "lanjutkan" ("cek seluruh area") — sapuan ulang semua area: dialog probe `MainActivity` (staleness guard OK), `WebExtractActivity`/`extract.js`, thumbs galeri/LruCache, section adapter/DiffUtil, SAF `FileSaver`, `ServerThumbnail` locks, `HlsParser.resolveUrl`, watchdog/throttle/mirror engine, `serveMedia`/`snapshot` server, `DownloadRepository` kredensial, `StoragePrefs` secret, SSE/upload/galeri remote.
+- 2 minor diperbaiki (1 commit + 2 entri `CHANGELOG.md`, push main tanpa pantau workflow): (1) `saveToMediaStore` cek-duplikat + insert kini satu lock (nama kembar paralel tak mungkin dalam proses); (2) `scan()` teruskan `usedFallback` (invarian cache utuh).
+- Diverifikasi bersih: probe basi, cookie WebView, DiffUtil payload, redirect manual + same-origin auth, batch pause/resume, PIN/session rotation, tombol/SSE/upload remote, fd ChainInputStream, ZIP budget, ekspor log.
+- Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
