@@ -246,3 +246,9 @@
   3. (bug minor) `verifyToken` global di `uploadFiles()` (remote.src.html:4414) dipakai lintas job sekuensial — job baru mewarisi token job lama sampai chunk sukses pertama; retry-verify awal bisa pakai token salah (hasil akhir sama-sama gagal, tapi isolasi salah). Fix: jadikan per-job di dalam `uploadOne`.
 - Diverifikasi bersih: guard `security_audit` 0/0, `check_readme_sync` sinkron, `prepare_remote --check` OK; redirect engine/ekstraktor validasi SSRF; merge staging+rename; throttle/watchdog; PIN PBKDF2 + cookie sesi acak; upload reservasi+lock atomik; login throttle per-IP; zip strip-lock+budget; SSE pump lifecycle; scan cache TTL monotonik.
 - Guard saat audit: `security_audit` 0/0, `check_readme_sync` OK, `prepare_remote --check` OK (JS valid + smoke upload).
+
+## Sesi fix 3 temuan jilid 19 (2026-10-04 13:55 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `7a8a527` (precedent `005f546`/`73ea48f`) + 3 entri `CHANGELOG.md`, push `main` `f1f176d..7a8a527` tanpa pantau workflow (aturan 19).
+- Fix: (1) `itemsSignature()` tambah `speedLimitKbps * 67` + komentar; (2) `Checksums` tolak header raksasa (>4KB single, >8KB Digest/base64) + unit test; (3) `remote.src.html` `verifyToken` global → `job.verifyToken` per-job + regen `assets/remote.html` via `prepare_remote.py`.
+- Guard: `security_audit` 0/0, `check_readme_sync` OK, `prepare_remote --check` OK (JS valid + smoke upload), `diff --check` bersih.
