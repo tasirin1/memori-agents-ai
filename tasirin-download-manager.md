@@ -7,7 +7,7 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-03 15:15 UTC, HEAD 004f63c)
+## Status terakhir (2026-10-04 14:07 UTC, HEAD baad5f1)
 
 - HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
@@ -268,3 +268,9 @@
   2. (duplikasi, low) `loadMoreGallery()` (remote.src.html) dua cabang identik render-chunk (rAF vs langsung), beda hanya penjadwalan ekor. Runtime ~0 (minify), tapi gandakan permukaan bug (ubah format cell wajib sentuh dua tempat). Fix: ekstrak `renderNextGalleryChunk()` lalu cabang hanya atur `requestAnimationFrame` vs loop.
 - Diverifikasi efisien/bersih: `updateItem` lewati emit bila sama; `flushSegmentProgress` 1 updateItem per item per flush + speed-sample 1/detik; `scheduleSave` debounce + `scheduleProgressSave` 2-detik; `progressSig`/toolbar-sig gate + sticky-header scan ke atas; galeri native DiffUtil background + LruCache + cancel job cell; remote galeri fragment+chunk+rAF; thumbnail/durasi probe ter-cache + throttled; `StoragePrefs` prefs/collapsed cache; ekstraktor timeout total 60s + redirect tervalidasi.
 - Guard: `security_audit` 0/0. Tanpa push repo (tak ada perubahan kode).
+
+## Sesi fix 2 temuan jilid 21 (2026-10-04 14:07 UTC, push main sukses)
+
+- Perintah user: temuan jilid 21 (2 item) + yang diverifikasi bersih — 1 commit satu tujuan `baad5f1` + 2 entri `CHANGELOG.md`, push `main` `7a8a527..baad5f1` tanpa pantau workflow (aturan 19).
+- Fix: (1) `DownloadEngine.resumeAutoPaused()` batch 1x map + 1x update seperti `pauseAll`/`resumeAll`/`retryFailed` (plus `clearSegProgress()` per id selaras `resume()` tunggal); (2) `remote.src.html` `loadMoreGallery()` dua blok render-chunk identik digabung satu blok + syarat rAF (`sisa > 0 && len > 120`), perilaku windowing sama + regen `assets/remote.html` via `prepare_remote.py`.
+- Guard: `security_audit` 0/0 (self-test OK), `check_readme_sync` OK, `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke upload), `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
