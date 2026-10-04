@@ -228,3 +228,10 @@
 - Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `fdec29d` + bump `versionCode` 94/`1.6.67` + tag `v1.6.67`, push main + tag, susulan rilis; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.67` rilis, menunggu hasil CI.
+
+## Sesi #32 (2026-10-04 10:12 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `CameraService` capture tail/session/size/save, `captureAndSendPhoto`, `registerBotCommands`/`mainMenu`, `flushPendingPhotos`, repo `getNewSms`/`getNewCalls`, model, `initialSyncStarted`, `shouldAutoResume`, `toggleMonitoring`, fix `v1.6.67`, XML + grep secret.
+- Hasil: 2 temuan minor (`initialSyncStarted` memori write-only; `restartAllLoops` tak pulihkan initial-sync) + info (`take(max)` sebelum filter fresh; callback lewati freshness by-design pasca-dedup); sisanya baik (save atomik, UUID, auto-resume konsisten).
+- Validasi: XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.68` bila ya).
