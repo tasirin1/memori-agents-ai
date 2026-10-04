@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #10 (2026-10-04 07:17 UTC) — selesai
+- Permintaan: audit jilid 5, lebih agresif seluruh area (tanpa patch).
+- Cakupan: regresi `v1.6.56` (dedup, dispatcher, channel, Setup IO, crash prune, mutex, boot_meta), `clearCredentials` sisa forensik, `numberMatches` lintas-format ID, `ringDevice` null-URI, order forwarder, hot-loop worker, double initial-sync, receiver spoof, media vs poll, `/help` disclosure, interval race, wall-clock age.
+- Temuan baru (11): synchronizedSet tanpa sync + eviksi tunggal; pending SMS + offset basi selamat dari wipe; `0812` vs `62812` miss; ring null tahan busy; order FIFO hilang; reschedule immediate saat gagal; initial-sync ganda; `USER_PRESENT` spoofable; foto blocking slot + captive hang 90 dtk; help/status bocor kapasitas; double-tap save race.
+- Validasi: XML OK, grep secret bersih, tanpa perubahan kode.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.57`).
+
 ## Sesi #9 (2026-10-04 07:14 UTC) — selesai
 - Permintaan: perbaiki semua 10 temuan audit jilid 4.
 - Perbaikan: dispatcher 6/4; dedup 300 updateId + reset offset kondisional; channel MIN + recreate + resume tanpa badge; exclude `crash_pending.txt`; Setup IO-background; hapus crash saat opt-out + prune 7 hari; `/apps` `/log` `/version` owner-only; kalkulator eksponen kecil + secret via operator; lepas mutex forwarder; throttle `boot_meta` persisten + thread daemon.
