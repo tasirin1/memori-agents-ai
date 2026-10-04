@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #15 (2026-10-04 07:40 UTC) — selesai
+- Permintaan: perbaiki semua 14 temuan audit jilid 7 + gagal build.
+- Akar gagal build: import `TelegramMediaClient` hilang di `MonitoringService` sejak `v1.6.57` (`Unresolved reference`, 2 titik); build `v1.6.56` terakhir hijau.
+- Perbaikan: import + 14 temuan (ping terkompensasi tanpa restart ganda; kursor kondisional; reset jeda foto saat unlock; gate flush foto; paging 500 + kabar setup kosong; reset kamera saat FGS timeout; throttle SMS saat konfirmasi; prefs IO-background; menu bot scope owner; flush crash hormati blokir auth; drop forwarder tercatat; `lastSyncTime` khusus data).
+- Rilis: commit `49f6c0a` + tag `v1.6.59` (`versionCode` 86), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.59` rilis, menunggu hasil CI.
+
 ## Sesi #14 (2026-10-04 07:33 UTC) — selesai
 - Permintaan: audit jilid 7, lebih agresif seluruh area (tanpa patch).
 - Cakupan: regresi `v1.6.58` (crash embed, wipe, generasi save, cap 64, KEEP, pool bersama, `/ping` owner-only, varian seluler, banner-skip), `MonitoringService` penuh (polling, gerbang, SMS/ring/record/foto/audio, FGS timeout), `CameraService`, `MessageQueue`, `PreferencesManager`, `SendMessageWorker`, `BootRestartWorker`, `SetupActivity`, `MainActivity`, repo, util, manifest, workflow, gradle.
