@@ -7,6 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #23 (2026-10-04 08:45 UTC) — selesai
+- Permintaan: audit jilid 12, seluruh area lebih agresif (tanpa patch).
+- Cakupan: `checkAndSendNewData`/`sendInitialData` progresif, `fetchLocation` (`removeUpdates` di `finally` benar), `registerBotCommands` (hanya sekali saat start), `sendDropNotice`, `getNewCalls` komposit, `MessageQueue` prune/snapshot, `sendStatusNow`, lifecycle FGS, regresi `v1.6.63`.
+- Temuan baru (8, belum diperbaiki): (1) DUPLIKAT `numberMatches`/`numbersEqualFast` di `MonitoringService` tak ikut gate >= 9 digit v1.6.62 + tanpa cek `==` dulu — filter akhir `/history` bobol privasi sufiks; plus `idVariants` dead code; (2) menu owner tak re-register sampai restart usai `rememberOwner`; (3) `sendDropNotice` sample tak di-escape + `parseMode` default HTML — notif drop bisa 400 hilang diam; (4) `sendFitted` gandakan antrean per-part saat auth gagal; (5) `pruneVolatileLocked` drop kedaluwarsa tanpa counter/notice; (6) residual replay crash antara handle & persist offset (perintah non-idempoten bisa ganda); (7) `BootReceiver` unlock rutin picu thread+IO tiap buka kunci (throttle 60 dtk, boros ringan); (8) `sendStatusNow` direct tanpa antre (gagal = hilang, hanya toast).
+- Koreksi audit: `fetchLocation` tak bocor; `getNewCalls` komposit benar; `registerBotCommands` scope serialisasi benar.
+- Validasi: XML OK, secret bersih, tanpa perubahan kode repo ini.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.64` bila ya).
+
 ## Sesi #22 (2026-10-04 08:40 UTC) — selesai
 - Permintaan: perbaiki semuanya (8 temuan audit jilid 11).
 - Perbaikan: baris Owner + petunjuk DM di status Setup; alert Telegram saat admin dinonaktifkan; buang eksklusi backup basi; deskripsi admin jujur `force-lock`; `/stop` sebut notif ikut pause; cancel audio usai-sukses antre notif via `audioOutcome`; cek paket update equals; channel tak dihapus; fallback `/history` `100`.
