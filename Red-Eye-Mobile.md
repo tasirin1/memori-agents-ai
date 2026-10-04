@@ -7,6 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #21 (2026-10-04 08:36 UTC) — selesai
+- Permintaan: audit jilid 11, seluruh area lebih agresif (tanpa patch).
+- Cakupan: `ParentalMonitorApp`, `AdminReceiver`, `TelegramApi` (semua `SerializedName` lengkap), kalkulator+jalur rahasia, `refreshLoopConfig`/cache, `sendInitialData`, handler `/stop`-`/lock`, `NotificationForwarderService` (revive hormati opt-out), `MessageQueue` (terkunci konsisten), audio/ring `finally`, `stop/startMonitoringConfirmed`, XML `network_security`/`backup`/`device_admin`, `SYNC_INTERVAL`, `onDestroy`/`onTaskRemoved`/`handleFgsTimeout`, regresi `v1.6.62` (aman: replay callback dicover dedup `update_id`, sub-`ping` tetap owner-only).
+- Temuan baru (8, belum diperbaiki): (1) owner-learning implisit — grup-only terkunci sampai DM privat pertama, tanpa petunjuk Setup; (2) `onDisabled` admin tak lapor owner (buta pra-uninstall); (3) eksklusi backup basi (`secure_prefs_fallback`, `message_queue`); (4) `device_admin.xml` hanya `force-lock` vs deskripsi over-claim; (5) `/stop` ikut hentikan forward notif diam-diam; (6) cancel usai kirim audio hilangkan notif sukses; (7) cek `MY_PACKAGE_REPLACED` pakai `contains` bukan equals; (8) recreate channel hapus setelan channel pengguna + fallback `/history` 200-row boros.
+- Koreksi audit: tak ada bypass baru; semua revive hormati opt-out; `SYNC_INTERVAL` kosong aman default `5`.
+- Validasi: XML semua OK, grep secret bersih, pola token live nihil, tanpa perubahan kode repo ini.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.63` bila ya).
+
 ## Sesi #20 (2026-10-04 08:33 UTC) — selesai
 - Permintaan: perbaiki semuanya (9 temuan audit jilid 10).
 - Perbaikan 8 + 1 koreksi: callback tap=kini (`0L`) + runtuh cabang mati + jawab spinner saat drop; reset offset tiap `400` ber-offset; `/ping` polos keluar `SENSITIVE` (sub-camera/location tetap owner-only); sufiks `endsWith` hanya >= 9 digit di `SmsRepository`+`CallLogRepository`; SMS timeout per-part + lapor parsial `x/y` + `failCount`; toast `setup_superseded` ganti gugur diam; fallback param URI `limit` sebelum full-scan; potong entity-safe `CrashReporter`.
