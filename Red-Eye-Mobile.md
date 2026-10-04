@@ -404,3 +404,12 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
 - Rilis: commit `fe43000` (-110/+66 baris) + bump `versionCode` 105/`1.6.78` + tag `v1.6.78` (`af12d7c`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.78` rilis, menunggu hasil CI.
+
+## Sesi #55 (2026-10-04 13:00 UTC) — selesai
+- Permintaan: cek lagi seluruh kode (tanpa patch, jilid 25).
+- Cakupan: regresi `v1.6.78` (25 call site helper terpusat, `Regex` bersama thread-safe, import `utils`→`data` searah tanpa siklus, resource mati hilang + tema utuh), pindai `KEY_*` mati + `private fun` tak dipanggil, brace/XML/secret/status.
+- Hasil (baru): 2 minor sampah — `PreferencesManager.putValue` (setter generik privat ~16 baris, nol pemanggil; semua tulis via blok edit eksplisit) + `SmsRepository.numbersEqual` (wrapper mati 3 baris; semua pemanggil langsung `numbersEqualFast`; `CallLogRepository` sudah bersih).
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header, varian `redactToken`/auth-inline beda situs disengaja.
+- Regresi baik: konsolidasi tanpa sisa tak-terkualifikasi; `versionCode` 105/`1.6.78` konsisten dengan `CHANGELOG.md` + tag.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul buang 2 fungsi mati di `v1.6.79` bila ya).
