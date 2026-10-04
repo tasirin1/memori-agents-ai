@@ -32,3 +32,10 @@
 - Koreksi audit: klaim deadlock `stopBackgroundThread` dan korutin-bocor `fetchLocation` gugur (kode sudah guard `join` dan `withTimeoutOrNull`).
 - Rilis: commit `f2c0c59` + tag `v1.6.53` (`versionCode` 80), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.53` rilis, menunggu hasil CI dan uji grup-mode owner.
+
+## Sesi #4 (2026-10-04 04:10 UTC) — selesai
+- Permintaan: audit jilid 2, lebih dalam (tanpa patch).
+- Cakupan: seluruh `MonitoringService` (perintah, SMS/record/ring/lock, media, loop), wake-loop forwarder, `CameraService`, worker, `TimeFmt`, repo, model, resource cross-check (semua id/string resolve), `network_security_config`, proguard, workflow, regresi diff `v1.6.53` (bersih).
+- Temuan baru: (1) wake-loop `pollWakeOnce` masih lockout owner grup + tanpa gate opt-out user (poll tiap 25 dtk meski monitoring dimatikan); (2) double-pong forwarder vs service; (3) cache `MessageQueue` tak pernah prune kedaluwarsa; (4) `/ping` bare bisa dipakai viewer grup untuk restart loop; (5) `LIKE '%%'` bila query non-digit; (6) fallback kamera bisa salah lensa diam-diam; (7) tolak notifikasi = autostart mati diam-diam; (8) duplikat chunk retry.
+- Validasi: XML OK, grep secret bersih, tidak ada perubahan kode.
+- Status terakhir: menunggu keputusan owner apakah temuan jilid 2 diperbaiki (usul: rilis `v1.6.54` bila ya).
