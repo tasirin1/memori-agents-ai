@@ -360,3 +360,13 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal; sebut build via GitHub Actions.
 - Rilis: commit `f91316d` + bump `versionCode` 102/`1.6.75` + tag `v1.6.75` (`927f920`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.75` rilis, menunggu hasil CI.
+
+## Sesi #50 (2026-10-04 12:20 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch, jilid 23).
+- Cakupan: regresi `v1.6.75` (hapus inkremental worker + hapus speed monitor), `checkAndSendNewData`/`sendInitialData` progresif, polling perintah + freshness/dedup, `sendFitted`/`sendToTelegram` antre-sekali, `sendSmsPending` multipart, `fetchLocation`, flush/prune media, `isRunning` volatile, `BootReceiver`/`BootRestartWorker`, `MessageScheduler` APPEND/KEEP, `SetupActivity` save/test + `sendStatusNow`, kalkulator `1234=`, forwarder, repo kursor, `CrashReporter` `safeTake`, prefs listener, manifest/backup/XML, README/builder/workflow, grep secret.
+- Hasil (baru): 1 info — `MessageScheduler.scheduleMessageSend` pakai `APPEND` di jalur gagal (`sendToTelegram`, `MonitoringService`, `SetupActivity`, `BootRestartWorker`) sehingga offline lama menumpuk rantai worker yang saat online jalan berurutan (yang pertama kuras antrean, sisanya no-op); efisiensi saja, tak ada data-loss/duplikat; mitigasi bila mau: samakan ke `KEEP`/coalesced seperti `scheduleMessageSendNext`.
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header.
+- Regresi baik: inkremental `removeMessage` per `Sent`/`Rejected` + `removeMessages` pengaman (duplikat kill tengah batch hilang kecuali pesan in-flight); hapus speed monitor bersih tanpa referensi sisa (19 XML OK, manifest 2 activity).
+- Gugur/baik: `BootReceiver.lastHandleAt` volatile (dugaan race gugur), `isRunning` volatile, busy-flag/`finally` lengkap, multipart confirm per-part + timeout proporsional, `removeUpdates` di `finally`, offset persist sebelum + `finally` + dedup 300/200 + freshness 900/300 termasuk callback, `sendStatusNow` antre selektif (429/401/403/chat-hilang ya, 400 permanen tidak), kalkulator 12 digit + entri baru usai `=`, channel `MIN`/`HIGH` + badge off, backup excludes, README GHA-first + builder legacy, tanpa TODO.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul biarkan APPEND atau perbaiki di `v1.6.76` bila mau).
