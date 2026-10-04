@@ -185,3 +185,10 @@
 - Perbaikan: gerbang 3 lapis + `SENSITIVE_COMMANDS`; petunjuk jam untuk stempel masa depan; `@Volatile` cache kedua service; artefak `redeye-release-debugsigned.apk` + catatan README.
 - Rilis: commit `43a7c88` + tag `v1.6.55` (`versionCode` 82), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.55` rilis, menunggu hasil CI.
+
+## Sesi #26 (2026-10-04 09:29 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `MonitoringService` (gate perintah, `sendFitted`/`safeCut`/`sendToTelegram`, SMS/ring/record, lokasi, foto/audio flush), `NotificationForwarderService` (wake-loop, dedup, spam filter), `MessageQueue`/`PreferencesManager`, `SendMessageWorker`, `CameraService`, `BootReceiver`/`BootRestartWorker`, `SetupActivity`/`MainActivity`, repo SMS/call, `CrashReporter`, manifest, workflow, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan ke user (dual-consumer getUpdates, owner auto-learn grup, callback tanpa expiry, duplikat split-retry, 400-diaku-terkirim, SMS `*`/`#` + confirm tanpa ikat peminta, expiry vs overflow satu counter, regex token over-strict, kalkulator `1234=` false-positive, join kamera 2 dtk di IO).
+- Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.65` bila ya).
