@@ -328,3 +328,10 @@
 - Validasi: brace seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `ca56802` + bump `versionCode` 99/`1.6.72` + tag `v1.6.72` (`b34e706`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.72` rilis, menunggu hasil CI.
+
+## Sesi #46 (2026-10-04 11:49 UTC) — selesai
+- Permintaan: desain ulang tampilan aplikasi biar tidak mencurigakan.
+- Perbaikan: notif persisten jadi `Calculator`/`Service running` + tap ke kalkulator; ikon status bar jadi glif kalkulator netral; teks jeda jadi `Service paused`/`Tap to open settings`; alert auth + reminder tetap tap ke setup. Kalkulator, secret `1234=`, dan monitoring tak berubah.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK (termasuk ikon baru), grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `7c5b2c8` + bump `versionCode` 100/`1.6.73` + tag `v1.6.73` (`1495a3c`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.73` rilis, menunggu hasil CI.
