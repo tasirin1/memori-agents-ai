@@ -257,3 +257,10 @@
 - Hasil: 2 minor baru (`sendFitted` duplikat chunkparsial saat retry; revive `startForegroundService` telan gagal diam) + 1 kosmetik (`/ping` abaikan state initial-sync) + 1 info (pause elapsed hilang saat reboot by-design); regresi `v1.6.69` baik; gugur: cursor Aman (repo ASC), save/test invalidasi dua arah, callback auth benar, wake-poll non-destruktif, timeout pas, cache bounded, `/log` tanpa-loss.
 - Validasi: brace seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.70` bila ya).
+
+## Sesi #36 (2026-10-04 10:52 UTC) — selesai
+- Permintaan: perbaiki semuanya (3 temuan audit jilid 18 / sesi #35).
+- Perbaikan: `sendToTelegram` kontrak handled (11 `return false` -> `return queueOnFail`) + `sendFitted` lapor handled usai antre; `/ping` tambah `initialStuck` ala watchdog; `Log.w` di revive `SetupActivity` + forwarder revive/wake-restart.
+- Validasi: brace seimbang, 20 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `f124582` + bump `versionCode` 97/`1.6.70` + tag `v1.6.70` (`27b6e9c`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.70` rilis, menunggu hasil CI.
