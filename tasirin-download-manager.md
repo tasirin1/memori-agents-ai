@@ -7,7 +7,7 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-04 20:40 UTC, HEAD 638424f — fix 4 temuan jilid 22, push sukses)
+## Status terakhir (2026-10-04 21:05 UTC, HEAD df78baa — feat Scribd tanpa langganan, push sukses)
 
 - HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
@@ -291,3 +291,11 @@
 - Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `638424f` (precedent `7a8a527`/`baad5f1`) + 4 entri `CHANGELOG.md`, push `main` `baad5f1..638424f` tanpa pantau workflow (aturan 19).
 - Fix: (1) `resumeInterrupted()` batch 1x map + 1x update, perilaku sama (hanya PENDING + autoResume); (2) `updateRows()` forEach → for + break setelah rebuild (render ganda hilang); (3) `render()` prune `dlPinned` + persist localStorage seperti `lockedTotalBytes`; (4) `_thumbQueueClear()` + panggil di `renderGalleryReset()`; regen `assets/remote.html` via `prepare_remote.py`.
 - Guard: `security_audit` 0/0, `check_readme_sync` OK, `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke upload), `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
+
+## Sesi feat Scribd tanpa langganan (2026-10-04 21:05 UTC, push main sukses)
+
+- Perintah user: "tambahkan kompatibilitas scribd tanpa harus langganan" — riset empiris: seluruh endpoint scribd.com (search, doc page, embeds, oembed) menyajikan "Client Challenge" JS ke fetch server (terverifikasi via curl) → arsitektur WebView seperti HentaiHaven (bukan fetch server).
+- 1 commit satu tujuan `df78baa` + 1 entri `CHANGELOG.md`, push `main` `638424f..df78baa` tanpa pantau workflow (aturan 19).
+- Implementasi: `SocialMediaExtractor` (`SCRIBD_HOST_RE`/`isScribdUrl`/cabang extract/`parseScribdPage`/`parseDocPages`+`DocPage`, cap 300, host-lock scribdassets); `extract.js` kolektor gambar halaman (src/data-src/srcset, filter chrome, urut nomor); `WebExtractActivity` (`EXTRA_PAGES_JSON`/`onPagesOnly`/trim 300); `MainActivity` (badge Scribd, skip probe, `offerPagesBatch` antre langsung + cookie/Referer, nama `Scribd_<judul>_p001.jpg`); strings `platform_scribd`+`batch_pages_*`; 4 unit test; `docs/index.html` FAQ ID+EN.
+- Batas jujur: hanya halaman pratinjau yang ter-render untuk sesi anonim (terkunci = tak ada URL di DOM = tak terunduh); tanpa bypass paywall/kredensial.
+- Guard: `security_audit` 0/0, `prepare_remote --check` OK, `check_readme_sync` OK, `node --check extract.js` OK, `check_repo.py --pre-commit` 10/10, `diff --check` bersih. Compile penuh milik CI (tanpa SDK lokal).
