@@ -378,3 +378,11 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
 - Rilis: commit `94ecad0` + bump `versionCode` 103/`1.6.76` + tag `v1.6.76` (`bbd0630`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.76` rilis, menunggu hasil CI.
+
+## Sesi #52 (2026-10-04 12:32 UTC) — selesai
+- Permintaan: buat aplikasi lebih pintar dan efisien.
+- Perbaikan: `SendMessageWorker` cek kredensial ulang tiap 5 pesan (bukan tiap pesan); batch 20 kini ~10 baca prefs terenkripsi, bukan ~40. Deteksi ganti kredensial mid-batch tetap aman via cek berkala + jalur `AuthFailed` (kredensial lama invalid langsung tertahan).
+- Sengaja tak diubah: persist inkremental per pesan tetap (itulah pengaman anti-duplikat `v1.6.75`), service sudah hemat (cache kredensial 5 mnt + network 20 dtk + polling adaptif), tradeoff lama tetap berlaku.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
+- Rilis: commit `9aab0e4` + bump `versionCode` 104/`1.6.77` + tag `v1.6.77` (`a1c4bff`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.77` rilis, menunggu hasil CI.
