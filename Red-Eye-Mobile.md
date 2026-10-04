@@ -294,3 +294,9 @@
 - Validasi: brace 4 file seimbang, 19 XML OK, grep secret bersih (di luar `KEY_*`/regex nihil), tanpa Gradle lokal.
 - Rilis: commit `9d5ddd1` + bump `versionCode` 98/`1.6.71` + tag `v1.6.71` (`ecc8024`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.71` rilis, menunggu hasil CI.
+
+## Sesi #41 (2026-10-04 11:34 UTC) — selesai
+- Permintaan: jelaskan perbedaan versi terpasang `1.6.56` (83) vs terkini `1.6.71` (tanpa ubah kode).
+- Hasil: rangkum 15 rilis (`1.6.57`–`1.6.71`) dari `CHANGELOG.md` — sorot boot-restart, antre/handled, command owner, media flush, forwarder, Setup, crash/log, kalkulator; sertakan catatan install (tandatangan keystore vs debugsigned).
+- Validasi: baca saja, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: `v1.6.71` rilis, menunggu hasil CI; perangkat owner masih di `1.6.56`.
