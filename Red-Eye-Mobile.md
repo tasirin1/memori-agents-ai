@@ -306,3 +306,9 @@
 - Hasil: jelaskan tanpa ubah kode — benteng existing (`START_STICKY` + foreground, `onTaskRemoved` restart, watchdog 15 mnt, Device Admin cegah uninstall bukan force-stop, tombol battery-exempt); Android tak izinkan app biasa truly-unkillable (butuh system app/Device Owner + reset pabrik); ColorOS OPPO agresif — cek kunci-di-recents, autostart, baterai unrestricted. Tawarkan hardening lanjutan (shortcut autostart OPPO di Setup).
 - Validasi: baca saja, tanpa `./gradlew` lokal.
 - Status terakhir: `v1.6.71` rilis; perangkat owner masih di `1.6.56`.
+
+## Sesi #43 (2026-10-04 11:40 UTC) — selesai
+- Permintaan: owner kabarkan app `1.6.56` di OPPO CPH2773 ternyata tidak mati (survive).
+- Hasil: tanpa ubah kode — benteng existing (`START_STICKY`, `onTaskRemoved`, watchdog) terbukti cukup di perangkat itu; tawarkan update ke `1.6.71` santai saja saat sempat (perbaikan boot-throttle hanya edge-case timing reboot).
+- Validasi: baca saja, tanpa `./gradlew` lokal.
+- Status terakhir: `v1.6.71` rilis; perangkat owner di `1.6.56` dan sehat.
