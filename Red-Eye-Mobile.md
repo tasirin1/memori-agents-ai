@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #22 (2026-10-04 08:40 UTC) — selesai
+- Permintaan: perbaiki semuanya (8 temuan audit jilid 11).
+- Perbaikan: baris Owner + petunjuk DM di status Setup; alert Telegram saat admin dinonaktifkan; buang eksklusi backup basi; deskripsi admin jujur `force-lock`; `/stop` sebut notif ikut pause; cancel audio usai-sukses antre notif via `audioOutcome`; cek paket update equals; channel tak dihapus; fallback `/history` `100`.
+- Validasi: XML semua OK, brace/paren 7 file seimbang, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `f64494a` + bump `versionCode` 90/`1.6.63` + tag `v1.6.63` (`40f1c52`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.63` rilis, menunggu hasil CI.
+
 ## Sesi #21 (2026-10-04 08:36 UTC) — selesai
 - Permintaan: audit jilid 11, seluruh area lebih agresif (tanpa patch).
 - Cakupan: `ParentalMonitorApp`, `AdminReceiver`, `TelegramApi` (semua `SerializedName` lengkap), kalkulator+jalur rahasia, `refreshLoopConfig`/cache, `sendInitialData`, handler `/stop`-`/lock`, `NotificationForwarderService` (revive hormati opt-out), `MessageQueue` (terkunci konsisten), audio/ring `finally`, `stop/startMonitoringConfirmed`, XML `network_security`/`backup`/`device_admin`, `SYNC_INTERVAL`, `onDestroy`/`onTaskRemoved`/`handleFgsTimeout`, regresi `v1.6.62` (aman: replay callback dicover dedup `update_id`, sub-`ping` tetap owner-only).
