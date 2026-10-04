@@ -39,3 +39,9 @@
 - Temuan baru: (1) wake-loop `pollWakeOnce` masih lockout owner grup + tanpa gate opt-out user (poll tiap 25 dtk meski monitoring dimatikan); (2) double-pong forwarder vs service; (3) cache `MessageQueue` tak pernah prune kedaluwarsa; (4) `/ping` bare bisa dipakai viewer grup untuk restart loop; (5) `LIKE '%%'` bila query non-digit; (6) fallback kamera bisa salah lensa diam-diam; (7) tolak notifikasi = autostart mati diam-diam; (8) duplikat chunk retry.
 - Validasi: XML OK, grep secret bersih, tidak ada perubahan kode.
 - Status terakhir: menunggu keputusan owner apakah temuan jilid 2 diperbaiki (usul: rilis `v1.6.54` bila ya).
+
+## Sesi #5 (2026-10-04 04:35 UTC) — selesai
+- Permintaan: perbaiki semua 9 temuan audit jilid 2.
+- Perbaikan: wake-loop owner-aware + gate opt-out + hapus double-pong; prune cache antrean; `/ping` restart khusus owner; early-return non-digit; tanpa fallback lensa; notifikasi keluar dari syarat autostart; jeda chunk 1000 ms.
+- Rilis: commit `1800e8f` + tag `v1.6.54` (`versionCode` 81), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.54` rilis, menunggu hasil CI.
