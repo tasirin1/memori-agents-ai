@@ -271,3 +271,10 @@
 - Hasil: 1 minor (tradeoff `v1.6.70`: kursor maju saat antre -> outage lama + >100 backlog = drop permanen; dulu duplikat tapi tak hilang) + 1 info (window volatile-queue + kill) + 1 kosmetik (fragmen antre worker tanpa header) + gugur: scheduler policy benar, retry bounded + watchdog, escape benar, Log.w ada.
 - Validasi: brace seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.71` bila ya).
+
+## Sesi #38 (2026-10-04 11:18 UTC) — selesai
+- Permintaan: Audit Jilid 19 (verifikasi ulang regresi `v1.6.70`, tanpa ubah kode).
+- Cakupan: kontrak antre, repo SMS, Setup toggle, boot worker, scheduler, wake-poll, dedup, escape.
+- Hasil: konfirmasi identik Sesi #37 — 11 `return queueOnFail`, `initialStuck` di `/ping` + watchdog, 3 `Log.w` revive; 1 minor (tradeoff kursor maju saat antre + cap 100 -> backlog >100 drop permanen) + 1 info (window volatile-queue + kill sebelum restore terenkripsi) + 1 kosmetik (fragmen antre worker >4000 char tanpa header); baik: policy APPEND/KEEP/watchdog, retry bounded + reminder, LIKE-escape, wake-poll non-destruktif, cache bounded.
+- Validasi: brace/paren 5 file seimbang, 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (bersih), `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.71` bila ya).
