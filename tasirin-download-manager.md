@@ -197,3 +197,10 @@
   2. `resolveInvidiousLatest` ikuti `Location` tanpa `isExtractRedirectAllowed` + `301..308` memakan 304/305/306 — kini kode redirect eksplisit + tolak target terlarang; + unit test metadata/samaran loopback di `SocialMediaExtractorTest`.
 - Diverifikasi bersih: `SegmentPlanner` (total=1, coerce), `uniqueTargetFile` (klaim atomik), `httpGetWithCookies`/`httpPostJson` (sudah validasi + strip kredensial), `isUrlForbidden` (tanpa follow redirect).
 - Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
+
+## Sesi sapuan total jilid 15 (2026-10-04 01:35 UTC, push main sukses)
+
+- Perintah user: "cek seluruh area temukan bug" — sapuan total semua area: `App`/`DownloadService`/`BootReceiver`/`BootResumeJobService`, `DownloadEngine` (runDownload/runSingle/segmen/HLS/mux), `FileSaver` (publish/MediaStore/unique), `MediaLibrary` (scan/lock/observer), `Crypto`/`PinHash`/`StorageCleanup`, `DownloadAdapter`, `GalleryActivity`/`SettingsActivity`/`LogActivity`/`MainActivity.openApk`, `WebExtractActivity`, `SseStream`/`ServerStreams`/`ShareToken`/`ServerVideoDurations`/`HttpBody`/`ZipCreator`, `QueueOrder`/`SpeedTracker`, `Streams`, remote JS (upload-chunk/SSE/galeri/tombol).
+- 1 bug ditemukan & diperbaiki (commit `03494c8`, +1 entri `CHANGELOG.md`, +2 unit test `StreamsTest`, push main tanpa pantau workflow): `readBounded` busy-loop pada `read() = 0` ( imports engine HLS probe, body ekstraktor, cache durasi, extract.js) — kini 32 nol beruntun = kembalikan parsial, selaras guard `HttpBody` jilid 12.
+- Diverifikasi bersih (temuan nihil): FGS/job boot, wake lock, throttle notifikasi monotonik, resume/segmen/HLS staging, publish atomik + orphan-guard, scanLock + observer tunggal, AES-GCM + plaintext eksplisit, PIN PBKDF2, tombol remote + SSE give-up + upload retry/finalisasi, ChainInputStream fd, ZIP budget/symlink, ekspor log tanpa yatim.
+- Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
