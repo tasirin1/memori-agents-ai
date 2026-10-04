@@ -342,3 +342,12 @@
 - Validasi: 20 XML OK (termasuk `values-night` baru), grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `633128e` + bump `versionCode` 101/`1.6.74` + tag `v1.6.74` (`b9c48d3`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.74` rilis, menunggu hasil CI.
+
+## Sesi #48 (2026-10-04 12:02 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch, jilid 22).
+- Cakupan: regresi 3 rilis (`1.6.72` freshness callback, `1.6.73` stealth notif/ikon, `1.6.74` tema `values-night`), cache interval + listener, busy-flag/`finally`, `sendSmsPending` multipart, flush/prune media, `isRunning` volatile, hapus-banyak worker, tema/setup hardcode, `STORED_MASK`, TODO, XML + grep secret.
+- Hasil (baru): 1 minor — `SendMessageWorker` hapus terkirim sekaligus usai batch 20 (`removeMessages(sentIds)` pasca-loop; `CancellationException` rethrow lewati hapus) sehingga kill pekerja di tengah batch (limit 10 mnt + network macet) kirim ulang duplikat; mitigasi: hapus inkremental atau batch <20 + 1 info (`SpeedMonitorActivity` unreachable — hanya manifest, tanpa intent masuk).
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header, callback kini ikut expiry; regresi `1.6.72`–`1.6.74` baik.
+- Gugur/baik: invalidasi interval via listener, semua busy ada `finally`, multipart confirm per-part + timeout proporsional, `isRunning` volatile, Setup tanpa hardcode + save/test aman, tema `calc_*` lengkap 9/9 dua moda, tanpa TODO.
+- Validasi: brace semua `.kt` seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.75` bila ya).
