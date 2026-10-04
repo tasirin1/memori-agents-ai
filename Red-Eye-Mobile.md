@@ -235,3 +235,10 @@
 - Hasil: 2 temuan minor (`initialSyncStarted` memori write-only; `restartAllLoops` tak pulihkan initial-sync) + info (`take(max)` sebelum filter fresh; callback lewati freshness by-design pasca-dedup); sisanya baik (save atomik, UUID, auto-resume konsisten).
 - Validasi: XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.68` bila ya).
+
+## Sesi #33 (2026-10-04 10:20 UTC) — selesai
+- Permintaan: rapikan dua temuan audit jilid 16 / sesi #32 (`v1.6.68`).
+- Perbaikan: hapus flag memori `initialSyncStarted` write-only; `restartAllLoops` pulihkan initial-sync bila idle dan belum done.
+- Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `748ad7e` + bump `versionCode` 95/`1.6.68` + tag `v1.6.68`, push main + tag, susulan rilis; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.68` rilis, menunggu hasil CI.
