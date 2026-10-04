@@ -501,3 +501,11 @@
 - Klaim gugur: callback member grup aman (`senderOk` gate); migrasi volatile aman; SMS requestCode aman (action unik + single-flight); `isChatIdValid` sudah tolak `0`.
 - Validasi: XML OK, grep secret bersih, `git status` bersih repo ini, tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul perbaiki kritis + rilis `v1.6.85` bila ya).
+
+## Sesi #68 (2026-10-04 22:12 UTC) — selesai
+- Permintaan: perbaiki semuanya (8 temuan audit agresif jilid 31 / sesi #67).
+- Perbaikan: `sendDropNotice` tulis ulang (hitung `text` di scope fungsi, fallback antre selalu jalan); `sendFitted` short-path bandingkan ukuran antrean sebelum/sesudah; `sendChunked` antrekan sisa part + anggap asli terkirim; reset offset hanya saat token berubah; `sendStatusNow` antrekan semua 400; scheduler delay>0 `REPLACE`; `/history` tanpa filter ganda; `searchContacts` `QUERY_ARG_LIMIT` 10; eviksi wake-ID terkecil dulu.
+- Insiden: skrip patch pertama salah target berkas (gagal assertion, file utuh); skrip kontak tinggalkan placeholder + kurung kurang — keduanya tertangkap verifikasi sebelum commit (cek balance vs HEAD + diff).
+- Validasi: brace/paren 8 `.kt` seimbang (0/0), XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `e6a58d0` + bump `versionCode` 112/`1.6.85` + tag `v1.6.85`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.85` rilis, menunggu hasil CI (kritis: pastikan build hijau — dua rilis sebelumnya certi gagal kompilasi).
