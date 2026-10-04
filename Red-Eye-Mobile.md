@@ -370,3 +370,11 @@
 - Gugur/baik: `BootReceiver.lastHandleAt` volatile (dugaan race gugur), `isRunning` volatile, busy-flag/`finally` lengkap, multipart confirm per-part + timeout proporsional, `removeUpdates` di `finally`, offset persist sebelum + `finally` + dedup 300/200 + freshness 900/300 termasuk callback, `sendStatusNow` antre selektif (429/401/403/chat-hilang ya, 400 permanen tidak), kalkulator 12 digit + entri baru usai `=`, channel `MIN`/`HIGH` + badge off, backup excludes, README GHA-first + builder legacy, tanpa TODO.
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul biarkan APPEND atau perbaiki di `v1.6.76` bila mau).
+
+## Sesi #51 (2026-10-04 12:27 UTC) — selesai
+- Permintaan: perbaiki semuanya (temuan audit jilid 23 / sesi #50).
+- Perbaikan: `MessageScheduler.scheduleMessageSend` `APPEND` → `KEEP` agar trigger offline menumpuk digabung bukan antre berantai; aman karena worker kuras antrean + jadwal ulang sendiri bila sisa.
+- Tak disentuh (masih berlaku): tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
+- Rilis: commit `94ecad0` + bump `versionCode` 103/`1.6.76` + tag `v1.6.76` (`bbd0630`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.76` rilis, menunggu hasil CI.
