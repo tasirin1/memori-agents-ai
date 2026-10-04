@@ -300,3 +300,9 @@
 - Hasil: rangkum 15 rilis (`1.6.57`–`1.6.71`) dari `CHANGELOG.md` — sorot boot-restart, antre/handled, command owner, media flush, forwarder, Setup, crash/log, kalkulator; sertakan catatan install (tandatangan keystore vs debugsigned).
 - Validasi: baca saja, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: `v1.6.71` rilis, menunggu hasil CI; perangkat owner masih di `1.6.56`.
+
+## Sesi #42 (2026-10-04 11:37 UTC) — selesai
+- Permintaan: owner tanya kenapa app admin masih bisa dibunuh (perangkat OPPO CPH2773).
+- Hasil: jelaskan tanpa ubah kode — benteng existing (`START_STICKY` + foreground, `onTaskRemoved` restart, watchdog 15 mnt, Device Admin cegah uninstall bukan force-stop, tombol battery-exempt); Android tak izinkan app biasa truly-unkillable (butuh system app/Device Owner + reset pabrik); ColorOS OPPO agresif — cek kunci-di-recents, autostart, baterai unrestricted. Tawarkan hardening lanjutan (shortcut autostart OPPO di Setup).
+- Validasi: baca saja, tanpa `./gradlew` lokal.
+- Status terakhir: `v1.6.71` rilis; perangkat owner masih di `1.6.56`.
