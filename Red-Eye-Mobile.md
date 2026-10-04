@@ -45,3 +45,10 @@
 - Perbaikan: wake-loop owner-aware + gate opt-out + hapus double-pong; prune cache antrean; `/ping` restart khusus owner; early-return non-digit; tanpa fallback lensa; notifikasi keluar dari syarat autostart; jeda chunk 1000 ms.
 - Rilis: commit `1800e8f` + tag `v1.6.54` (`versionCode` 81), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.54` rilis, menunggu hasil CI.
+
+## Sesi #6 (2026-10-04 05:00 UTC) — selesai
+- Permintaan: audit jilid 3, lebih dalam (tanpa patch).
+- Cakupan: loop `checkAndSendNewData`, `sendFitted`/`safeCut`, SMS pending/confirm, ring restore, audio/photo outcome, `CrashReporter.install` (chaining benar), inputType Setup (token `textPassword` baik), mutex+cap forwarder, `BootRestartWorker`, kalkulator hardcode (wajar), `@Volatile` audit.
+- Temuan utama: (1) relaksasi `v1.6.53` membuka data sensitif (`/photo`, `/location`, `/lastcalls`, `/lastsms`, `/lastnotif`, `/contacts`, `/history`) untuk semua viewer grup via `chatOk` — usul gerbang 3 lapis; (2) field cache kredensial/config tanpa `@Volatile` di kedua service; (3) skew jam >5 mnt membunuh semua perintah; (4) APK release non-tag debug-signed tapi bernama release.
+- Validasi: tanpa perubahan kode.
+- Status terakhir: menunggu keputusan owner apakah temuan jilid 3 diperbaiki (`v1.6.55`).
