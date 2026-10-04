@@ -396,3 +396,11 @@
 - Gugur/baik: `getSmsForNumber`/`getCallsForNumber` LIKE + filter dua tahap wajar (perintah manual jarang); flush audio/foto early-exit (`authBlocked`, CAS busy, `listFiles` null); forwarder throttle 10/120 dtk per paket + history cap; `.take(100)`/`sortBy` nol-biaya; `getQueueSize` murah via cache.
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul konsolidasi helper + buang resource mati di `v1.6.78` bila ya).
+
+## Sesi #54 (2026-10-04 12:52 UTC) — selesai
+- Permintaan: perbaiki semuanya (temuan sampah jilid 24 / sesi #53).
+- Perbaikan: `isChatMissing` 5 file + `authBlocked` 401/403/400 (service + worker) + `tagStripRegex` ganda kini milik `NetworkUtils`/`Html` (salin byte-identik, perilaku sama); `scheduleMessageSendCoalesced` delegasi ke `scheduleMessageSendNext`; bulk `removeMessages` akhir worker digate flag `incrementalFailed` (hemat satu persist tiap run sukses); buang resource mati `purple_200`, `green_success`, `red_error`, `msg_fill_all_debug`, `queue_pending`.
+- Sengaja tak disatukan: 3 varian `redactToken` (sumber secret + fallback beda) dan inline auth forwarder/setup/bootworker (predikat blokir-any vs 401/403/400 beda) — penyatuan paksa justru ubah perilaku.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
+- Rilis: commit `fe43000` (-110/+66 baris) + bump `versionCode` 105/`1.6.78` + tag `v1.6.78` (`af12d7c`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.78` rilis, menunggu hasil CI.
