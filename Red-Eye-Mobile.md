@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #12 (2026-10-04 07:25 UTC) — selesai
+- Permintaan: audit jilid 6, lebih agresif seluruh area (tanpa patch).
+- Cakupan: regresi `v1.6.57` (crash IO, wipe sisa, serial unbounded, cancel race, boot_meta backup, USER_PRESENT, double pool, help/pong, wake double, idVariants, worker priority), manifest, workflow, repo query.
+- Temuan baru (11): IO prefs di crash-thread; kursor history selamat dari wipe; serial 1 antrean tak bounded; cancel kooperatif masih balapan; boot_meta tak di-exclude; hapus USER_PRESENT kurangi reliabilitas; double pool 10/6; pong viewer bocor liveness; double restart ping; false-positive 626 + GC churn; backoff 5 mnt blokir pesan urgent.
+- Validasi: XML OK, grep secret bersih, tanpa perubahan kode.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.58`).
+
 ## Sesi #11 (2026-10-04 07:19 UTC) — selesai
 - Permintaan: perbaiki semua 11 temuan audit jilid 5.
 - Perbaikan: dedup sync + eviksi while; wipe SMS pending + hash + offset; varian `62`/`0`; ring null fail-fast; forwarder serial tunggal; worker backoff 5 mnt; kursor initial hanya saat sukses; hapus `USER_PRESENT`; `TelegramMediaClient` pisah; status/battery/uptime/storage owner-only + help peran; cancel job save/test; crash elapsed monotonic.
