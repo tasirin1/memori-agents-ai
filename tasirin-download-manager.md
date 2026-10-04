@@ -222,4 +222,11 @@
   4. (catatan/teoretis) `AdtsAac.readExact` tanpa guard zero-read (pola `MAX_ZERO_READS` sudah ada di `HttpBody`/`Streams`); praktis aman (blocking stream tak return 0 untuk len>0).
 - Dugaan gugur: `serveMedia` cabang `f:` pakai `absolutePath` — TERNYATA AMAN karena `ServerSecurity.isPathAllowed` mengkanonikalkan di dalam (sama proteksinya dengan `serveFile`).
 - Diverifikasi bersih: budget cap + verifikasi Content-Range segmen, klaim atomik publish, PIN/session rotation, throttle login per-IP, token ZIP sekali pakai, share symlink-kanonikal, sanitasi nama + unik saat antre/rename, junk-cleanup aman (nama selalu tersanitasi), socialJob cancel + stale-guard, escaping XSS remote disiplin, WebView tanpa JS bridge + blokir navigasi luar host.
-- Guard: `security_audit` 0 error/0 warning, `check_repo.py` 10/10 SEMUA SEHAT. Tanpa push repo (tak ada perubahan kode).
+- Guard saat audit: `security_audit` 0/0, `check_repo.py` 10/10 SEMUA SEHAT.
+- Koreksi angka saat fix: 1 jam = 3,6e9 us (bukan 3,6e12) — overflow mentah butuh BANDWIDTH raksasa dari playlist tak-terpercaya atau video sangat panjang; fix tetap sah sebagai hardening input tak-terpercaya.
+
+## Sesi fix 4 temuan jilid 17 (2026-10-04 13:15 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 4 commit satu tujuan + entri `CHANGELOG.md` tiap commit, push `main` `24d0176..bde3ee5` tanpa pantau workflow (aturan 19).
+- Commit: `4dd64aa` fix(download) estimasi HLS anti-overflow (`safeMulDiv`/`saturatingAdd` internal murni + `SafeMulDivTest` 6 test); `f0395db` fix(server) `closeConnection()` di tolak CSRF-403, 401, login-terkunci; `1cd7005` docs(app) komentar PBKDF2-HMAC-SHA1; `bde3ee5` fix(download) guard zero-read `AdtsAac.readExact`.
+- Guard: `security_audit` 0/0, `check_repo.py` 10/10 SEMUA SEHAT, `diff --check` bersih.
