@@ -7,6 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #19 (2026-10-04 08:31 UTC) — selesai
+- Permintaan: audit jilid 10, seluruh area lebih agresif (tanpa patch).
+- Cakupan: `MonitoringService` (gate callback, expiry 900 dtk, offset 400, `/history` suffix, SMS multipart, loop kamera/auth, `registerBotCommands` hash), `NotificationForwarderService` (escape HTML, history 20), `SendMessageWorker`/`BootRestartWorker` (retry vs success), `SetupActivity` save/test seq, `SmsRepository`/`CallLogRepository` (`LIMIT` OEM), `MainActivity` stealth, `CrashReporter` (finally reset benar), `TelegramApi` dispatcher `6`/`4`, proguard keep, manifest, workflow.
+- Temuan baru (9, belum diperbaiki): (1) tombol inline kedaluwarsa 15 mnt (`msgDate` pesan lama vs `COMMAND_MAX_AGE_SEC`); (2) offset 400 brick (reset hanya bila `cur<0`, tak pernah tercapai); (3) `handleCallbackQuery` cabang `MUTATING` identik mati + spinner gantung saat drop diam; (4) menu publik `/ping` vs gerbang `SENSITIVE` tak sinkron; (5) `/history` suffix `endsWith` 7 digit bisa cocok nomor asing; (6) SMS multipart non-atomik (1 part gagal = lapor gagal total, retry = duplikat + biaya); (7) balap Save-vs-Test diam-diam gugur tanpa toast; (8) `LIMIT` via `sortOrder` di OEM tak support = full-scan + spike memori; (9) `activePhotoFile` bocor bila capture batal = file zombie dikecualikan prune selamanya.
+- Koreksi audit: dugaan bypass owner via callback GUGUR (gate dalam tetap `senderOk`); dugaan cache foto unbounded saat auth-blocked GUGUR (`captureAndSendPhoto` gate `authBlocked`); dugaan `flushing` macet GUGUR (`finally` reset ada); dispatcher/proguard/consent sudah benar.
+- Validasi: XML 4 file OK, grep secret bersih (hanya `KEY_` + regex), pola token live nihil, tanpa perubahan kode repo ini.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.62` bila ya).
+
 ## Sesi #18 (2026-10-04 08:09 UTC) — selesai
 - Permintaan: perbaiki semua temuan audit jilid 9.
 - Perbaikan 10: keystore tag jadi warning; Setup kecualikan `POST_NOTIFICATIONS`; Save/Test cross-invalidate; `scheduleMessageSendCoalesced` (`KEEP`) untuk cooldown auth + `APPEND` untuk rate-limit; `authBlocked`+`CrashReporter` hormati `400`; `README` nama debugsigned; pause basi >`480` mnt dibuang; chunk berhenti di gagal pertama; `tools:targetApi` `35`; reskala speed per-counter.
