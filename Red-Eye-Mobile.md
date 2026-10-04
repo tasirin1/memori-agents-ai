@@ -321,3 +321,10 @@
 - Gugur/baik: save/test hanya persist saat sukses + supersede toast, backoff loop + `authBlocked`, gate tanggal jalur pesan, gate sender/origin callback + jawab spinner, handler speedmonitor lepas di `onPause`, channel `MIN`/`HIGH` + badge off, README GHA-first + builder legacy, receiver ada scheme package, backup excludes, multipart SMS confirm per-part.
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.72` bila ya).
+
+## Sesi #45 (2026-10-04 11:47 UTC) — selesai
+- Permintaan: perbaiki semuanya (temuan audit jilid 21 / sesi #44).
+- Perbaikan: `handleCallbackQuery` teruskan `query.message?.date` sebagai `sentAtSec` agar tap inline basi ikut expiry 900/300 dtk dan tak replayable selamanya.
+- Validasi: brace seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `ca56802` + bump `versionCode` 99/`1.6.72` + tag `v1.6.72` (`b34e706`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.72` rilis, menunggu hasil CI.
