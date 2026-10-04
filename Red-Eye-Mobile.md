@@ -7,6 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #20 (2026-10-04 08:33 UTC) — selesai
+- Permintaan: perbaiki semuanya (9 temuan audit jilid 10).
+- Perbaikan 8 + 1 koreksi: callback tap=kini (`0L`) + runtuh cabang mati + jawab spinner saat drop; reset offset tiap `400` ber-offset; `/ping` polos keluar `SENSITIVE` (sub-camera/location tetap owner-only); sufiks `endsWith` hanya >= 9 digit di `SmsRepository`+`CallLogRepository`; SMS timeout per-part + lapor parsial `x/y` + `failCount`; toast `setup_superseded` ganti gugur diam; fallback param URI `limit` sebelum full-scan; potong entity-safe `CrashReporter`.
+- Koreksi audit: `activePhotoFile` ternyata sudah `finally`-null, tanpa perubahan; slot ke-9 diisi hardening potong entity `CrashReporter`.
+- Validasi: XML 5 file OK, brace/paren 5 file seimbang, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `052e6d0` + bump `versionCode` 89/`1.6.62` + tag `v1.6.62` (`060e2f9`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.62` rilis, menunggu hasil CI.
+
 ## Sesi #19 (2026-10-04 08:31 UTC) — selesai
 - Permintaan: audit jilid 10, seluruh area lebih agresif (tanpa patch).
 - Cakupan: `MonitoringService` (gate callback, expiry 900 dtk, offset 400, `/history` suffix, SMS multipart, loop kamera/auth, `registerBotCommands` hash), `NotificationForwarderService` (escape HTML, history 20), `SendMessageWorker`/`BootRestartWorker` (retry vs success), `SetupActivity` save/test seq, `SmsRepository`/`CallLogRepository` (`LIMIT` OEM), `MainActivity` stealth, `CrashReporter` (finally reset benar), `TelegramApi` dispatcher `6`/`4`, proguard keep, manifest, workflow.
