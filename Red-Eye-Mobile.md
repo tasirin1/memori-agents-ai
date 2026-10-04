@@ -19,3 +19,9 @@
 
 - Awal sesi: baca file ini, lalu `git status --short` + `git log --oneline -5`.
 - Akhir sesi: update tanggal, status terakhir, dan tugas terbuka.
+
+## Sesi #2 (2026-10-04 03:38 UTC) — selesai
+- Permintaan: audit seluruh kode, temukan bug (tanpa patch).
+- Hasil: 12 temuan dilaporkan ke user (kritikal: MessageQueue/PreferencesManager volatile-first race + snapshot loss; SendMessageWorker KEEP stall backlog >20; tombol inline grup mati; cache kredensial forwarder basi; join HandlerThread dari callback; LIKE nomor tidak dinormalisasi; VALIDATED over-strict; short-code <7 digit tak ter-search).
+- Validasi: XML 4 file OK, grep secret bersih, tanpa perubahan kode repo ini.
+- Status terakhir: audit selesai, menunggu keputusan owner bug mana yang diperbaiki dulu.
