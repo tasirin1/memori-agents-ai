@@ -7,6 +7,12 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #9 (2026-10-04 07:14 UTC) — selesai
+- Permintaan: perbaiki semua 10 temuan audit jilid 4.
+- Perbaikan: dispatcher 6/4; dedup 300 updateId + reset offset kondisional; channel MIN + recreate + resume tanpa badge; exclude `crash_pending.txt`; Setup IO-background; hapus crash saat opt-out + prune 7 hari; `/apps` `/log` `/version` owner-only; kalkulator eksponen kecil + secret via operator; lepas mutex forwarder; throttle `boot_meta` persisten + thread daemon.
+- Rilis: commit `4713e06` + tag `v1.6.56` (`versionCode` 83), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.56` rilis, menunggu hasil CI.
+
 ## Sesi #8 (2026-10-04 07:09 UTC) — selesai
 - Permintaan: audit jilid 4, paling agresif seluruh area (tanpa patch).
 - Cakupan: `ParentalMonitorApp`, `MessageQueue`, `PreferencesManager`, `MonitoringService` full (polling, gerbang, `/ping`, SMS/record/ring, media, FGS), `CameraService`, `NotificationForwarderService` (wake, dedup, mutex), `SendMessageWorker`, `BootRestartWorker`, `BootReceiver`, `MainActivity` kalkulator, `SetupActivity`, repo SMS/call, `TelegramApi` dispatcher, `MessageScheduler`, `CrashReporter`, manifest, backup/extraction rules, channel.
