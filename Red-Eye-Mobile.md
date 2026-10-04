@@ -312,3 +312,12 @@
 - Hasil: tanpa ubah kode — benteng existing (`START_STICKY`, `onTaskRemoved`, watchdog) terbukti cukup di perangkat itu; tawarkan update ke `1.6.71` santai saja saat sempat (perbaikan boot-throttle hanya edge-case timing reboot).
 - Validasi: baca saja, tanpa `./gradlew` lokal.
 - Status terakhir: `v1.6.71` rilis; perangkat owner di `1.6.56` dan sehat.
+
+## Sesi #44 (2026-10-04 11:43 UTC) — selesai
+- Permintaan: cek seluruh kode seperti biasa agresif (tanpa patch, jilid 21).
+- Cakupan: regresi 4 patch `v1.6.71`, Setup test/save/supersede, loop polling/backoff, gate timestamp perintah, auth callback inline, owner claim, `sendSmsPending` multipart, flush/prune media, `SpeedMonitorActivity`/`NetSpeed`/`ParentalMonitorApp`, README/builder/manifest/backup, XML + grep secret.
+- Hasil (baru): 1 minor — tap tombol inline lewati gate freshness (`handleCallbackQuery` teruskan `sentAtSec=0L` ke `handleTelegramCommand`, expiry 900 dtk umum + 300 dtk mutasi tak berlaku; tombol basi mis. pause60 hidup selamanya + dedup callback cap 200 bisa evict hingga replayable; usul: teruskan `query.message?.date`) + 1 info (owner first-claim via DM privat by-design, ada hint Setup + reset saat ganti kredensial).
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header; regresi `v1.6.71` baik (wall-clock boot/reminder, fallback `400` forwarder, `safeTake`).
+- Gugur/baik: save/test hanya persist saat sukses + supersede toast, backoff loop + `authBlocked`, gate tanggal jalur pesan, gate sender/origin callback + jawab spinner, handler speedmonitor lepas di `onPause`, channel `MIN`/`HIGH` + badge off, README GHA-first + builder legacy, receiver ada scheme package, backup excludes, multipart SMS confirm per-part.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.72` bila ya).
