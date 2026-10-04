@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #8 (2026-10-04 07:09 UTC) — selesai
+- Permintaan: audit jilid 4, paling agresif seluruh area (tanpa patch).
+- Cakupan: `ParentalMonitorApp`, `MessageQueue`, `PreferencesManager`, `MonitoringService` full (polling, gerbang, `/ping`, SMS/record/ring, media, FGS), `CameraService`, `NotificationForwarderService` (wake, dedup, mutex), `SendMessageWorker`, `BootRestartWorker`, `BootReceiver`, `MainActivity` kalkulator, `SetupActivity`, repo SMS/call, `TelegramApi` dispatcher, `MessageScheduler`, `CrashReporter`, manifest, backup/extraction rules, channel.
+- Temuan baru (10): (1) starvasi dispatcher OkHttp perHost=2 vs 2 long-poll; (2) replay perintah mutasi saat offset reset 0; (3) channel notifikasi immutable beda DEBUG/release; (4) backup rules tak lindungi filesDir crash_pending; (5) Setup baca encrypted prefs di main-thread; (6) crash stale tak dihapus saat opt-out; (7) `/apps`/`/log`/`/version` bocor ke viewer grup; (8) kalkulator desimal kecil jadi 0 + secret 1234 hilang bila operator dulu; (9) `fwdMutex` tahan kunci selama HTTP; (10) `BootReceiver` goAsync thread mentah + throttle memori saja.
+- Validasi: XML OK, grep secret bersih (hanya KEY_/regex), tanpa perubahan kode repo ini (hanya M AGENTS.md docs).
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.56`).
+
 ## Status terakhir (2026-10-03)
 
 - `AGENTS.md` ditambah pointer wajib baca/update `MEMORY.md` tiap sesi (repo download-manager sudah lebih dulu).
