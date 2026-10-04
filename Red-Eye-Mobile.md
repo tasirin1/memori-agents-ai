@@ -335,3 +335,10 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK (termasuk ikon baru), grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `7c5b2c8` + bump `versionCode` 100/`1.6.73` + tag `v1.6.73` (`1495a3c`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.73` rilis, menunggu hasil CI.
+
+## Sesi #47 (2026-10-04 11:53 UTC) — selesai
+- Permintaan: tema terang/gelap otomatis ikut sistem.
+- Perbaikan: warna kalkulator + layar speed pindah ke resource `calc_*` dengan varian `values-night` (latar, display, tombol, teks, ripple); aksen oranye + teks putihnya dipertahankan; tanpa `setDefaultNightMode` (DayNight default ikut sistem); perilaku kalkulator tak berubah.
+- Validasi: 20 XML OK (termasuk `values-night` baru), grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `633128e` + bump `versionCode` 101/`1.6.74` + tag `v1.6.74` (`b9c48d3`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.74` rilis, menunggu hasil CI.
