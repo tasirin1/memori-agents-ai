@@ -141,6 +141,18 @@
   3. `App.onCreate` menulis cap `thumb_cleanup_last` walau `cleanupOldThumbs` gagal; gagal bersih tak dicoba lagi 7 hari. Fix: update cap hanya bila sukses.
 - Tanpa push ke `main` (tak ada perubahan kode); guard `check_repo.py` tak selesai dibaca penuh sesi ini (hanya `security_audit` yang terkonfirmasi hijau).
 
+## Sesi sapuan penuh jilid 12 (2026-10-04 00:06 UTC, tanpa ubah kode — 2 minor + 3 catatan)
+
+- Perintah user: "cek seluruh kode temukan bug" — sapuan semua file: `HttpControlServer` (serve/auth/throttle/upload-chunk/finalisasi/fs/galeri/share/partial/SSE/zip/login), `DownloadEngine` (resume/segmen/HLS/watchdog/throttle/muxer/ADTS), `FileSaver`, `MediaLibrary`, `ServerSecurity`, `ServerThumbnail`, `ServerVideoDurations`, `DownloadRepository`/`DownloadItemCodec`, `StoragePrefs`/`PinHash`/`Crypto`, `Updater`, `App`/`DownloadService`/`BootReceiver`/`BootResumeJobService`, `MainActivity` (probe/openApk), `GalleryActivity`, `SettingsActivity` (PIN/port), `LogActivity` (ekspor), `WebExtractActivity`/`extract.js`, `remote.src.html` (SSE/upload/galeri/fs), `ZipCreator`/`HttpBody`/`ServerLog`/`SseStream`/`MediaStream`/`ServerStreams`, `QueueOrder`/`SegmentPlanner`/`SpeedTracker`, `StorageCleanup`, `NotificationHelper`.
+- Temuan (BELUM diperbaiki — tunggu pilihan owner):
+  1. (minor-real) `HttpControlServer`: `sseJob = null` di luar `ssePumpLock` (jalur exit pump + `stopServer`) — balapan bisa bikin pump ganda / pump yatim tak terlacak. Fix: null-kan di dalam lock dengan cek identitas `=== me`.
+  2. (minor-teoretis) `HttpBody`: loop baca `readForm`/`drainBody`/`copyUploadBody` tak menangani `read() == 0` — kontrak InputStream membolehkan 0 sehingga thread HTTP bisa busy-loop selamanya; di socket blocking praktis tak terjadi. Fix: hitung nol beruntun lalu IOException/closeConnection.
+  3. (catatan) `serveShare` memanggil `pruneShares()` tanpa `shareLock` (tempat lain pakai lock) — CHM aman dari crash, sekadar inkonsistensi.
+  4. (catatan) `SseStream.push` saat antrean penuh menandai tutup tapi tak membangunkan `poll` 25 dtk — teardown SSE bisa telat sampai 25 dtk.
+  5. (catatan) `scannedGallery` pakai wall-clock untuk TTL 15 dtk sementara `MediaLibrary` monotonik — lompatan jam bikin cache basi sebentar.
+- Yang diverifikasi bersih: signature/cache `itemsJson` (immutable + list baru tiap update, `===` aman), resume/ETag/Range-reject+CDN-refresh, merge staging, throttle/watchdog, upload reservasi+lock+finalisasi background, PIN PBKDF2 + cookie sesi acak, `isPathAllowed` sudah kanonikal di dalam (serveMedia aman), ZigZag ZIP/symlink/depth/budget, galeri total/dedupe/TTL, probe basi dialog, openApk 3 fallback, ekspor log tanpa yatim, wake lock, boot job, muxer/ADTS.
+- Guard: `security_audit` 0/0. Tanpa push (tak ada perubahan kode).
+
 ## Sesi tombol remote lanjutan (2026-10-04 00:06 UTC, push main sukses)
 
 - Perintah user: "lanjutkan" — audit saudara bug `moveHere` (commit 96b8c0a) di `remote.src.html`: semua situs `disabled = true` dicek satu per satu.
