@@ -386,3 +386,13 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
 - Rilis: commit `9aab0e4` + bump `versionCode` 104/`1.6.77` + tag `v1.6.77` (`a1c4bff`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.77` rilis, menunggu hasil CI.
+
+## Sesi #53 (2026-10-04 12:40 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif, khusus kode sampah yang tidak efisien (tanpa patch, jilid 24).
+- Cakupan: duplikasi helper lintas file, API scheduler ganda, resource mati, persist ganda worker, pola baca antrean, flush media, throttle forwarder, query repo dua tahap, brace/XML/secret/status.
+- Hasil (baru): 4 minor sampah — `isChatMissing` identik di 5 file (`MonitoringService`, `SendMessageWorker`, `NotificationForwarderService`, `SetupActivity`, `CrashReporter`) + `redactToken` di 3 file + `authBlocked` di 2 file + varian inline di 3 tempat (konsolidasi ke `NetworkUtils`/util bersama) + `tagStripRegex` ganda (worker + forwarder) + `scheduleMessageSendNext` vs `scheduleMessageSendCoalesced` badan identik 100% (API ganda tanpa beda) + persist ganda worker (`removeMessage` inkremental lalu `removeMessages` bulk tiap run; bulk kini hampir selalu no-op, bisa gate flag gagal-inkremental).
+- Hasil (baru): 1 info — resource mati tak direferensi: `green_success`, `red_error`, `purple_200` (`colors.xml`) + `queue_pending`, `msg_fill_all_debug` (`strings.xml`); buang hemat APK + rapi.
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header, persist inkremental = harga anti-duplikat.
+- Gugur/baik: `getSmsForNumber`/`getCallsForNumber` LIKE + filter dua tahap wajar (perintah manual jarang); flush audio/foto early-exit (`authBlocked`, CAS busy, `listFiles` null); forwarder throttle 10/120 dtk per paket + history cap; `.take(100)`/`sortBy` nol-biaya; `getQueueSize` murah via cache.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul konsolidasi helper + buang resource mati di `v1.6.78` bila ya).
