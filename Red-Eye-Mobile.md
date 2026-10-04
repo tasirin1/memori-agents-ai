@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #16 (2026-10-04 08:00 UTC) — selesai
+- Permintaan: audit jilid 8 lebih agresif seluruh area, lalu perbaiki semuanya.
+- Audit jilid 8: 14 temuan (2 dikoreksi tidak jadi bug: owner-learning ternyata hidup karena `rememberOwner` di luar gerbang `chatOk||ownerOk`; fallback `400` ke plain ternyata sudah tangani `401`/`403`).
+- Perbaikan 12: reset offset `lastUpdateId`/`wakeUpdateId` + wake ping saat ganti token/chat; fallback tanggal callback sensitif `1L`; reset foto hanya boot nyata; secret kalkulator hanya `1234` + `=`; dispatcher `6`/`4` + pool `6` dan media `4`/`2`; `scheduleMessageSendNext` `APPEND`; reset 5 busy flag saat stop/FGS timeout; `lastSyncTime` khusus SMS/panggilan; notif lokal `Chat not found (400)`; kursor `checkAndSendNewData` progresif per chunk 10; forwarder `BIG_TEXT`/`TEXT_LINES`/`SUB_TEXT` + tanpa record spam; foto via `.tmp` + rename atomik + prune `.tmp` basi.
+- Rilis: commit `70a847d` + tag `v1.6.60` (`versionCode` 87), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.60` rilis, menunggu hasil CI.
+
 ## Sesi #15 (2026-10-04 07:40 UTC) — selesai
 - Permintaan: perbaiki semua 14 temuan audit jilid 7 + gagal build.
 - Akar gagal build: import `TelegramMediaClient` hilang di `MonitoringService` sejak `v1.6.57` (`Unresolved reference`, 2 titik); build `v1.6.56` terakhir hijau.
