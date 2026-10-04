@@ -192,3 +192,11 @@
 - Hasil: 10 temuan baru dilaporkan ke user (dual-consumer getUpdates, owner auto-learn grup, callback tanpa expiry, duplikat split-retry, 400-diaku-terkirim, SMS `*`/`#` + confirm tanpa ikat peminta, expiry vs overflow satu counter, regex token over-strict, kalkulator `1234=` false-positive, join kamera 2 dtk di IO).
 - Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.65` bila ya).
+
+## Sesi #27 (2026-10-04 09:45 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit jilid 13 / sesi #26).
+- Perbaikan (9 fix, 2 klaim gugur): wake-offset forwarder disatukan ke `lastUpdateId+1`; owner auto-learn hanya pesan `/`; dedup `callback_query.id` cap 200; `sendFitted` antre ulang pecahan gagal saja; drop `400` kirim notif terlihat; `/sms` tolak `*`/`#` + `pendingSmsOwner` ikat peminta; `expiredDrops` pisah dari overflow + lapor terpisah; `TOKEN_REGEX` longgar; `join` kamera 500 ms.
+- Koreksi audit: klaim takeover grup (guard privat-chat sudah ada) dan false-positive `1234=` (guard `previousNumber`/`operator`/`justCalculated` sudah ada) gugur — yang pertama dikeraskan, yang kedua by-design.
+- Validasi: brace/paren seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `5d50788` + bump `versionCode` 92/`1.6.65` + tag `v1.6.65`, push main + tag, susulan `2bc00e2`; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.65` rilis, menunggu hasil CI.
