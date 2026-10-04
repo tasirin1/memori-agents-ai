@@ -141,6 +141,12 @@
   3. `App.onCreate` menulis cap `thumb_cleanup_last` walau `cleanupOldThumbs` gagal; gagal bersih tak dicoba lagi 7 hari. Fix: update cap hanya bila sukses.
 - Tanpa push ke `main` (tak ada perubahan kode); guard `check_repo.py` tak selesai dibaca penuh sesi ini (hanya `security_audit` yang terkonfirmasi hijau).
 
+## Sesi fix sapuan jilid 12 (2026-10-04 00:17 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 5 temuan jadi 1 commit `73ea48f` (satu tujuan: temuan sapuan jilid 12) + 5 entri `CHANGELOG.md` + unit test baru `SseStreamTest` (2 test).
+- Fix: (1) `sseJob = null` di dalam `ssePumpLock` + cek identitas (exit pump & `stopServer`, urutan lock aman); (2) guard baca 0-byte 32x beruntun di `readForm`/`drainBody`/`copyUploadBody` (`HttpBody`, konstanta `MAX_ZERO_READS`); (3) `serveShare` prune+baca dalam `shareLock`; (4) `SseStream.wakeBlockedReader()` + `SseStreamTest`; (5) `scannedGallery` pakai `elapsedRealtime`.
+- Guard: `security_audit` 0/0, `check_readme_sync` sinkron, `diff --check` bersih. Push main sukses tanpa pantau workflow (aturan 19).
+
 ## Sesi sapuan penuh jilid 12 (2026-10-04 00:06 UTC, tanpa ubah kode — 2 minor + 3 catatan)
 
 - Perintah user: "cek seluruh kode temukan bug" — sapuan semua file: `HttpControlServer` (serve/auth/throttle/upload-chunk/finalisasi/fs/galeri/share/partial/SSE/zip/login), `DownloadEngine` (resume/segmen/HLS/watchdog/throttle/muxer/ADTS), `FileSaver`, `MediaLibrary`, `ServerSecurity`, `ServerThumbnail`, `ServerVideoDurations`, `DownloadRepository`/`DownloadItemCodec`, `StoragePrefs`/`PinHash`/`Crypto`, `Updater`, `App`/`DownloadService`/`BootReceiver`/`BootResumeJobService`, `MainActivity` (probe/openApk), `GalleryActivity`, `SettingsActivity` (PIN/port), `LogActivity` (ekspor), `WebExtractActivity`/`extract.js`, `remote.src.html` (SSE/upload/galeri/fs), `ZipCreator`/`HttpBody`/`ServerLog`/`SseStream`/`MediaStream`/`ServerStreams`, `QueueOrder`/`SegmentPlanner`/`SpeedTracker`, `StorageCleanup`, `NotificationHelper`.
