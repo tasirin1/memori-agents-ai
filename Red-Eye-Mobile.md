@@ -524,3 +524,11 @@
 - Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), bare-return nihil, tanpa Gradle lokal.
 - Rilis: commit `147f3b9` + bump `versionCode` 113/`1.6.86` + tag `v1.6.86` (`a2bfbac`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.86` rilis, menunggu hasil CI.
+
+## Sesi #71 (2026-10-04 22:51 UTC) — selesai
+- Permintaan: gagal build.
+- Akar masalah: `MonitoringService.searchContacts` gagal kompilasi — refactor query Bundle di `v1.6.85` (commit `e6a58d0`) menghapus deklarasi `uri`/`projection`/`escaped` yang masih dipakai; CI `compileDebugKotlin`/`compileReleaseKotlin` gagal sejak itu (`v1.6.85`, `v1.6.86` merah).
+- Perbaikan: kembalikan 3 deklarasi di `searchContacts` (`CONTENT_URI`, `projection` nama+nomor, `escaped` LIKE), tanpa ubah logika Bundle/fallback.
+- Validasi: brace semua `.kt` seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `5388178` + bump `versionCode` 114/`1.6.87` + tag `v1.6.87`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.87` rilis, menunggu hasil CI.
