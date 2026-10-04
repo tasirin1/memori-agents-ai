@@ -250,3 +250,10 @@
 - Validasi: brace seimbang, 20 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `6c82dbf` + bump `versionCode` 96/`1.6.69` + tag `v1.6.69` (`7012b52`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.69` rilis, menunggu hasil CI.
+
+## Sesi #35 (2026-10-04 10:44 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: regresi 5 patch `v1.6.69`, `pollTelegramCommands`/`handleCallbackQuery`, `sendSmsPending`, `checkAndSendNewData` vs urutan repo, `sendFitted`, `SendMessageWorker`, `MessageQueue.registerFailures`, `PreferencesManager` snapshot/config/wake, `SetupActivity` save/test/updateStatus, `CameraService`, `NotificationForwarderService` wake-poll/dedup/cache, `TelegramApi` timeout, `MainActivity`, `BootRestartWorker`, XML + grep secret.
+- Hasil: 2 minor baru (`sendFitted` duplikat chunkparsial saat retry; revive `startForegroundService` telan gagal diam) + 1 kosmetik (`/ping` abaikan state initial-sync) + 1 info (pause elapsed hilang saat reboot by-design); regresi `v1.6.69` baik; gugur: cursor Aman (repo ASC), save/test invalidasi dua arah, callback auth benar, wake-poll non-destruktif, timeout pas, cache bounded, `/log` tanpa-loss.
+- Validasi: brace seimbang, 20 XML OK, grep secret bersih, `git status` bersih, tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.70` bila ya).
