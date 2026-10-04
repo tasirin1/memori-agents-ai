@@ -230,3 +230,9 @@
 - Perintah user: "perbaiki semuanya" — 4 commit satu tujuan + entri `CHANGELOG.md` tiap commit, push `main` `24d0176..bde3ee5` tanpa pantau workflow (aturan 19).
 - Commit: `4dd64aa` fix(download) estimasi HLS anti-overflow (`safeMulDiv`/`saturatingAdd` internal murni + `SafeMulDivTest` 6 test); `f0395db` fix(server) `closeConnection()` di tolak CSRF-403, 401, login-terkunci; `1cd7005` docs(app) komentar PBKDF2-HMAC-SHA1; `bde3ee5` fix(download) guard zero-read `AdtsAac.readExact`.
 - Guard: `security_audit` 0/0, `check_repo.py` 10/10 SEMUA SEHAT, `diff --check` bersih.
+
+## Sesi hotfix CI jilid 18 (2026-10-04 13:25 UTC, push main sukses)
+
+- Pemicu: anotasi CI "Build APK exit 1" — `compileDebugKotlin` gagal `Unresolved reference 'values'` di `FileSaver.kt:258-260`, bawaan commit `24d0176` (klaim nama MediaStore atomik), bukan dari 4 commit jilid 17. Build `24d0176` sebelumnya juga sudah gagal untuk alasan sama.
+- Fix (1 commit + entri `CHANGELOG.md`): `f1f176d` fix(app) `values` MediaStore keluar dari lock — `val values` dideklarasikan di dalam blok `synchronized` tapi dipakai setelahnya; kini `Triple(uri, unique, values)` didestruktur keluar lock.
+- Guard: `security_audit` 0/0, `check_repo.py` 10/10 SEMUA SEHAT, `diff --check` bersih. Push `main` tanpa pantau workflow (aturan 19).
