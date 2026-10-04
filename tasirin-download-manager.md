@@ -188,3 +188,12 @@
 - Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `005f546` (precedent `73ea48f`) + 4 entri `CHANGELOG.md`, push `main` sukses tanpa pantau workflow (aturan 19).
 - Fix: (1) `writeReservedUploadChunk` 2 jalur reject kuras body dulu, tutup koneksi hanya bila kuras gagal; (2) `serveGallery` `hasMore = matched > pageEnd` bila `q` non-kosong; (3) hapus dead branch `oldObj.has("error")`; (4) `TlsCompat` satu store gabungan (salin anchor sistem + 3 root bundle), hapus import tak terpakai.
 - Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
+
+## Sesi sapuan lanjutan jilid 14 (2026-10-04 01:20 UTC, push main sukses)
+
+- Perintah user: "lanjutkan" — sapuan fokus area belum tersentuh: `SocialMediaExtractor` (httpGet/redirect/YouTube fallback), `SegmentPlanner`, `FileSaver.uniqueTargetFile`, redirect-safety tests.
+- 2 bug ditemukan & diperbaiki (commit `362cf8d`, +2 entri `CHANGELOG.md`, push main tanpa pantau workflow):
+  1. `extractYouTubeViaCobalt` loop-never-continues: `return ...?.let { return it }` membuat parse tanpa URL me-return null dari fungsi (loop 1 instance tak masalah hari ini, tapi logika salah vs pola Piped) — kini `val result` + lanjut bila null.
+  2. `resolveInvidiousLatest` ikuti `Location` tanpa `isExtractRedirectAllowed` + `301..308` memakan 304/305/306 — kini kode redirect eksplisit + tolak target terlarang; + unit test metadata/samaran loopback di `SocialMediaExtractorTest`.
+- Diverifikasi bersih: `SegmentPlanner` (total=1, coerce), `uniqueTargetFile` (klaim atomik), `httpGetWithCookies`/`httpPostJson` (sudah validasi + strip kredensial), `isUrlForbidden` (tanpa follow redirect).
+- Guard: `security_audit` 0/0, `check_repo.py --pre-commit` 10/10 SEMUA SEHAT, `diff --check` bersih.
