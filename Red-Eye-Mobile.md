@@ -450,3 +450,10 @@
 - Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `47b183b` + bump `versionCode` 108/`1.6.81` + tag `v1.6.81`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.81` rilis, menunggu hasil CI.
+
+## Sesi #61 (2026-10-04 20:15 UTC) — selesai
+- Permintaan: audit agresif bug + inefisiensi runtime, fokus baterai, signifikan saja, laporan tanpa patch (implementasi plan sesi plan-mode).
+- Cakupan: loop polling perintah (`timeout=10` + jeda 10-30 dtk), wake-loop forwarder (25 dtk), polling saat pause (60 dtk), kirim notifikasi per-event, persist antrean per-pesan worker, `wakeUpdateId` in-memory, `photoPausedUntil` vs reboot, timeout OkHttp vs long-poll.
+- Hasil: 7 temuan signifikan dilaporkan (long-poll pendek 2 loop, poll saat pause, tanpa batching notif, persist per-pesan, `wakeUpdateId` tak dipersist + wake tanpa freshness, pause foto gugur saat reboot); tanpa perubahan kode repo ini.
+- Validasi: `git status` bersih, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.82` bila ya).
