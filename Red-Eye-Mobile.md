@@ -7,6 +7,12 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #11 (2026-10-04 07:19 UTC) — selesai
+- Permintaan: perbaiki semua 11 temuan audit jilid 5.
+- Perbaikan: dedup sync + eviksi while; wipe SMS pending + hash + offset; varian `62`/`0`; ring null fail-fast; forwarder serial tunggal; worker backoff 5 mnt; kursor initial hanya saat sukses; hapus `USER_PRESENT`; `TelegramMediaClient` pisah; status/battery/uptime/storage owner-only + help peran; cancel job save/test; crash elapsed monotonic.
+- Rilis: commit `e0b4eeb` + tag `v1.6.57` (`versionCode` 84), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.57` rilis, menunggu hasil CI.
+
 ## Sesi #10 (2026-10-04 07:17 UTC) — selesai
 - Permintaan: audit jilid 5, lebih agresif seluruh area (tanpa patch).
 - Cakupan: regresi `v1.6.56` (dedup, dispatcher, channel, Setup IO, crash prune, mutex, boot_meta), `clearCredentials` sisa forensik, `numberMatches` lintas-format ID, `ringDevice` null-URI, order forwarder, hot-loop worker, double initial-sync, receiver spoof, media vs poll, `/help` disclosure, interval race, wall-clock age.
