@@ -420,3 +420,12 @@
 - Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal; build via GitHub Actions.
 - Rilis: commit `5b4a115` + bump `versionCode` 106/`1.6.79` + tag `v1.6.79` (`ad59b53`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.79` rilis, menunggu hasil CI.
+
+## Sesi #57 (2026-10-04 13:15 UTC) — selesai
+- Permintaan: cek lagi seluruh kode (tanpa patch, jilid 26).
+- Cakupan: regresi `v1.6.79` (nol referensi fungsi buangan), pindai import mati sedunia-kode, `onDestroy` cleanup, `wakePing` dedup, banner legacy `builder.sh`, placeholder manifest, konsistensi versi/tag, brace/XML/secret/status.
+- Hasil (baru): 1 minor sampah — 4 import mati: `android.database.Cursor` (`CallLogRepository.kt`) + `CoroutineScope`/`Dispatchers`/`launch` (`CameraService.kt`); hanya warning kompiler, nol efek runtime.
+- Masih berlaku: tradeoff kursor + cap 100, window volatile-queue, fragmen worker tanpa header.
+- Regresi baik: `onDestroy` lepas listener + reset flag + cancel scope; `builder.sh` ber-banner legacy; `versionCode` 106/`1.6.79` + tag konsisten sampai `v1.6.79`.
+- Validasi: brace semua `.kt` seimbang, 19 XML OK, grep secret bersih, `git status` bersih, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul buang 4 import di `v1.6.80` bila ya).
