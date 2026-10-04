@@ -52,3 +52,9 @@
 - Temuan utama: (1) relaksasi `v1.6.53` membuka data sensitif (`/photo`, `/location`, `/lastcalls`, `/lastsms`, `/lastnotif`, `/contacts`, `/history`) untuk semua viewer grup via `chatOk` — usul gerbang 3 lapis; (2) field cache kredensial/config tanpa `@Volatile` di kedua service; (3) skew jam >5 mnt membunuh semua perintah; (4) APK release non-tag debug-signed tapi bernama release.
 - Validasi: tanpa perubahan kode.
 - Status terakhir: menunggu keputusan owner apakah temuan jilid 3 diperbaiki (`v1.6.55`).
+
+## Sesi #7 (2026-10-04 05:15 UTC) — selesai
+- Permintaan: perbaiki semua 4 temuan audit jilid 3.
+- Perbaikan: gerbang 3 lapis + `SENSITIVE_COMMANDS`; petunjuk jam untuk stempel masa depan; `@Volatile` cache kedua service; artefak `redeye-release-debugsigned.apk` + catatan README.
+- Rilis: commit `43a7c88` + tag `v1.6.55` (`versionCode` 82), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.55` rilis, menunggu hasil CI.
