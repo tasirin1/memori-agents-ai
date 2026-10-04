@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #14 (2026-10-04 07:33 UTC) — selesai
+- Permintaan: audit jilid 7, lebih agresif seluruh area (tanpa patch).
+- Cakupan: regresi `v1.6.58` (crash embed, wipe, generasi save, cap 64, KEEP, pool bersama, `/ping` owner-only, varian seluler, banner-skip), `MonitoringService` penuh (polling, gerbang, SMS/ring/record/foto/audio, FGS timeout), `CameraService`, `MessageQueue`, `PreferencesManager`, `SendMessageWorker`, `BootRestartWorker`, `SetupActivity`, `MainActivity`, repo, util, manifest, workflow, gradle.
+- Temuan baru (14: 3 sedang, 11 rendah): dual-konsumen `/ping` dobel dari sisi main; kursor periodik maju walau kirim gagal; `photoPausedUntil` basi saat boot via `USER_PRESENT`; flush foto tanpa gate auth; setup history kosong kini sunyi; FGS timeout tak reset kamera; `lastSmsSendAt` walau gagal; baca prefs di main-thread; `USER_PRESENT` mungkin no-op API 26+; menu bot bocorkan daftar sensitif; flush crash abaikan blokir auth; jendela initial-sync 100; drop forwarder sunyi di `/lastnotif`; `lastSyncTime` ikut pong.
+- Validasi: XML OK, grep secret bersih, tanpa perubahan kode.
+- Status terakhir: menunggu keputusan owner perbaiki mana dulu (usul `v1.6.59`).
+
 ## Sesi #13 (2026-10-04 07:32 UTC) — selesai
 - Permintaan: perbaiki semua temuan audit jilid 6 (regresi `v1.6.57` + sisa forensik).
 - Perbaikan: crash tulis tanpa IO `boot_meta` (elapsed disemat di berkas); wipe reset kursor SMS/panggilan/sync/foto + flag sync; antrean forwarder dibatasi 64; save/test pakai nomor generasi; backoff worker 60 dtk + retry `KEEP`; `boot_meta` di-exclude backup; fallback `USER_PRESENT` kembali + throttle 60 dtk; satu connection pool + dispatcher 4/3 dan 2/1; `/ping` owner-only; varian nomor khusus seluler `628`/`08` tanpa alokasi per baris; banner initial sync dilewati bila tak ada history baru.
