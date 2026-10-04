@@ -493,3 +493,11 @@
 - Validasi: brace/paren 5 `.kt` seimbang, XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `1685036` + bump `versionCode` 111/`1.6.84` + tag `v1.6.84`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.84` rilis, menunggu hasil CI.
+
+## Sesi #67 (2026-10-04 22:12 UTC) — selesai
+- Permintaan: cek seluruh area kode temukan bug (tanpa patch).
+- Cakupan: `SendMessageWorker` (semua outcome + `sendDropNotice` + `sendChunked`/`sendPlainFallback`), `BootRestartWorker`, `MessageQueue` (volatile/persist + overflow counter), `PreferencesManager` (`upgradeToPersistent` 2-pass, `saveCoreConfig`/`saveTestCredentials` reset offset), `CrashReporter` (redaksi + flush), `MonitoringService` (callback auth, `/history` double-filter, `searchContacts`, SMS multipart, ring/record), `SetupActivity.sendStatusNow`, `MainActivity`, `ParentalMonitorApp`, `TelegramApi` timeout, histori `git show e6e0821`.
+- Hasil: 1 kritis + 7 temuan baru (lihat laporan ke user): `sendDropNotice` outer-catch pakai `text` luar-scope = gagal kompilasi sejak `v1.6.83`; fix `v1.6.84` short-path tak lengkap; `sendChunked` retry duplikat part terkirim; reset offset saat ganti token picu eksekusi ganda; `sendStatusNow` 400-drop; APPEND tiap 429; double-filter `/history`; eviksi `wakePingSeen` acak; `searchContacts` tanpa LIMIT.
+- Klaim gugur: callback member grup aman (`senderOk` gate); migrasi volatile aman; SMS requestCode aman (action unik + single-flight); `isChatIdValid` sudah tolak `0`.
+- Validasi: XML OK, grep secret bersih, `git status` bersih repo ini, tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul perbaiki kritis + rilis `v1.6.85` bila ya).
