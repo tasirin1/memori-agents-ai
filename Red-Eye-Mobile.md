@@ -7,6 +7,13 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
+## Sesi #25 (2026-10-04 08:53 UTC) — selesai
+- Permintaan: perbaiki semuanya (8 temuan audit jilid 12).
+- Perbaikan: gate sufiks >= 9 digit + hapus `idVariants` mati; `rememberOwner` picu `registerBotCommands`; `sendDropNotice` `parseMode` null; `sendFitted`/`sendToTelegram` antre sekali via `queueOnFail`; drop kedaluwarsa masuk `overflowDrops`; persist offset sebelum handle; `BootReceiver` skip thread+IO untuk unlock rutin; `sendStatusNow` antre saat direct gagal.
+- Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
+- Rilis: commit `973f49c` + bump `versionCode` 91/`1.6.64` + tag `v1.6.64` (`887cf5b`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.64` rilis, menunggu hasil CI.
+
 ## Sesi #24 (2026-10-04 08:51 UTC) — selesai
 - Permintaan: konfirmasi laporan audit jilid 12 (tanpa ubah kode, laporan ulang identik Sesi #23).
 - Hasil: sama dengan Sesi #23 — 8 temuan belum diperbaiki + 3 disproved (`fetchLocation` `finally` benar, kursor komposit benar, serialisasi scope menu benar), tanpa temuan tambahan.
