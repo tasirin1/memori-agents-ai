@@ -517,3 +517,10 @@
 - Gugur/by-design: listener lintas-instance aman (singleton sama-proses + `cfgCacheAt` 10 dtk); migrasi `photoPausedUntil` sekali-tulis; `/pause` via listener `refreshLoopConfig`; SMS `RECEIVER_NOT_EXPORTED` benar; kalkulator 12-digit/`1234=` benar; `saveCoreConfig` reset offset hanya-token benar (offset global per-bot).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, `grep` token keras nihil, `git status` bersih repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul perbaiki P0 + rilis `v1.6.86` bila ya).
+
+## Sesi #70 (2026-10-04 22:35 UTC) — selesai
+- Permintaan: perbaiki semuanya (7 temuan audit agresif jilid 32 / sesi #69).
+- Perbaikan: `forwardLocked` `return false` + 2 call-site `""` (kompilasi hijau); `sendFitted` short-path probe-then-queue anti-race; `flushBatch` `batchCut` aman-surrogate/entity/tag; `forwardLocked` 400 antrekan notice drop; hapus hitung ganda `pkgRecord` via `pkg` kosong; `isMainRunning` delegasi `isRunning`; `sendToTelegram` notice 400 unconditional.
+- Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), bare-return nihil, tanpa Gradle lokal.
+- Rilis: commit `147f3b9` + bump `versionCode` 113/`1.6.86` + tag `v1.6.86` (`a2bfbac`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.86` rilis, menunggu hasil CI.
