@@ -788,3 +788,10 @@
 - Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `52d817d` + bump `versionCode` 133/`1.6.106` + tag `v1.6.106` (`fe7dc80`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.106` rilis, menunggu hasil CI.
+
+## Sesi #106 (2026-10-05 07:25 UTC) — selesai
+- Permintaan: tambahkan record video; record lainnya jangan dibatasi 60 detik.
+- Implementasi: `/recordvideo <5-180>` via `CameraService.captureVideo` (Camera2 + `MediaRecorder` H264/AAC, maks 720p ~1-2 Mbps, ukuran dari `getOutputSizes`) kirim lewat `sendVideo` baru (`sendVideoFile`, antre offline `flushPendingVideos`/`pruneVideoCache` maks 3, guard 48 MB, watchdog + `videoAttempt`, masuk `MUTATING_COMMANDS` + bot menu + `/help`); `/record` dibuka ke 5-600 detik dengan validasi rentang eksplisit (dulu jepit diam-diam 5-60).
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `9de131b` + bump `versionCode` 134/`1.6.107` + tag `v1.6.107` (`bb46f0e`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.107` rilis, menunggu hasil CI.
