@@ -744,3 +744,10 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `5e8458d` + bump `versionCode` 129/`1.6.102` + tag `v1.6.102` (`169ff74`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.102` rilis, menunggu hasil CI.
+
+## Sesi #100 (2026-10-05 05:22 UTC) — selesai
+- Permintaan: perbaiki semuanya.
+- Perbaikan (7 fix): `SendMessageWorker` lapor drop expired/overflow tanpa gate `sentIds`; `sendPairHint` token segar `PreferencesManager`; hapus `isMainRunning()` duplikat; `sendStatusNow` fallback plain catat `credentialError` 401/403/chat hilang; `forwardLocked` fallback plain catat auth/chat hilang + antre ulang; `CrashReporter` pakai `Html.tagStripRegex`; `clearQueue`/`clearCredentials` reset counter drop.
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `1b56228` + bump `versionCode` 130/`1.6.103` + tag `v1.6.103` (`3a01fa1`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.103` rilis, menunggu hasil CI.
