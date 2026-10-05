@@ -701,3 +701,10 @@
 - Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `2519d9a` + bump `versionCode` 126/`1.6.99` + tag `v1.6.99`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.99` rilis, menunggu hasil CI.
+
+## Sesi #94 (2026-10-05 11:35 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `MonitoringService` (poll/offset, gate owner, `/sms`, `/ping`, `sendFitted`/`sendToTelegram`, ring/record, lokasi, foto/audio flush), `NotificationForwarderService` (wake-loop, batch 15 dtk, spam filter), `MessageQueue`/`PreferencesManager`, `SendMessageWorker`, `CameraService`, `BootReceiver`/`BootRestartWorker`, `SetupActivity`/`MainActivity`, repo SMS/call, `CrashReporter`, manifest, workflow, XML + grep secret.
+- Hasil: 12 temuan baru dilaporkan ke user (kalkulator butuh `=` 2x; owner first-claimer `/start`; `chatId` `@username` mati di runtime; normalisasi nomor SMS strip `,;pw`; offset persist-sebelum-efek (tradeoff anti-replay); `allowed_updates` tanpa `channel_post`; batch notif 15 dtk + salvage daemon; ambang restore volume tak konsisten; antrean yatim bila belum konfigurasi; crash dihapus saat monitoring mati; `TOKEN_REGEX`/`CHAT_ID` Setup vs runtime; cap prioritas queue 105 vs 100).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa perubahan kode repo ini, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.100` bila ya).
