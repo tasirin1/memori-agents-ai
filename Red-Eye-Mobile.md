@@ -882,3 +882,10 @@
 - Disproved/baik: teardown tak perlu reset `active*` (instance-scoped, mati bersama instance); cabang record normal-path setara `historyAllowed`; regresi `v1.6.112` setara perilaku lama; `/apps` hanya label; `VALIDATED` konsisten semua jalur.
 - Validasi: 19 XML OK, secret + token-literal bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.113` bila ya).
+
+## Sesi #118 (2026-10-05 09:38 UTC) — selesai
+- Permintaan: perbaiki semuanya (3 temuan LOW audit jilid 27 / sesi #117), rilis `v1.6.113`.
+- Perbaikan: fast-path ikut redam summary grup 120 detik + paritas `trackGroup`; `@Volatile` `activeShotFile`; drop-notice `onDestroy` ikut schedule.
+- Validasi: brace/paren 2 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `d96421c` (fix) + `945d333` (bump `versionCode` 140/`1.6.113` + CHANGELOG) + tag `v1.6.113`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.113` rilis, menunggu hasil CI.
