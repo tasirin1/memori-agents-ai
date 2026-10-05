@@ -693,3 +693,11 @@
 - Validasi: brace/paren 9 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `2e3f951` + bump `versionCode` 125/`1.6.98` + tag `v1.6.98`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.98` rilis, menunggu hasil CI.
+
+## Sesi #93 (2026-10-05 04:23 UTC) — selesai
+- Permintaan: gagal build (`v1.6.97`/`v1.6.98` merah di CI).
+- Akar masalah: `CrashReporter.flushPending(this)` di dalam `serviceScope.launch` (`MonitoringService.kt:444`, masuk via sesi #90) — `this` merujuk `CoroutineScope`, bukan `Context`.
+- Perbaikan: satu baris jadi `this@MonitoringService`; pemakaian `CrashReporter` lain aman (`install` di Application, `saveNow` di Service, `flushPending(appContext)` di worker).
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `2519d9a` + bump `versionCode` 126/`1.6.99` + tag `v1.6.99`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.99` rilis, menunggu hasil CI.
