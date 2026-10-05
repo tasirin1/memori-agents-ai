@@ -555,3 +555,10 @@
 - Gugur/by-design: cache config tak basi (listener baris 139); `MemoryPrefs` dukung listener; antrean persisten prune kedaluwarsa; recorder release di finally; eviksi wake-ID terkecil benar; 400 chat-missing konsisten set auth-block.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.89` bila ya).
+
+## Sesi #75 (2026-10-05 00:43 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit agresif jilid 34 / sesi #74).
+- Perbaikan: pending SMS consume-sebelum-kirim + `reopenSmsPending` saat gagal; `onDestroy` forwarder amankan batch ke antrean; media 429 tunggu `retry_after` + coba sekali; flush hitung drop + kabar; callback basi terbitkan menu segar; heartbeat `monitorBeatAt`/`cameraBeatAt` + watchdog gantung-aktif; `AdminReceiver` background thread; `mapping.txt` keluar artifacts; korup antrean tinggalkan kabar; `addMessage(priority)` +5 slot + kabar prioritas di 8 call-site.
+- Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih, workflow tanpa mapping, tanpa Gradle lokal.
+- Rilis: commit `40ac302` + bump `versionCode` 116/`1.6.89` + tag `v1.6.89` (`ed4fbee`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.89` rilis, menunggu hasil CI.
