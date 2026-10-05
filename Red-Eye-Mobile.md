@@ -655,3 +655,11 @@
 - Gugur/by-design: `<code>$normalized</code>` (digit-only); cursor-then-break (retry milik antrean); listener memori (notify ada); cache/cross-process lama.
 - Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.96` bila ya).
+
+## Sesi #88 (2026-10-05 03:41 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit sesi #87: 6 bug + 4 inefisiensi).
+- Perbaikan: ring sinkron (`setRingStateSync`/`clearRingStateSync`) + jeda penuh sekali + replay `MediaPlayer.setOnCompletionListener` (fallback `Ringtone`); backoff media non-blokir (`mediaBackoffUntil` + `scheduleMessageSendNext`, file KEPT untuk retry); `setInitialSyncDoneSync`/`setInitialSyncStartedSync`; `/sms` tolak bila pending aktif <=5 mnt; drop-notice agregat per 30 dtk + saat destroy; `sendStatusNow` antre prioritas; `persistLocked`/`persistDropCountsLocked` `apply()` + `flushSync()` eksplisit (`clearQueue`, worker, `onDestroy`); bonus: rekursi `noteOverflowLocked`/`noteExpiredLocked` diperbaiki (`addAndGet`); fallback nomor SMS/panggilan pakai `DATE >= ?` + `LIMIT` di provider (`getRecentSmsSince`/`getCallsSince`); hapus `take(100)` redundan.
+- Tanpa patch: `updateStatus()` sudah di `Dispatchers.IO` (klaim audit basi).
+- Validasi: brace/paren 8 file seimbang, 19 XML OK, grep secret bersih (hanya `CHAT_ID_REGEX`), tanpa Gradle lokal.
+- Rilis: commit `6dd97b6` + bump `versionCode` 123/`1.6.96` + tag `v1.6.96`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.96` rilis, menunggu hasil CI.
