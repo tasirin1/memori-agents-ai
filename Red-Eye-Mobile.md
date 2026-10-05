@@ -729,3 +729,10 @@
 - Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `293f19b` + bump `versionCode` 128/`1.6.101` + tag `v1.6.101` (`6d0ac6b`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.101` rilis, menunggu hasil CI.
+
+## Sesi #98 (2026-10-05 05:00 UTC) — selesai
+- Permintaan: cek seluruh kode temukan bug (tanpa patch).
+- Cakupan: `onCreate`/`onStartCommand`/`stopMonitoring`, `setupTapIntent`, `startMonitoringInBackground` + raw flag, `secretStage` mati, kamera sesi/metering/orientasi, `MessageQueue` budget/drop, worker retry/backoff/notice, `CrashReporter.savePending`, backup rules, `AppPermissions` vs Setup/Main, `forwardToTelegram`/`flushBatch`/`forwardLocked` penuh, volatile forwarder/Main, regresi `v1.6.101`.
+- Hasil: tanpa regresi; 9 temuan baru (menu perintah basi pasca-rotasi token; flag mentah Main + `secretStage` mati; `registerFailures`/`incrementRetry` mati; cache forwarder non-volatile; `/foo` grup picu balasan; riwayat notif beda jalur beban; `saveSettings` username offline toast keliru; `answerCallback` token basi 5 mnt; `BootRestartWorker` retry tanpa backoff eksplisit).
+- Validasi: 19 XML OK, grep secret bersih, working tree bersih, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.102` bila ya).
