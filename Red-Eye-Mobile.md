@@ -866,3 +866,11 @@
 - Disproved/baik: regresi `v1.6.111` aman (rantai APPEND terbatas-harmless, worker-internal tetap REPLACE, `clearCredentials` picu listener token/chat, merge API utuh); tak ada stale-token poisoning (listener + recheck 5 mnt); `capturing` bersama foto-video saling eksklusi; `android.R.string` false-positive resource; semua `R.*` resolve; single-process (flag `workerRunning` valid).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` + scan token literal bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.112` bila ya).
+
+## Sesi #116 (2026-10-05 09:24 UTC) — selesai
+- Permintaan: perbaiki semuanya (5 temuan LOW + 1 info audit jilid 26 / sesi #115), rilis `v1.6.112`.
+- Perbaikan (5 fix, info by-design): screenshot pakai `activeShotFile` sendiri (flush/prune/count kecualikan keduanya); `flushBatch` kelompok per pesan + `forwardLocked(msgCount)`/`noteDroppedNotification(count)`; `flushPending` hormati `monitoringPaused`; `isNetworkAvailable` syarat `VALIDATED`; paging `/history` kursor komposit `(DATE, _ID)` + sort deterministik SMS.
+- Info tanpa patch: pair-hint `/start` ke orang asing by-design (throttle 1 jam, tanpa secret).
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `CHAT_ID_REGEX`), tanpa Gradle lokal.
+- Rilis: commit `6e59d70` (fix) + `d5a032f` (bump `versionCode` 139/`1.6.112` + CHANGELOG) + tag `v1.6.112`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.112` rilis, menunggu hasil CI.
