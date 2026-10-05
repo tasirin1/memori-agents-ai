@@ -532,3 +532,10 @@
 - Validasi: brace semua `.kt` seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `5388178` + bump `versionCode` 114/`1.6.87` + tag `v1.6.87`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.87` rilis, menunggu hasil CI.
+
+## Sesi #72 (2026-10-05 00:26 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `MonitoringService` (offset `lastUpdateId`, `sendFitted`/`safeCut`/`sendToTelegram`, `checkAndSendNewData`, `fetchLocation` 2x20s, `/sms` regex + premium, ring/record, `searchContacts`, `pruneAudioCache`), `NotificationForwarderService` (dedup `lastSent` 10s, summary `groupSeen` 120s, `batchCut`, `flushBatch`), `SendMessageWorker` (`splitChunk`, hapus ID via `apply`), `MessageQueue` (`persistLocked` `apply`), `SetupActivity` (`TOKEN_REGEX`, `saveSeq`/`testSeq`), `MainActivity` (`1234=`), manifest/admin, `app/build.gradle`/proguard, workflow, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan ke user (offset commit-before-handle; `sendFitted` tanpa cek auth-block; antrean+kursor `apply` async; dedup/summary return sebelum `record`; split HTML tak balance tag; `/sms` 3-digit + premium sempit; `/location` blokir perintah 40s; `TOKEN_REGEX` 20+ longgar; `1234=` bajak kalkulator; save/test toast superseded menipu).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.88` bila ya).
