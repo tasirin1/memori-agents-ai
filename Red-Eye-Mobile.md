@@ -904,3 +904,11 @@
 - Validasi: brace/paren 2 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `925d0fb` (fix) + `5d6a1f9` (bump `versionCode` 141/`1.6.114` + CHANGELOG) + tag `v1.6.114`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.114` rilis, menunggu hasil CI.
+
+## Sesi #121 (2026-10-05 10:12 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif, jilid 29, basis `v1.6.114` (tanpa patch).
+- Cakupan: regresi patch `v1.6.114` (rantai `shotAttempt`, diff-counter `flushBatch`, `groupSeen` dini, resync offset-nol, SMS owner-aware), forwarder `onDestroy` vs persist drop-counter, wake-loop `pollWakeOnce` vs auth-block, worker tail reschedule/backoff, `MessageQueue` budget/expiry/generasi, audio flush/prune vs `activeAudioFile`, `recordAndSendAudio` cancellation, `CameraService` `capturing` foto-vs-video, `BootReceiver` unlock fast-path, Setup save/test + `resolveChatId`, kalkulator `1234=`, `/log` clear, `SYNC_INTERVAL`/build, manifest, resource cross-check.
+- Hasil: 2 temuan LOW, tanpa patch menunggu keputusan owner (usul `v1.6.115` bila ya).
+- Disproved/baik: regresi `v1.6.114` bersih (paruh foto memang sudah ter-guard `cameraAttempt`; diff-counter aman dalam `fwdSerial`; replay offset-nol tertutup gate expiry + pending dibersihkan pasca-kirim); `/log` clear pasca-tampil; audio/record/video concurrency aman; unlock-rutin skip thread+IO; kalkulator stealth OK.
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (hanya `KEY_*`/regex), tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.115` bila ya).
