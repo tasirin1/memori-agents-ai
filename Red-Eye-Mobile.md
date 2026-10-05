@@ -569,3 +569,11 @@
 - Hasil: 10 temuan baru dilaporkan ke user (spam-bypass burst; wake hammer 409; premium luar lolos; chatId typo self-DoS 400; kalkulator abnormal; volume stuck max; callback replay amplification; location/owner-link at-most-once; kamera busy palsu 15s; crash basi kirim ulang) + 2 catatan (scheduler triple identik; duplikat crash-window 10-batch).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.90` bila ya).
+
+## Sesi #77 (2026-10-05 01:01 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit agresif jilid 35 / sesi #76).
+- Perbaikan: spam filter atomik `pkgTryAcquire` (hitung saat cek); wake-loop backoff `409` 60s + `429` `retry_after`; premium luar (UK/US/`809` + prefix `00`); chat ID min 5 digit; kalkulator `secretStage` + `justCalculated` + tak lewat rotasi; restore volume alarm saat create; callback dedup-sebelum-answer; `/location` + owner-link sekuensial; scheduler selalu `KEEP`; umur crash pakai wall-clock bila monotonic negatif.
+- Koreksi audit: klaim kamera busy palsu 15s gugur (`onError` 30s reset `cameraBusy` langsung; watchdog 45s hanya cadangan) — tak dipatch; `resolveStored` kosong-ke-stored by-design (clear via long-press) — hanya validasi diperketat.
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
+- Rilis: commit `0eb6182` + bump `versionCode` 117/`1.6.90` + tag `v1.6.90`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.90` rilis, menunggu hasil CI.
