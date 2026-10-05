@@ -843,3 +843,11 @@
 - Validasi: brace/paren 4 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `dffaf89` (fix) + `e75e2dc` (bump `versionCode` 137/`1.6.110` + CHANGELOG) + tag `v1.6.110`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.110` rilis, menunggu hasil CI.
+
+## Sesi #113 (2026-10-05 08:59 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh, jilid 25, basis `v1.6.110` (tanpa patch).
+- Cakupan: regresi patch `v1.6.110` (`emitPost` paritas, `historyAllowed` vs cache, REPLACE vs worker in-flight, retry-block, media full-body, clearqueue-antre), `SendMessageWorker` ujung-ujung (drop gate, backoff, credsChanged), `PreferencesManager` penuh (upgrade, snapshot, `putCredentialState`, sms pending, wake ids, screenshot consent, `MemoryPrefs`), polling perintah (401-retry token segar, 409/429/400, pause-polling), `registerBotCommands` scope+hash, loop/watchdog, `CameraService` thread, timeout OkHttp, `BootRestartWorker`, kalkulator `formatResult`, manifest, `ContentQuery`/repo.
+- Hasil: 4 temuan LOW + 1 junk, tanpa patch menunggu keputusan owner (usul `v1.6.111` bila ya).
+- Disproved/baik: self-cancel REPLACE di ujung worker harmless (pembukuan antrean sudah commit); paritas `emitPost` terjaga (`notifySpam`/`trackGroup`); pause tetap senyap di semua jalur; 401-retry token segar; menu scope + hash benar; timeout eksplisit; prefs terenkripsi + fallback.
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.111` bila ya).
