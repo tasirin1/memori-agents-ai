@@ -820,3 +820,10 @@
 - Disproved/baik: worker 20-cap `scheduleMessageSendNext` saat antrean sisa; menu bot scope pakai user id (migrasi tak merusak menu); owner dipertahankan saat adopsi; `SYNC_INTERVAL` kosong jatuh ke 5; forwarder baca kredensial segar per panggilan; `registerTransientFailures` hanya saat online.
 - Validasi: 19 XML OK, grep secret bersih, tanpa perubahan kode, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.109` bila ya).
+
+## Sesi #110 (2026-10-05 08:38 UTC) — selesai
+- Permintaan: perbaiki semuanya (6 temuan audit jilid 23 / sesi #109).
+- Perbaikan: spam notif migrasi (adopsi hanya umumkan bila `chatId` tersimpan benar berubah; notif `MonitoringService` dipindah ke dalam `adopt`, 2 antre luar dihapus; `Worker`/`Forwarder` cek `stored` atasi `chatId` lokal basi); fallback regex `extractMigratedChatId` (`"migrate_to_chat_id"` mentah + `New chat id:` legacy); `sendStatusNow` wired adopt (update `chatId` + retry sekali + refresh input, tanpa `credentialError=400`); SMS parsial sertakan nomor + pratinjau 120 char escape HTML; `teardownJobs` batalkan `shotWatchdog` + reset `shotBusy`/`videoFlushBusy` + invalide `cameraAttempt`/`videoAttempt`; cap video/foto tak hitung file in-flight (`activeVideoFile`/`activePhotoFile`).
+- Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
+- Rilis: commit `ed40c25` (fix) + `cec5ea0` (bump `versionCode` 136/`1.6.109` + CHANGELOG) + tag `v1.6.109`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.109` rilis, menunggu hasil CI.
