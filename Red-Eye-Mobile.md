@@ -858,3 +858,11 @@
 - Validasi: brace/paren 7 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `99c1482` (fix) + `aa1f198` (bump `versionCode` 138/`1.6.111` + CHANGELOG) + tag `v1.6.111`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.111` rilis, menunggu hasil CI.
+
+## Sesi #115 (2026-10-05 09:17 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh, jilid 26, basis `v1.6.111` (tanpa patch).
+- Cakupan: regresi patch `v1.6.111` (fast-path history, generasi clearqueue, wake reset, `scheduleRateLimited`/`workerRunning`, merge `saveCredentials`), `pollTelegramCommands` + gate 3 lapis + callback/expiry, `sendFitted`/`sendToTelegram`, SMS staging/confirm, ring/record, foto/video/screenshot + flush/prune, `fetchLocation`, `restartAllLoops`/watchdog, `checkAndSendNewData`/`sendInitialData`, `CameraService`, forwarder batch/flush/drop-notice, `CrashReporter`, repo SMS/call + paging, `PhoneNumbers`/`TextChunk`/`Html`/`Redact`/`TimeFmt`, `NetworkUtils`, `BootReceiver`/`BootRestartWorker`, Setup/kalkulator, `PreferencesManager` penuh, manifest, workflow, resource cross-check.
+- Hasil: 5 temuan LOW + 1 info, tanpa patch menunggu keputusan owner (usul `v1.6.112` bila ya).
+- Disproved/baik: regresi `v1.6.111` aman (rantai APPEND terbatas-harmless, worker-internal tetap REPLACE, `clearCredentials` picu listener token/chat, merge API utuh); tak ada stale-token poisoning (listener + recheck 5 mnt); `capturing` bersama foto-video saling eksklusi; `android.R.string` false-positive resource; semua `R.*` resolve; single-process (flag `workerRunning` valid).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` + scan token literal bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.112` bila ya).
