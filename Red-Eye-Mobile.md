@@ -622,3 +622,11 @@
 - Validasi: brace/paren 9 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `86b825e` + bump `versionCode` 120/`1.6.93` + tag `v1.6.93`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.93` rilis, menunggu hasil CI.
+
+## Sesi #84 (2026-10-05 03:20 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh; temukan bug, kode tidak efisien, kode sampah (tanpa patch).
+- Cakupan: `SetupActivity` (`testConnection` tanpa catat blokir, `sendStatusNow` tanpa fallback plain, `formatStatusTime`), `CrashReporter` (`flushPending` parseMode null + `safeTake` + potong inline = 3 varian `TextChunk`), forwarder (`batchCut` varian ke-4, `dropNoticeAt` ada prune OK), `NetworkUtils.isChatMissing` (tanpa kicked/no-rights), repo SMS/call (`altVariant`/`filter` duplikat 2 repo, fallback 200-row, `querySms`/`queryCalls` kembar), blok reset-expiry auth di 5 file, `BootRestartWorker`, kamera (`cleanup` lengkap OK), XML + grep secret.
+- Hasil: 10 temuan (5 bug, 5 duplikasi/sampah).
+- Gugur/by-design: `dropNoticeAt` unbounded (ada prune 64); cache forwarder (capped 100); lintas-proses `isRunning` (satu proses); `joinToString("")` (benar).
+- Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.94` bila ya).
