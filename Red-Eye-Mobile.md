@@ -883,9 +883,17 @@
 - Validasi: 19 XML OK, secret + token-literal bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.113` bila ya).
 
-## Sesi #118 (2026-10-05 09:38 UTC) — selesai
+## Sesi #118 (2026-10-05 09:34 UTC) — selesai
 - Permintaan: perbaiki semuanya (3 temuan LOW audit jilid 27 / sesi #117), rilis `v1.6.113`.
 - Perbaikan: fast-path ikut redam summary grup 120 detik + paritas `trackGroup`; `@Volatile` `activeShotFile`; drop-notice `onDestroy` ikut schedule.
 - Validasi: brace/paren 2 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `d96421c` (fix) + `945d333` (bump `versionCode` 140/`1.6.113` + CHANGELOG) + tag `v1.6.113`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.113` rilis, menunggu hasil CI.
+
+## Sesi #119 (2026-10-05 09:47 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif, jilid 28, basis `v1.6.113` (tanpa patch).
+- Cakupan: regresi patch `v1.6.113` (summary fast-path, volatile shotFile, drop-destroy schedule), teardown vs in-flight (screenshot/photo anon-launch, audio/video attempt-guard), `pollTelegramCommands` + offset-400 + gate 3 lapis + callback/expiry, `sendFitted`/`sendToTelegram` + fallback plain, SMS staging/confirm cross-owner, ring/record/video concurrency, foto/screenshot/flush/prune/count, `fetchLocation`, `restartAllLoops`/watchdog/beat, `checkAndSendNewData`/`sendInitialData`, `CameraService`, forwarder `emitPost`/dedup/spam/`flushBatch`/`forwardLocked`/drop-notice, `CrashReporter` pause, repo SMS/call + paging komposit, `searchContacts`/`listLaunchableApps`/`cacheStats`, Setup save/test/status, kalkulator stealth, `PreferencesManager` penuh, manifest, workflow, resource cross-check.
+- Hasil: 5 temuan LOW, tanpa patch menunggu keputusan owner (usul `v1.6.114` bila ya).
+- Disproved/baik: regresi `v1.6.113` aman; `searchContacts` cursor pakai `.use` tertutup; `listLaunchableApps` cache 10 mnt; `cacheStats` hitung video; `sendFitted` chunk gagal antre per-chunk benar; pause sensor konsisten dengan teks `/stop` (calls/SMS/foto/notif); `active*` stale antar-restart instance-scoped (mati bersama instance).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.114` bila ya).
