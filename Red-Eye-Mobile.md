@@ -663,3 +663,10 @@
 - Validasi: brace/paren 8 file seimbang, 19 XML OK, grep secret bersih (hanya `CHAT_ID_REGEX`), tanpa Gradle lokal.
 - Rilis: commit `6dd97b6` + bump `versionCode` 123/`1.6.96` + tag `v1.6.96`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.96` rilis, menunggu hasil CI.
+
+## Sesi #89 (2026-10-05 04:10 UTC) — selesai
+- Permintaan: audit agresif menyeluruh, temukan bug + kode tidak efisien (tanpa patch).
+- Cakupan: `MonitoringService` (command gate, `/restart`/`/syncinterval`/`/clearqueue`/`/stop`, `sendToTelegram`/`sendFitted` 400-branch, `sendSmsPending`/`reopenSmsPending`, `restartAllLoops` vs `initialSyncJob`, watchdog), `SendMessageWorker` (`sendChunked`, retry budget, `sendDropNotice`), `NotificationForwarderService` (jalur serial `fwdSerial` + timer batch), `MessageScheduler` (`KEEP` ganda), `BootReceiver` (restore ring), `SetupActivity.clearCredentials`, `CameraService`, manifest, XML + grep secret.
+- Hasil: 10 bug + 4 inefisiensi dilaporkan (teratas: konfirmasi `/restart` hilang karena bunuh job sendiri; `scheduleMessageSendNext` no-op karena `KEEP`; timer batch 15 dtk duduki lajur serial forwarder; pending SMS gagal tak pernah kedaluwarsa + kunci `/sms`).
+- Validasi: 19 XML OK, grep secret bersih, tanpa ubah kode repo ini, tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.97` bila ya).
