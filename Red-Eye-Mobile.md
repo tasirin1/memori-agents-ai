@@ -773,3 +773,11 @@
 - Baik/disproved: offset 400 keep+backoff, rotasi owner, counter drop persistent, `APPEND`, batch HTML per-pesan, split 4000, lifecycle main, toast fallback, history paging 5x500, reset owner saat rotasi token; `TelegramMessage` default HTML + `Html.escape` konsisten; `isAuthBlocked`/`sweep` 30 mnt + clear saat Save; dual-poller `max(main,wake)+1` + 409/429 backoff; manifest/FGS/backup excludes/cleartext false benar.
 - Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (bersih), `git status` bersih, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.105` bila ya).
+
+## Sesi #104 (2026-10-05 06:58 UTC) — selesai
+- Permintaan: perbaiki semuanya (temuan audit jilid 21 / sesi #103).
+- Perbaikan (6 fix, 1 disproved): `NO_REPLAY_COMMANDS` disempitkan ke `/smsconfirm` (`/ring`/`/record`/`/lock` retry via `finally`); expiry sensitif 300 dtk di `handleTelegramCommandInner` + `menuMaxAge`; `CrashReporter.flushPending` simpan sisa >4000 char; `resolveStored` hanya map mask (kosong tetap kosong); `sendPairHint` throttle persist `last_pair_hint_wall`; kunci reminder ke `last_resume_wall` (fallback lama).
+- Disproved: rotasi kalkulator tak hilang `previousNumber`/`lastExpression` — `onSaveInstanceState`/`onCreate` sudah simpan-pulihkan, tanpa patch `MainActivity`.
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `9fcc833` + bump `versionCode` 132/`1.6.105` + tag `v1.6.105` (`1ae9c3c`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.105` rilis, menunggu hasil CI.
