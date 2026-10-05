@@ -685,3 +685,11 @@
 - Hasil: 10 bug + 4 inefisiensi dilaporkan.
 - Validasi: 19 XML OK, grep secret bersih, tanpa ubah kode repo ini, tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.98` bila ya).
+
+## Sesi #92 (2026-10-05 04:16 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 bug + 4 inefisiensi audit sesi #91) sekalian perbaiki gagal build.
+- Perbaikan: guard `compareAndSet` + `initialSyncLock` + cek identitas job (single `sendInitialData`); `handleCallbackQuery` izinkan `ownerOk` + `answerCallback` dulu; offset persist sebelum mutasi (pesan + callback); `upgradeToPersistent` dua `commit()`; worker lewati `registerTransientFailures` bila `credsChanged`/`!credsSame()`; `sendFitted` pertahankan HTML via `TextChunk.safeCut`; `isChatIdValid` terima `@username`; `handleFgsTimeout` panggil `teardownJobs()`; `isChatMissing` tanpa rights + `isRightsLimited()` antre/keep tanpa auth-block (service/worker/forwarder/media); counter drop persist ringan (`pendingMsgDrops`/`pendingNotifDrops`) + flush terjadwal (catat batas kill paksa milidetik); `getUpdates` filter `allowed_updates` + `limit`; `cacheStats` top-level; deque spam cap 30; Test pakai `getMe`/`getChat` tanpa spam (tambah API).
+- Tanpa patch: disable monitoring via Setup (`stopService`) + kalkulator/`1234=` tetap by-design.
+- Validasi: brace/paren 9 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `2e3f951` + bump `versionCode` 125/`1.6.98` + tag `v1.6.98`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.98` rilis, menunggu hasil CI.
