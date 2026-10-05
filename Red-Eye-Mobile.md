@@ -722,3 +722,10 @@
 - Hasil: tanpa regresi patch; 10 temuan baru dilaporkan (watchdog buta bila `syncInterval` >30 mnt; wake-loop+revive abaikan `monitoringPaused`; retry SMS parsial duplikat part; `alreadyRetired` mati; `appsCache` non-volatile; `/start` pairing tanpa feedback; `onTaskRemoved` jadwalkan worker saat disabled; `/history` fallback 90 hari/200 baris; race `rememberOwner` apply vs offset sync; initial-sync cursor+queue sudah at-least-once, bukan temuan).
 - Validasi: 19 XML OK, grep secret bersih, brace/paren 9 file seimbang, working tree bersih, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.101` bila ya).
+
+## Sesi #97 (2026-10-05 05:05 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit sesi #96).
+- Perbaikan (9 fix, 1 disproved tetap): watchdog range 1440/60 mnt; wake-loop 5 mnt saat pause; SMS parsial kunci 60 dtk; hapus `alreadyRetried` mati; `appsCache` `@Volatile`; hint pairing langsung throttle 1 jam; `onTaskRemoved` gate `shouldAutoResume`; fallback history 365 hari/500 baris; owner `commit` sinkron.
+- Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `293f19b` + bump `versionCode` 128/`1.6.101` + tag `v1.6.101` (`6d0ac6b`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.101` rilis, menunggu hasil CI.
