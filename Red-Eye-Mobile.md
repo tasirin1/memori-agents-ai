@@ -781,3 +781,10 @@
 - Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `9fcc833` + bump `versionCode` 132/`1.6.105` + tag `v1.6.105` (`1ae9c3c`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.105` rilis, menunggu hasil CI.
+
+## Sesi #105 (2026-10-05 07:10 UTC) — selesai
+- Permintaan: tambahkan screen soot (klarifikasi: perintah bot `/screenshot`, bukan gambar README).
+- Implementasi: `/screenshot` via MediaProjection + `ImageReader` (720p JPEG) kirim lewat jalur `sendPhotoFile` (antren offline/flush/prune); consent sekali via tombol Capture Screen di Setup (`screenCaptureLauncher`, token tersimpan terenkripsi); `SecurityException` (revoke) membersihkan consent + instruksi grant ulang; FGS `mediaProjection` di manifest + `ensureForegroundTypes`; masuk `SENSITIVE_COMMANDS` (expiry 300 dtk), bot menu, tombol menu `shot`, `/help`; status Setup tampil Screenshot granted/off; `clearCredentials` ikut membersihkan consent; README + CHANGELOG.
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `52d817d` + bump `versionCode` 133/`1.6.106` + tag `v1.6.106` (`fe7dc80`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.106` rilis, menunggu hasil CI.
