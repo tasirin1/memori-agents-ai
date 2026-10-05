@@ -638,3 +638,12 @@
 - Validasi: brace/paren 12 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `7057388` + bump `versionCode` 121/`1.6.94` + tag `v1.6.94`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.94` rilis, menunggu hasil CI.
+
+## Sesi #86 (2026-10-05 03:25 UTC) — selesai
+- Permintaan: gagal build (`v1.6.94` merah di CI).
+- Penyebab: string `"</pre>"` rusak (newline literal) di `CrashReporter.kt:225` + `selects.onAwait` tak dikenal toolchain CI.
+- Perbaikan: string crash dibetulkan; `select` diganti lomba `invokeOnCompletion` + `withTimeoutOrNull` (listener kalah tetap `cancel` via loop lama).
+- Aturan tag: `v1.6.94` yang gagal tidak digeser; perbaikan dirilis sebagai `v1.6.95`.
+- Validasi: brace/paren seimbang, tanpa Gradle lokal.
+- Rilis: commit `a6d6a70` + bump `versionCode` 122/`1.6.95` + tag `v1.6.95`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.95` rilis, menunggu hasil CI.
