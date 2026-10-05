@@ -670,3 +670,11 @@
 - Hasil: 10 bug + 4 inefisiensi dilaporkan (teratas: konfirmasi `/restart` hilang karena bunuh job sendiri; `scheduleMessageSendNext` no-op karena `KEEP`; timer batch 15 dtk duduki lajur serial forwarder; pending SMS gagal tak pernah kedaluwarsa + kunci `/sms`).
 - Validasi: 19 XML OK, grep secret bersih, tanpa ubah kode repo ini, tanpa Gradle lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.97` bila ya).
+
+## Sesi #90 (2026-10-05 04:35 UTC) — selesai
+- Permintaan: perbaiki semuanya (14 temuan audit sesi #89).
+- Perbaikan: konfirmasi `/restart`/`/syncinterval` sebelum restart; `scheduleMessageSendNext` `APPEND`; `reopenSmsPending` dihapus (expiry alami 5 mnt); drop-notice `sendToTelegram` agregat 30 dtk + flush destroy; `/clearqueue` tanpa `queueOnFail`; `restartAllLoops` restart sync hanya bila terinterupsi; `BootReceiver`/`clearCredentials` pakai `clearRingStateSync`; `/record` cek `ringBusy`; timer batch forwarder di luar lajur serial; timeout SMS 30+15 dtk/part; `sendChunked` pertahankan HTML; drop-notice worker gabungan; `flushPending` crash tiap siklus.
+- Koreksi audit: klaim worker bakar budget `429` gugur (`RateLimited` tak sentuh `failedIds`).
+- Validasi: brace/paren 8 file seimbang, 19 XML OK, secret bersih, tanpa Gradle lokal.
+- Rilis: commit `2b99f2c` + bump `versionCode` 124/`1.6.97` + tag `v1.6.97`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.97` rilis, menunggu hasil CI.
