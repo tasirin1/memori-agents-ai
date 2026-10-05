@@ -647,3 +647,11 @@
 - Validasi: brace/paren seimbang, tanpa Gradle lokal.
 - Rilis: commit `a6d6a70` + bump `versionCode` 122/`1.6.95` + tag `v1.6.95`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.95` rilis, menunggu hasil CI.
+
+## Sesi #87 (2026-10-05 03:35 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh; temukan bug + kode tidak efisien (tanpa patch).
+- Cakupan: ring (`ringDevice` apply-window, putar-ulang 1 dtk), rekam (`sendAudioFile` 429 inline 300 dtk tahan `recordBusy`), SMS (`/sms` ganti-pending diam-diam, escape `<code>` aman-by-konstruksi), `checkAndSendNewData` (cursor-then-break by-design antrean), `sendInitialData` (`initialSyncDone/Started` apply → burst ganda), `MessageQueue.persistLocked` (`commit` + JSON penuh tiap mutasi), `MemoryPrefs` listener (notifikasi OK), forwarder 400-drop-notice per-notif, XML + grep secret.
+- Hasil: 10 temuan (6 bug, 4 inefisiensi).
+- Gugur/by-design: `<code>$normalized</code>` (digit-only); cursor-then-break (retry milik antrean); listener memori (notify ada); cache/cross-process lama.
+- Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.96` bila ya).
