@@ -758,3 +758,10 @@
 - Hasil: tanpa regresi patch; 10 temuan baru (reset offset 400 ke 0 picu replay; owner tak bisa rotate tanpa Clear; counter drop tak dimuat di jalur persistent langsung; `KEEP` drop jadwal immediate saat chain `APPEND` tertunda; batch forwarder strip HTML seluruh batch; ambang 4000 vs 4096 tak konsisten; `isFinishing`/`isDestroyed` dipanggil off-main; toast `sendStatusNow` pakai kode 400 asli walau fallback 401/403; fallback riwayat nomor via 500 terbaru bisa lewatkan nomor lama; `putCredentialState` pertahankan owner saat rotasi token perlu konfirmasi) + 3 disproved (`SurfaceTexture(0)` dummy umum; `pkgTryAcquire` leaky bucket benar; timeout Telegram 15/45/30/90s eksplisit).
 - Validasi: 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), working tree bersih, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.104` bila ya).
+
+## Sesi #102 (2026-10-05 05:40 UTC) — selesai
+- Permintaan: perbaiki 10 temuan audit sesi #101.
+- Perbaikan: offset 400 dipertahankan + backoff 30 dtk (tanpa reset 0); pairing `/start <chat ID>` bisa rotasi owner; `MessageQueue` init persistent muat counter drop; `scheduleMessageSend` `APPEND` bukan `KEEP`; `flushBatch` hapus strip HTML global; ambang split 4000 seragam (`sendToTelegram`, worker); `MainActivity` cek lifecycle via `runOnUiThread`; `sendStatusNow` toast pakai kode fallback; riwayat nomor paging mundur 5x500 dalam 365 hari; rotasi token reset `ownerUserId`.
+- Validasi: brace/paren 10 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `379e04a` + bump `versionCode` 131/`1.6.104` + tag `v1.6.104` (`3069b93`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.104` rilis, menunggu hasil CI.
