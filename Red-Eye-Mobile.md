@@ -912,3 +912,10 @@
 - Disproved/baik: regresi `v1.6.114` bersih (paruh foto memang sudah ter-guard `cameraAttempt`; diff-counter aman dalam `fwdSerial`; replay offset-nol tertutup gate expiry + pending dibersihkan pasca-kirim); `/log` clear pasca-tampil; audio/record/video concurrency aman; unlock-rutin skip thread+IO; kalkulator stealth OK.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (hanya `KEY_*`/regex), tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.115` bila ya).
+
+## Sesi #122 (2026-10-05 10:15 UTC) — selesai
+- Permintaan: perbaiki semuanya (2 temuan LOW audit jilid 29 / sesi #121), rilis `v1.6.115`.
+- Perbaikan: `onDestroy` forwarder ikut `setPendingNotifDropsSync(0)` (paritas `flushMsgDropNotice`, cegah notice ganda pasca-restart); `pollWakeOnce` return dini saat `isAuthBlocked` (paritas loop utama, hentikan polling 25 dtk sia-sia).
+- Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `e8a6e5c` (fix) + `8c003c6` (bump `versionCode` 142/`1.6.115` + CHANGELOG) + tag `v1.6.115`, push `origin main` + tag (terkonfirmasi di `ls-remote`); build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.115` rilis, menunggu hasil CI.
