@@ -927,3 +927,11 @@
 - Disproved/baik: regresi `v1.6.115` bersih; `fetchLocation` `removeUpdates` di `finally` benar; `sendFitted` antre per-chunk benar; `TimeFmt` ThreadLocal aman; `isNetworkAvailable` `VALIDATED` konsisten; XML OK, secret bersih.
 - Validasi: 19 XML OK via `python3 xml.dom.minidom`, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.116` bila ya).
+
+## Sesi #124 (2026-10-05 11:08 UTC) — selesai
+- Permintaan: perbaiki semuanya (8 temuan audit jilid 30 / sesi #123), rilis `v1.6.116`.
+- Perbaikan: wake `400`-offset resync + `401`/`403` set `credentialError`; kalkulator `1234=` syarat `!justCalculated`; ganti token clear `handledUpdateIds`/`handledCallbackIds`; plain-fallback decode `&lt;`/`&gt;`/`&amp;` (service/worker/crash); foto/screenshot/video/audio cek `mediaBackoffUntil`; `PhoneNumbers` threshold `10` jadi `7`; `/clearqueue` ambil `overflow`/`expired` sebelum clear + sebut di konfirmasi; `parseRetryAfter` fallback regex deskripsi.
+- Koreksi audit: `CrashReporter` auth-block ternyata sudah ada (disproved), diganti temuan `parseRetryAfter` deskripsi-only.
+- Validasi: brace/paren 7 file seimbang, 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa Gradle lokal.
+- Rilis: commit `2b863e6` (fix) + `e4d3f37` (bump `versionCode` 143/`1.6.116` + CHANGELOG) + tag `v1.6.116`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.116` rilis, menunggu hasil CI.
