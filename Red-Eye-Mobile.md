@@ -607,3 +607,18 @@
 - Validasi: brace/paren 5 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `3cae812` + bump `versionCode` 119/`1.6.92` + tag `v1.6.92`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.92` rilis, menunggu hasil CI.
+
+## Sesi #82 (2026-10-05 03:00 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh; temukan bug, kode tidak efisien, dan kode sampah (tanpa patch).
+- Cakupan: scheduler 3-varian, helper duplikat (`safeCut`/`splitChunk`, `redactToken` x3, `altVariant` x3), cache forwarder (capped OK), worker (`sendChunked` reject-parsial, `registerFailures` budget tunggal, counter volatil, backoff tetap), `fetchLocation` busy-poll, teardown ganda + backoff basi, `/record` vs `ringBusy`, `SecurityException` lokasi, `/apps` tanpa cache, `putAllValues`, `numberMatches`, `Coalesced`, komentar Uzbek manifest, XML + grep secret.
+- Hasil: 12 temuan (7 bug, 3 inefisiensi berat + 2 duplikasi, 4 kode mati/sampah).
+- Gugur/by-design: unbounded cache (ada `removeEldestEntry` 100); lintas-proses `isRunning` (satu proses); `joinToString("")` (separator eksplisit benar).
+- Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.93` bila ya).
+
+## Sesi #83 (2026-10-05 03:06 UTC) — selesai
+- Permintaan: perbaiki semuanya (12 temuan audit jilid 38 / sesi #82).
+- Perbaikan: `teardownJobs()` bersama + reset backoff; budget transien 20x + backoff eksponensial; counter drop persist; stop-saat-reject; `/record` tanpa gate ring; lokasi lanjut provider; `select`-timeout lokasi; jeda part rasional; `TextChunk`/`Redact` bersama; cache `/apps` 10 mnt; hapus `Coalesced`; komentar Inggris; hapus `numberMatches`-trio + `putAllValues` + consume statis.
+- Validasi: brace/paren 9 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `86b825e` + bump `versionCode` 120/`1.6.93` + tag `v1.6.93`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.93` rilis, menunggu hasil CI.
