@@ -751,3 +751,10 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `1b56228` + bump `versionCode` 130/`1.6.103` + tag `v1.6.103` (`3a01fa1`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.103` rilis, menunggu hasil CI.
+
+## Sesi #101 (2026-10-05 05:29 UTC) — selesai
+- Permintaan: cek seluruh kode temukan bug (tanpa patch).
+- Cakupan: regresi `v1.6.103` (worker drop gate, `sendPairHint` segar, hapus `isMainRunning`, fallback auth `sendStatusNow`/`forwardLocked`, regex crash, reset drop clear), polling/offset/pairing/owner gate, `sendFitted`/`sendToTelegram`, SMS multipart, watchdog/restart, wake-loop/revive, batch/overflow/riwayat forwarder, `MessageQueue`/`PreferencesManager`, `SendMessageWorker`/`BootRestartWorker`/`MessageScheduler`, `SetupActivity`/`MainActivity`, `CameraService`, repo SMS/call, `CrashReporter`, manifest, workflow, XML + grep secret.
+- Hasil: tanpa regresi patch; 10 temuan baru (reset offset 400 ke 0 picu replay; owner tak bisa rotate tanpa Clear; counter drop tak dimuat di jalur persistent langsung; `KEEP` drop jadwal immediate saat chain `APPEND` tertunda; batch forwarder strip HTML seluruh batch; ambang 4000 vs 4096 tak konsisten; `isFinishing`/`isDestroyed` dipanggil off-main; toast `sendStatusNow` pakai kode 400 asli walau fallback 401/403; fallback riwayat nomor via 500 terbaru bisa lewatkan nomor lama; `putCredentialState` pertahankan owner saat rotasi token perlu konfirmasi) + 3 disproved (`SurfaceTexture(0)` dummy umum; `pkgTryAcquire` leaky bucket benar; timeout Telegram 15/45/30/90s eksplisit).
+- Validasi: 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), working tree bersih, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.104` bila ya).
