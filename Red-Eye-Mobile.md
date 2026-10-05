@@ -592,3 +592,18 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `4d31b31` + bump `versionCode` 118/`1.6.91` + tag `v1.6.91`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.91` rilis, menunggu hasil CI.
+
+## Sesi #80 (2026-10-05 02:30 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif dan menyeluruh (tanpa patch).
+- Cakupan: `MonitoringService` (polling `429` inline-delay, `sendFitted` markup, callback auth-guard, owner-learn suffix, `isPremiumSmsNumber` IDD, `computeForegroundTypes`), `NotificationForwarderService` (persist `wakeUpdateId` `apply`), `SendMessageWorker` (`credsChanged` tanpa reschedule), `BootReceiver` (campur jam dinding/monotonik), `PreferencesManager` (`openPrefs` main-thread volatil + save `apply`), repo kontak/SMS (escape `LIKE` benar), kalkulator `1234` (rotasi justru lebih ketat), XML + grep secret.
+- Hasil: 10 temuan baru (freeze polling 300 dtk saat `429`; markup hilang saat retry; amplifikasi `answerCallbackQuery` asing; `/start@botlain` ikut learn; wake ganda via `apply`; worker macet pasca-ganti kredensial; kunci boot campur jam; Save/Test volatil-hilang; bypass `0111900`; FGS lokasi butuh bg).
+- Gugur/by-design: injeksi `LIKE` (escape benar + filter digit); bypass kalkulator via rotasi (tidak ada — `secretStage` tak persist).
+- Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.92` bila ya).
+
+## Sesi #81 (2026-10-05 02:55 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit jilid 37 / sesi #80).
+- Perbaikan: backoff `429` non-blokir (`commandBackoffUntil` + skip capped 60 dtk di loop); hint `/help` saat antre bermarkup (2 jalur `sendFitted`); callback asing dibuang tanpa jawab + guard auth-block (handler + `answerCallback`); owner-learn `/start` persis; `setWakeUpdateIdSync` (`commit`) di forwarder; worker reschedule pasca-`credsChanged`; kunci boot `last_handle_wall` + migrasi legacy; `saveCoreConfig`/`saveTestCredentials` upgrade-persist + `commit`; normalisasi IDD `011`; tipe FGS `LOCATION` untuk izin foreground-only.
+- Validasi: brace/paren 5 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `3cae812` + bump `versionCode` 119/`1.6.92` + tag `v1.6.92`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.92` rilis, menunggu hasil CI.
