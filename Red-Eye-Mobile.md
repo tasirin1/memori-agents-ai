@@ -585,3 +585,10 @@
 - Gugur/by-design: `getNewCalls` komposit benar; `saveTestCredentials` reset offset benar; `/ping` pong viewer tanpa bocor tail; `AdminReceiver`/`ParentalMonitorApp` bersih.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, `git status` bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.91` bila ya).
+
+## Sesi #79 (2026-10-05 01:20 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit agresif jilid 36 / sesi #78).
+- Perbaikan: restore volume cap 12 jam di `onCreate`; `sendChunked` antre sisa part + `remainderQueued` (original dianggap terkirim); SMS kritis + cursor history tulis `commit` (`writeSmsPendingSync`/`touchSmsPendingSync`/`setLastSmsSendAtSync`/`setSmsCursorSync`/`setCallCursorSync`); Test persist interval; `sendToTelegram` `false`-saat-antre (12 path); `putCredentialState` bersama; `/apps` usage untuk arg sampah; `/storage` foto+audio; autostart tanpa gate bg-location; cursor `commit` per part.
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `4d31b31` + bump `versionCode` 118/`1.6.91` + tag `v1.6.91`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.91` rilis, menunggu hasil CI.
