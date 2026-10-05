@@ -736,3 +736,11 @@
 - Hasil: tanpa regresi; 9 temuan baru (menu perintah basi pasca-rotasi token; flag mentah Main + `secretStage` mati; `registerFailures`/`incrementRetry` mati; cache forwarder non-volatile; `/foo` grup picu balasan; riwayat notif beda jalur beban; `saveSettings` username offline toast keliru; `answerCallback` token basi 5 mnt; `BootRestartWorker` retry tanpa backoff eksplisit).
 - Validasi: 19 XML OK, grep secret bersih, working tree bersih, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.102` bila ya).
+
+## Sesi #99 (2026-10-05 05:14 UTC) — selesai
+- Permintaan: perbaiki semuanya (9 temuan audit sesi #98).
+- Perbaikan (8 fix, 1 disproved): `registerBotCommands` dipicu ulang saat `KEY_BOT_TOKEN` berubah; `MainActivity` pakai `setMonitoringActive(true)` + hapus `secretStage` mati + sederhanakan `onSaveInstanceState`; hapus `MAX_RETRIES`/`registerFailures`/`incrementRetry` mati (sisa `registerTransientFailures` budget 20); `Unknown command` hanya untuk owner (grup didiamkan); overflow forwarder gate `forwardingAllowed()` sebelum `record`; `saveSettings` `@username` offline tampil `setup_no_network` (string baru); `answerCallback` baca token segar `PreferencesManager`; `BootRestartWorker` unconfigured jadwal 30 mnt + `success` bukan `retry`.
+- Disproved: cache forwarder `cachedFwdToken`/`cachedFwdChat`/`netCached`/`netCheckAt` sudah `@Volatile`, tanpa patch.
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
+- Rilis: commit `5e8458d` + bump `versionCode` 129/`1.6.102` + tag `v1.6.102` (`169ff74`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.102` rilis, menunggu hasil CI.
