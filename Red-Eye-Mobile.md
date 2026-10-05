@@ -708,3 +708,10 @@
 - Hasil: 12 temuan baru dilaporkan ke user (kalkulator butuh `=` 2x; owner first-claimer `/start`; `chatId` `@username` mati di runtime; normalisasi nomor SMS strip `,;pw`; offset persist-sebelum-efek (tradeoff anti-replay); `allowed_updates` tanpa `channel_post`; batch notif 15 dtk + salvage daemon; ambang restore volume tak konsisten; antrean yatim bila belum konfigurasi; crash dihapus saat monitoring mati; `TOKEN_REGEX`/`CHAT_ID` Setup vs runtime; cap prioritas queue 105 vs 100).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.100` bila ya).
+
+## Sesi #95 (2026-10-05 11:55 UTC) — selesai
+- Permintaan: perbaiki semuanya (12 temuan audit sesi #94).
+- Perbaikan: kalkulator `1234`+`=` 1x; `/start` pairing `<chat ID>`; `@username` resolve numerik + hint owner; `/sms` tolak `,;`/huruf/`+` salah posisi; pre-persist hanya `/smsconfirm`/`/ring`/`/record`/`/lock`; `allowed_updates` +`channel_post`; `onDestroy` persist sinkron; `BootReceiver` cap 12 jam + clear basi; worker reschedule saat unconfigured; crash dipertahankan saat monitoring mati; `TOKEN_REGEX` 20+ dan chat min 4 digit; `addMessages(priority)`.
+- Validasi: brace/paren 8 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `8b76c0e` + bump `versionCode` 127/`1.6.100` + tag `v1.6.100` (`832306b`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.100` rilis, menunggu hasil CI.
