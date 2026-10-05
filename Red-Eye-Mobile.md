@@ -827,3 +827,11 @@
 - Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `ed40c25` (fix) + `cec5ea0` (bump `versionCode` 136/`1.6.109` + CHANGELOG) + tag `v1.6.109`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.109` rilis, menunggu hasil CI.
+
+## Sesi #111 (2026-10-05 08:55 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh, jilid 24, basis `v1.6.109` (tanpa patch).
+- Cakupan: patch `v1.6.109` sendiri (urutan cek adopt, retry Setup, preview SMS, teardown, cap), gerbang perintah + callback + menu expiry, `sendFitted`/`sendToTelegram`, loop watchdog + `restartAllLoops`, media 400 (`take(200)`), flush/prune, lokasi, SMS pending, `checkAndSendNewData`/`sendInitialData` kursor, `/clearqueue`/`/flush`/`/restart`, `MessageQueue` cap/expiry, `MessageScheduler` APPEND ganda, forwarder fast-path/batch/dedup/spam, wake-loop `/ping`, `BootReceiver`/`BootRestartWorker`, kalkulator `1234`, repo SMS/call, `TimeFmt`/`TextChunk`, `PreferencesManager` enkripsi, manifest, workflow, XML + grep secret.
+- Hasil: 7 temuan baru (1 MED-LOW + 6 LOW), tanpa patch menunggu keputusan owner (usul `v1.6.110` bila ya).
+- Disproved/baik: dedup callback `LinkedHashSet` (evict tertua benar); wake-loop owner-only + backoff; kalkulator gate `previousNumber`/`operator` benar; `removeUpdates` di `finally`; antrean cap 100 + expiry 7 hari; worker 20-cap + `credsChanged`; teardown + cap in-flight `v1.6.109` benar; fallback regex + preview SMS + cross-cancel benar; `/restart` jujur; kursor-then-queue by-design (pesan `/clearqueue` sudah jujur).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (hanya `KEY_*`/regex), tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.110` bila ya).
