@@ -562,3 +562,10 @@
 - Validasi: brace/paren 5 file seimbang, 19 XML OK, grep secret bersih, workflow tanpa mapping, tanpa Gradle lokal.
 - Rilis: commit `40ac302` + bump `versionCode` 116/`1.6.89` + tag `v1.6.89` (`ed4fbee`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.89` rilis, menunggu hasil CI.
+
+## Sesi #76 (2026-10-05 01:01 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif dan menyeluruh (tanpa patch).
+- Cakupan: `MonitoringService` (poll offset, callback answer-before-dedup, `/location` fire-and-forget, `/sms` premium ID-only, ring volume restore, kamera dual-watchdog 30s/45s, `checkAndSendNewData` at-least-once), `NotificationForwarderService` (fast-path >32 tanpa `pkgRecord`, `pollWakeOnce` tanpa 409/429 backoff), `SetupActivity` (`CHAT_ID_REGEX` longgar + `resolveStored` empty-ke-stored), `MainActivity` (`1234=` pertama abnormal + secret lewat rotasi), `MessageScheduler` (triple identik + REPLACE-vs-KEEP), `CrashReporter` (elapsed-reset), `TelegramApi` timeout 45s/90s, manifest, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan ke user (spam-bypass burst; wake hammer 409; premium luar lolos; chatId typo self-DoS 400; kalkulator abnormal; volume stuck max; callback replay amplification; location/owner-link at-most-once; kamera busy palsu 15s; crash basi kirim ulang) + 2 catatan (scheduler triple identik; duplikat crash-window 10-batch).
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.90` bila ya).
