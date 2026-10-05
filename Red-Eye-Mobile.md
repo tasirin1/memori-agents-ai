@@ -715,3 +715,10 @@
 - Validasi: brace/paren 8 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `8b76c0e` + bump `versionCode` 127/`1.6.100` + tag `v1.6.100` (`832306b`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.100` rilis, menunggu hasil CI.
+
+## Sesi #96 (2026-10-05 04:48 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: regresi patch `v1.6.100` (pairing `/start`, guard SMS, resolve username, split `NO_REPLAY`, `allowed_updates`, salvage sinkron, cap 12 jam, reschedule worker, keep crash, regex, `addMessages(priority)`), watchdog loop, wake-loop/revive saat pause, `sendPhotoFile`/`sendAudioFile`, `sendSmsPending` multipart, `BootRestartWorker`, `ParentalMonitorApp`, `ContentQuery`, repo SMS/call, `SetupActivity` ujung-ujung, workflow.
+- Hasil: tanpa regresi patch; 10 temuan baru dilaporkan (watchdog buta bila `syncInterval` >30 mnt; wake-loop+revive abaikan `monitoringPaused`; retry SMS parsial duplikat part; `alreadyRetired` mati; `appsCache` non-volatile; `/start` pairing tanpa feedback; `onTaskRemoved` jadwalkan worker saat disabled; `/history` fallback 90 hari/200 baris; race `rememberOwner` apply vs offset sync; initial-sync cursor+queue sudah at-least-once, bukan temuan).
+- Validasi: 19 XML OK, grep secret bersih, brace/paren 9 file seimbang, working tree bersih, tanpa Gradle lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.101` bila ya).
