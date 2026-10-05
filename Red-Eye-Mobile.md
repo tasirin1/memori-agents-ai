@@ -547,3 +547,11 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `6718214` + bump `versionCode` 115/`1.6.88` + tag `v1.6.88` (`6d9dc50`), push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.88` rilis, menunggu hasil CI.
+
+## Sesi #74 (2026-10-05 00:43 UTC) — selesai
+- Permintaan: cek seluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `pollTelegramCommands` offset at-least-once, `sendSmsPending` jendela 90s, `NotificationForwarderService.onDestroy` vs `batchBuf`, `AdminReceiver.onDisableRequested/onDisabled` thread, loop-watchdog vs gantung-aktif, media 429 tanpa retry, flush background DROPPED tanpa notice, `pressedAt` callback basi, `build.yml` mapping artifacts, `readLocked` corrupt, drop-notice vs cap antrean 100, `MemoryPrefs` listener, `pruneAudioCache`, `wakePingIds` eviksi, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan ke user (duplikat SMS saat reboot di jendela confirm; batch 32 notif hilang saat mati; `commit` antrean di main thread `onDisabled`; watchdog buta gantung-aktif; media 429 tanpa jadwal; flush DROPPED diam; tombol inline basi 5 mnt; mapping di artifacts; corrupt antrean buang diam; drop-notice makan slot antrean).
+- Gugur/by-design: cache config tak basi (listener baris 139); `MemoryPrefs` dukung listener; antrean persisten prune kedaluwarsa; recorder release di finally; eviksi wake-ID terkecil benar; 400 chat-missing konsisten set auth-block.
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.89` bila ya).
