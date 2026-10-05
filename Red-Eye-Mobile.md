@@ -851,3 +851,10 @@
 - Disproved/baik: self-cancel REPLACE di ujung worker harmless (pembukuan antrean sudah commit); paritas `emitPost` terjaga (`notifySpam`/`trackGroup`); pause tetap senyap di semua jalur; 401-retry token segar; menu scope + hash benar; timeout eksplisit; prefs terenkripsi + fallback.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.111` bila ya).
+
+## Sesi #114 (2026-10-05 09:11 UTC) — selesai
+- Permintaan: perbaiki semua temuan audit jilid 25 / sesi #113, rilis `v1.6.111`.
+- Perbaikan (4 LOW + 1 junk): fast-path forwarder `pendingPosts>32` gate `historyAllowed()` + record bila forward off (label resolve sebelum gate); `/clearqueue` hentikan in-flight via counter generasi `MessageQueue.queueGeneration()` + abort worker + lewati akuntansi drop/backoff pasca-clear; listener token/chat forwarder reset `wakeUpdateId=-1` + invalide cache config; `REPLACE` 429 jalur langsung via `scheduleRateLimited()` (`APPEND` bila `workerRunning`, `REPLACE` bila idle; 7 situs langsung: forwarder/monitoring teks+fallback, 3 media, SetupActivity; worker-internal tetap `REPLACE`); `saveCoreConfig`/`saveTestCredentials` gabung ke `saveCredentials` privat.
+- Validasi: brace/paren 7 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `99c1482` (fix) + `aa1f198` (bump `versionCode` 138/`1.6.111` + CHANGELOG) + tag `v1.6.111`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.111` rilis, menunggu hasil CI.
