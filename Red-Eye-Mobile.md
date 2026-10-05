@@ -803,3 +803,12 @@
 - Disproved (baik, tanpa patch): recorder audio `release()` di `finally` + berkas 0-byte dibersihkan; receiver SMS `unregisterReceiver` di `finally`; timeout OkHttp 15/45/30/90 dtk eksplisit; `cachedOwnerId` disegar via listener token/chat; `removeUpdates` di `finally` tiap provider lokasi; `chooseVideoSize` dari `getOutputSizes`; consent screenshot divalidasi `resultCode!=0 && data` + revoke bersihkan consent; offset 400 keep+backoff; expiry sensitif 300 dtk.
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (hanya `KEY_*`/regex), tanpa perubahan kode repo ini, tanpa Gradle lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.108` bila ya).
+
+## Sesi #108 (2026-10-05 08:20 UTC) — selesai
+- Permintaan: perbaiki semuanya (8 temuan audit jilid 22 / sesi #107) + perbaiki gagal build.
+- Gagal build: `v1.6.106`/`v1.6.107` merah karena `Unresolved reference: windowManager` di `takeScreenshotFrame` (`Service` tak punya properti itu) — kini via `getSystemService(WINDOW_SERVICE)`.
+- Perbaikan: loop periodik + `/flush` ikut `flushPendingVideos()` + guard backlog video maks 3 (`pendingVideoCount`, prune pola foto); `cacheStats` jadi `CacheStats` (bytes/foto/audio/video) + `/storage` tampilkan video; `NetworkUtils.extractMigratedChatId` + `adoptMigratedChat` di teks `MonitoringService`/`SendMessageWorker`/`NotificationForwarderService` (adopsi otomatis + antre notif, media `KEPT` retry, owner dipertahankan) + body penuh media (dulu `take(200)` potong `migrate_to_chat_id`); SMS parsial langsung clear pending anti-duplikat; `/clearqueue` jujur soal kursor; `restartAllLoops(): Boolean` + hidupkan ulang `loopWatchdogJob` + `/restart` jujur throttle; Setup cross-cancel `saveJob`/`testJob` (temuan balap Save-Test parsial gugur — sekuens invalidasi sudah simetris, sisa jendela check-then-act mikrodetik).
+- Insiden patch: satu blok 400 foto sempat korup (variabel `new` tertukar saat ganti berurutan) — terdeteksi via baca ulang, diperbaiki, brace/paren 0 di semua file.
+- Validasi: brace/paren semua `.kt` seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `a328228` (fix) + `b3cf34c` (bump `versionCode` 135/`1.6.108` + CHANGELOG) + tag `v1.6.108`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.108` rilis, menunggu hasil CI.
