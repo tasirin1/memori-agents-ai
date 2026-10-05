@@ -577,3 +577,11 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `KEY_*`/regex), tanpa Gradle lokal.
 - Rilis: commit `0eb6182` + bump `versionCode` 117/`1.6.90` + tag `v1.6.90`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.90` rilis, menunggu hasil CI.
+
+## Sesi #78 (2026-10-05 01:20 UTC) — selesai
+- Permintaan: cek menyeluruh kode dari seluruh area lebih agresif (tanpa patch).
+- Cakupan: `SendMessageWorker` (`sendChunked` 429/auth tengah-chunk, `sendDropNotice`, `registerFailures`), `MessageQueue` (`apply` vs `commit`, `clearQueue`, corrupt path), `MonitoringService` (`sendFitted`/`sendToTelegram` semantik boolean, `/smsconfirm` apply-window, `/apps`/`/storage`/`/ping`, `checkAndSendNewData` cursor apply), `SetupActivity` (`testConnection` interval hilang, `saveCoreConfig`/`saveTestCredentials` duplikat), `PreferencesManager` (semua setter `apply`), `BootReceiver` + `startMonitoring` + `onCreate` (tiga jalur restore volume), `CallLogRepository` (komposit date+id benar), `MainActivity` autostart vs boot gating, XML + grep secret.
+- Hasil: 10 temuan baru dilaporkan (restore volume 3 jalur divergen — regresi `v1.6.90`; chunk 429/auth duplikat prefix + suffix hilang; SMS `apply` jendela dobel-kirim; interval Test tak persist; boolean `sendToTelegram` vs `sendFitted` terbalik laten; duplikat `saveCoreConfig`/`saveTestCredentials`; `/apps` arg sampah diam-diam 30; `/storage` byte-vs-foto mismatch; gating bg-location tak konsisten; cursor history `apply` duplikat).
+- Gugur/by-design: `getNewCalls` komposit benar; `saveTestCredentials` reset offset benar; `/ping` pong viewer tanpa bocor tail; `AdminReceiver`/`ParentalMonitorApp` bersih.
+- Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, `git status` bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.91` bila ya).
