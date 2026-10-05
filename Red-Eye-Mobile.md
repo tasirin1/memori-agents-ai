@@ -919,3 +919,11 @@
 - Validasi: brace/paren seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
 - Rilis: commit `e8a6e5c` (fix) + `8c003c6` (bump `versionCode` 142/`1.6.115` + CHANGELOG) + tag `v1.6.115`, push `origin main` + tag (terkonfirmasi di `ls-remote`); build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.115` rilis, menunggu hasil CI.
+
+## Sesi #123 (2026-10-05 11:07 UTC) — selesai
+- Permintaan: cek seluruh kode temukan bug, jilid 30, basis `v1.6.115` (tanpa patch).
+- Cakupan: regresi `v1.6.115` (drop-destroy persist-nol, wake auth-block), `pollTelegramCommands` + offset-400 + dedup/callback, wake-loop `pollWakeOnce` offset-400, `sendFitted`/`sendToTelegram` + plain-fallback entities, SMS staging/confirm, foto/video/screenshot + `mediaBackoffUntil`, `fetchLocation`, `MessageQueue`/`clearQueue`, `CrashReporter` auth-block, repo SMS/call + `PhoneNumbers` short-query, kalkulator `1234=` double-press, `handledUpdateIds` vs ganti token, Setup save/test, `BootReceiver`/`BootRestartWorker`, manifest, XML + secret-grep.
+- Hasil: 8 temuan baru (1 MEDIUM, 6 LOW, 1 info) dilaporkan tanpa patch, menunggu keputusan owner (usul `v1.6.116` bila ya).
+- Disproved/baik: regresi `v1.6.115` bersih; `fetchLocation` `removeUpdates` di `finally` benar; `sendFitted` antre per-chunk benar; `TimeFmt` ThreadLocal aman; `isNetworkAvailable` `VALIDATED` konsisten; XML OK, secret bersih.
+- Validasi: 19 XML OK via `python3 xml.dom.minidom`, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.116` bila ya).
