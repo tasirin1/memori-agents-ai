@@ -678,3 +678,10 @@
 - Validasi: brace/paren 8 file seimbang, 19 XML OK, secret bersih, tanpa Gradle lokal.
 - Rilis: commit `2b99f2c` + bump `versionCode` 124/`1.6.97` + tag `v1.6.97`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.97` rilis, menunggu hasil CI.
+
+## Sesi #91 (2026-10-05 05:00 UTC) — selesai
+- Permintaan: audit agresif menyeluruh, temukan bug + kode tidak efisien (tanpa patch).
+- Cakupan: `startMonitoring` (tanpa guard9631838; double initial sync), `handleCallbackQuery` (drop DM owner), offset-vs-handle (replay), `upgradeToPersistent` (`apply` ganda), worker vs `credsChanged`, `sendFitted` strip HTML, validasi `chat_id` username, `handleFgsTimeout` (backoff basi), `isChatMissing` rights-freeze, counter drop-notice evaporate, `getUpdates` tanpa `allowed_updates`, `cacheStats` full-walk, spam deque, probe spam; Setup-disable terkonfirmasi aman (`stopService` ada).
+- Hasil: 10 bug + 4 inefisiensi dilaporkan.
+- Validasi: 19 XML OK, grep secret bersih, tanpa ubah kode repo ini, tanpa Gradle lokal.
+- Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.98` bila ya).
