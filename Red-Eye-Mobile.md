@@ -539,3 +539,11 @@
 - Hasil: 10 temuan baru dilaporkan ke user (offset commit-before-handle; `sendFitted` tanpa cek auth-block; antrean+kursor `apply` async; dedup/summary return sebelum `record`; split HTML tak balance tag; `/sms` 3-digit + premium sempit; `/location` blokir perintah 40s; `TOKEN_REGEX` 20+ longgar; `1234=` bajak kalkulator; save/test toast superseded menipu).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex (tanpa token asli), `git status` repo ini bersih (tanpa ubah kode), tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.88` bila ya).
+
+## Sesi #73 (2026-10-05 00:26 UTC) — selesai
+- Permintaan: perbaiki semuanya (10 temuan audit agresif jilid 33 / sesi #72).
+- Perbaikan: offset `lastUpdateId` commit sesudah handle (at-least-once); `sendFitted`/`sendToTelegram` early `isAuthBlocked` + antre sekali; HTML panjang dipecah polos (`sendFitted`, `flushBatch`, `sendChunked`); `record()` sebelum return dedup 10s/summary 120s; lokasi NETWORK+GPS paralel 25s; `/sms` 7-15 digit + short-code <=6 digit premium; `TOKEN_REGEX` secret 30+; kalkulator `1234` + `=` dua kali; `MessageQueue` tulis `commit`; buang toast superseded pasca-persist.
+- Koreksi audit: klaim `/location` blokir antrean perintah gugur (`/location` sudah `serviceScope.launch` async) — yang diperbaiki latensi jawab lokasi 40s seri jadi 25s paralel.
+- Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `6718214` + bump `versionCode` 115/`1.6.88` + tag `v1.6.88` (`6d9dc50`), push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.88` rilis, menunggu hasil CI.
