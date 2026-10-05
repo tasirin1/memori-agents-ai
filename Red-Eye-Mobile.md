@@ -874,3 +874,11 @@
 - Validasi: brace/paren 6 file seimbang, 19 XML OK, grep secret bersih (hanya `CHAT_ID_REGEX`), tanpa Gradle lokal.
 - Rilis: commit `6e59d70` (fix) + `d5a032f` (bump `versionCode` 139/`1.6.112` + CHANGELOG) + tag `v1.6.112`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.112` rilis, menunggu hasil CI.
+
+## Sesi #117 (2026-10-05 09:32 UTC) — selesai
+- Permintaan: cek seluruh kode lebih agresif dan menyeluruh, jilid 27, basis `v1.6.112` (tanpa patch).
+- Cakupan: regresi patch `v1.6.112` (shotFile, batch-count, crash-pause, VALIDATED, paging komposit), teardown/stop/destroy vs in-flight, loop/watchdog/beat, polling + wrapper + callback, semua perintah `[...]`/`/sms`/`/history`/`/apps`/`/storage`, repo + `searchContacts`, Setup save/test/status, kalkulator, `CameraService`, forwarder batch/summary/destroy, `BootReceiver` penuh, manifest, workflow, resource cross-check.
+- Hasil: 3 temuan LOW, tanpa patch menunggu keputusan owner (usul `v1.6.113` bila ya).
+- Disproved/baik: teardown tak perlu reset `active*` (instance-scoped, mati bersama instance); cabang record normal-path setara `historyAllowed`; regresi `v1.6.112` setara perilaku lama; `/apps` hanya label; `VALIDATED` konsisten semua jalur.
+- Validasi: 19 XML OK, secret + token-literal bersih, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
+- Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.113` bila ya).
