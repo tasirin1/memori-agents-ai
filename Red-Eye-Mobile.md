@@ -835,3 +835,11 @@
 - Disproved/baik: dedup callback `LinkedHashSet` (evict tertua benar); wake-loop owner-only + backoff; kalkulator gate `previousNumber`/`operator` benar; `removeUpdates` di `finally`; antrean cap 100 + expiry 7 hari; worker 20-cap + `credsChanged`; teardown + cap in-flight `v1.6.109` benar; fallback regex + preview SMS + cross-cancel benar; `/restart` jujur; kursor-then-queue by-design (pesan `/clearqueue` sudah jujur).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih (hanya `KEY_*`/regex), tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.110` bila ya).
+
+## Sesi #112 (2026-10-05 08:52 UTC) — selesai
+- Permintaan: perbaiki semuanya (7 temuan audit jilid 24 / sesi #111).
+- Perbaikan (6 fix, 1 gugur): retry-400 Setup set `credentialError` bila tetap chat-hilang tanpa migrasi lanjutan (langsung + plain); media foto/video cek body penuh; `scheduleMessageSendNext` jadi `REPLACE` (kirim biasa tetap `APPEND`); `/clearqueue` `queueOnFail=true`; forwarder `emitPost()` satukan dedup/spam/record/build/forward (fast-path duplikat kini ikut record); riwayat tetap dicatat saat forward off/unconfigured via `historyAllowed()` (pause tetap senyap).
+- Gugur: urutan cek adopt (`stored` dulu) dipertahankan — swap `current` dulu justru bekukan 30 mnt untuk caller segar pasca-adopsi; loop glitch sudah dibatasi budget retry worker (20x + backoff).
+- Validasi: brace/paren 4 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `dffaf89` (fix) + `e75e2dc` (bump `versionCode` 137/`1.6.110` + CHANGELOG) + tag `v1.6.110`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.110` rilis, menunggu hasil CI.
