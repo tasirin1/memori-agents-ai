@@ -897,3 +897,10 @@
 - Disproved/baik: regresi `v1.6.113` aman; `searchContacts` cursor pakai `.use` tertutup; `listLaunchableApps` cache 10 mnt; `cacheStats` hitung video; `sendFitted` chunk gagal antre per-chunk benar; pause sensor konsisten dengan teks `/stop` (calls/SMS/foto/notif); `active*` stale antar-restart instance-scoped (mati bersama instance).
 - Validasi: 19 XML OK, `grep BOT_TOKEN|CHAT_ID` hanya `KEY_*`/regex, tanpa perubahan kode repo ini, tanpa `./gradlew` lokal.
 - Status terakhir: menunggu keputusan owner temuan mana diperbaiki dulu (usul `v1.6.114` bila ya).
+
+## Sesi #120 (2026-10-05 09:55 UTC) — selesai
+- Permintaan: perbaiki semuanya (5 temuan LOW audit jilid 28 / sesi #119), rilis `v1.6.114`.
+- Perbaikan: guard generasi screenshot `shotAttempt` (pola `cameraAttempt`, invalide di `teardownJobs`, hasil basi dibuang + watchdog basi tak bunuh capture baru; paruh foto audit disproved — `cameraAttempt` sudah guard); `flushBatch` pesan >4000 char bobot 0 per potongan + dihitung 1 bila ada drop permanen (diff `dropNoticeCount`, retry transien tak dihitung); `emitPost` tandai `groupSeen` di awal sebelum dedup/spam-return; offset-400 `getUpdates` resync dari nol (andalkan gate expiry anti-replay); `/sms` staging owner-aware (owner sama boleh timpa, owner lain dikunci) + throttle 60 dtk.
+- Validasi: brace/paren 2 file seimbang, 19 XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `925d0fb` (fix) + `5d6a1f9` (bump `versionCode` 141/`1.6.114` + CHANGELOG) + tag `v1.6.114`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.114` rilis, menunggu hasil CI.
