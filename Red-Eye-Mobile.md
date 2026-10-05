@@ -630,3 +630,11 @@
 - Gugur/by-design: `dropNoticeAt` unbounded (ada prune 64); cache forwarder (capped 100); lintas-proses `isRunning` (satu proses); `joinToString("")` (benar).
 - Validasi: XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa ubah kode, tanpa `./gradlew` lokal.
 - Status terakhir: tanpa patch, menunggu keputusan owner (usul `v1.6.94` bila ya).
+
+## Sesi #85 (2026-10-05 03:14 UTC) — selesai
+- Permintaan: perbaiki semuanya + perbaiki gagal build (10 temuan jilid 39 / sesi #84).
+- Build gagal: `v1.6.93` merah di CI (`Redact.kt` smart-cast nullable) — diperbaiki + impor `selects` dipertegas.
+- Perbaikan: crash `HTML` + potong sadar-tag; `isChatMissing` +kicked/rights; probe gagal catat blokir; status fallback plain; fallback history 90 hari; `safeTake`/`batchCut`/inline → `TextChunk`; redaksi → `Redact`; nomor → `PhoneNumbers`; query → `ContentQuery`; sweep → `sweepAuthBlock` (5 lokasi); hapus `formatStatusTime`.
+- Validasi: brace/paren 12 file seimbang, XML OK, grep secret bersih, tanpa Gradle lokal.
+- Rilis: commit `7057388` + bump `versionCode` 121/`1.6.94` + tag `v1.6.94`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.94` rilis, menunggu hasil CI.
