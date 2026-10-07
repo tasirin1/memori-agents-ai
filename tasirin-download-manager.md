@@ -379,3 +379,13 @@
 - Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `8975508` + 1 entri `CHANGELOG.md` + 1 unit test lintas-jalur, push `main` sukses tanpa pantau workflow (aturan 19).
 - Fix: (1) `MainActivity` dismiss batalkan `socialJob`/`socialDebounce` + null-kan; (2) `ServerSecurity` HMAC token diprefix domain (`partial:`/`upload:`, format kawat tetap `id.expiry.hmac` — token lama otomatis gugur, wajar karena short-lived); (3) throttle snapshot bangun fresh bila cache masih `"{}"` awal.
 - Guard: `security_audit` 0/0 (24 rules), `git diff --check` bersih. Compile + unit test penuh milik CI.
+
+## Sesi fokus remote web jilid 29 (2026-10-07 11:51 UTC, tanpa ubah kode — 1 sedang + 2 rendah)
+
+- Perintah user: "kita fokus ke remote web" — audit baca-saja `remote.src.html` (6603 baris: render/updateRows/gallery/fs/move/upload/SSE/polling/ZIP/login) + `prepare_remote.py` + endpoint terkait `HttpControlServer` (pinOk/media/thumb/events).
+- Temuan (BELUM diperbaiki — tunggu pilihan owner):
+  1. (sedang) Auto-logout 10 mnt membunuh playback/upload (`remote.src.html:~4717`: re-arm hanya klik/sentuh/tombol/scroll/mouse; logout rotate secret → `/api/media` 401 padahal di cabang pinOk `:292`). Pemicu: PIN aktif + nonton film >10 mnt tanpa interaksi (TV/tablet) → video macet di Range berikutnya; upload/XHR ikut 401. Fix: jangan logout saat video diputar/`fsUploading`/transfer aktif, atau re-arm saat poll/SSE sukses.
+  2. (rendah-sedang) `runFsActions` kehilangan hitungan parsial (`~4330`: `out.done = done` hanya di jalur sukses; throw tengah batch → lapor 0 padahal sebagian sudah pindah → "nothing moved" menyesatkan). Pemicu: batch move 5 folder, item ke-3 gagal. Fix: set `out.done` sebelum throw/ di catch.
+  3. (rendah) ZIP ditampung di RAM s.d. 400 MB (`ZIP_MEMORY_LIMIT`, `downloadZipWithProgress ~3838`: chunks[] + Blob ≈ 2x di memori; TV RAM kecil bisa OOM-crash tab padahal fallback anchor streaming tersedia). Pemicu: ZIP galeri 300 MB di TV 1 GB. Fix: turunkan ambang (64–100 MB) atau deteksi memori kecil.
+- Yang diverifikasi bersih: XSS (escapeHtml di semua nama/error, textContent di modal/toast/meta), CSRF (XHR header + zt sekali-pakai), ID upload crypto-hex 32, retry/finalize caps 3x + 5 mnt, move self-check + validasi server, `beforeunload` saat upload, thumb/media token-encode, D-pad/tabbar, tema, swipe, delegasi SSE 1x+give-up.
+- Guard: `security_audit` 0/0 (24 rules, dari sesi sebelumnya; kode tak berubah). Tanpa push repo (tak ada perubahan kode).
