@@ -203,3 +203,12 @@
 - Bersih (dugaan gugur): kunciUnduh pakai ConcurrentHashMap (bukan String-lock), LOG_TS selalu synchronized, readAllBytes dibatasi, tambahUkuranUnzip tanpa overflow, restore stop-server dulu (UI+bot), detectBinaryVersion ada watchdog 10 dtk + batas 50 baris, lockout PIN dual-clock wall+elapsed, FileShareProvider sudah anti-oracle, redirect https+GitHub-only.
 - Temuan baru dilapor ke user: 2 sedang (export-TTL wall-clock; doRestore pegang kunci data selama unduh) + 2 rendah (throttle log wall-clock bikin refresh macet saat jam mundur; tebakan PIN pendek burns lockout = lockout-DoS kecil, by-design).
 - Pelajaran: pola `currentTimeMillis - terakhir > X` selalu curigai jam-mundur; kunci global jangan dipegang selama I/O jaringan.
+
+## Sesi #25 — 2026-10-07 (fix temuan audit #24, selesai)
+- User: "perbaiki semuanya". 3 commit + push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `2f18d5d fix: TTL export dan throttle log pakai jam elapsed` (exportPlainPada + sapu basi + throttle appendUiLog di Settings/Main → elapsedRealtime; umur mtime negatif dijepit 0 agar file segar tak terhapus saat jam mundur).
+  - `f9cb432 fix: kunci restore bot baru dipegang saat eksekusi` (doRestore: unduh+dekrip tanpa kunci, kunciRestore tepat sebelum restoreFromZip; finally lepas hanya bila dikunci).
+  - `713774d fix: tebakan PIN pendek tak bakar lockout` (authDangerous: PIN <4 char ditolak tanpa catatHasil — tak mungkin benar sehingga hanya membuka lockout-DoS; sempat 1 commit gabung lalu dipecah via reset+apply-hunk agar satu commit satu tujuan).
+- Guard: `git diff --check` bersih + cek-cepat.sh exit 0. Tidak ada test yang mengunci perilaku lama (TgBotTest hanya pisahkanPin murni).
+- Pelajaran: jam dinding vs elapsed — pola `now - terakhir > X` selalu ganti elapsed bila untuk umur/TTL/throttle; kunci global jangan dipegang selama I/O jaringan; hunk terpisah satu file bisa dipecah via header-diff + apply --cached.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
