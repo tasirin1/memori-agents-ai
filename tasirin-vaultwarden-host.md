@@ -95,3 +95,11 @@
   - `e4a6486 fix: baca ulang sertifikat bila hilang sesaat saat tukar atomik` (TlsCert.sisaMs retry 100ms).
   - `6ece938 docs: changelog audit lock log symlink versi sertifikat` (md saja, CI dilewati).
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #13 — 2026-10-07 03:05 UTC (selesai)
+- Perbaiki gagal build atas perintah user (2 run merah, 1 run hijau):
+  - Run `37564259631` (head `e4a6486`) gagal 1 test: `symlinkIndukBersihDiJvm` — fail-closed baru menganggap stub `android.system.Os` di JVM sebagai perangkat.
+  - Coba 1 `0d566a6` (deteksi pesan "Stub!") tetap merah: stub AGP di CI tak selalu melempar (bisa pulang null → NPE tanpa pesan).
+  - Coba 2 `da4fab5` hijau: `diJvmUnitTest()` via `java.vm.name` (Dalvik = perangkat) + uji `jvmUnitTestTerdeteksi`; run `37565963777` success, rilis `v1.37.4` 7 aset lengkap.
+- Pelajaran: jangan deteksi stub Android via pesan exception; pakai nama VM yang deterministik.
+- Verifikasi: pantau CI atas perintah eksplisit user (pengecualian aturan #13).
