@@ -63,3 +63,8 @@
   - `3ce0a77 docs: changelog unduh binary berulang` (md saja, CI dilewati).
 - Penyimpangan sadar dari usulan awal: `KEY_BIN_PATCH` TIDAK ditulis saat fallback-cache (akan menutupi binary belum-patch); sebagai gantinya throttle coba-ulang.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #8 — 2026-10-07 02:15 UTC (selesai)
+- Audit agresif baca-saja seluruh area (tanpa build lokal): ServerService (start/stop/restart/health/killStale/port/dataDir/log), Updater (tryUpdate/download/resume/SHA/webvault/shim/trust/redirect), TgBot (auth/PIN/callback/update/restore), TgBackup (k WinG/GCM/restore/zip-slip/jadwal/export), Settings/Main (port/PIN/kuncian/import/restore/susulan), PinGate, TlsCert, KernelCompat, StoragePerm, FileShareProvider, LogExport, HttpsCompat, Util, Alarm/Boot/TgBotReceiver, AutoUpdate, manifest, res (ID/night/vektor), workflow CI, gradle, proguard.
+- Vonis: tidak ada bug kritikal/tinggi. 1 regresi sedang dari sesi #7 ditemukan + langsung diperbaiki (`4811235`: jalan pintas unduh abaikan butuhRefresh; cap gagal dibatasi refresh-only; uji `unduhTetapJalanBilaPatchBasi`). Push terkonfirmasi di origin.
+- Temuan rendah/kosmetik dilaporkan ke user, belum diperbaiki (menunggu perintah): WV redirect-offline tak cap marker (unduh ulang 35MB), komentar isPortBusy basi, Start saat stopping diabaikan diam-diam, pesan gagal /restart hampir mati, RSS cache basi, hint restart palsu pasca-update WV, toast restart-notice tiap buka app, START_TERTUNDA hapus saat intent terkirim, Unduh&Start tanpa batal.
