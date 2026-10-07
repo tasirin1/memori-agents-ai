@@ -86,3 +86,12 @@
 - Vonis: tanpa kritikal/tinggi. Terverifikasi bersih: baca logBuffer semua terkunci, LOG_TS semua synchronized, redirect max-5 https+host-GitHub, TUGAS_DATA semua try-finally, configJson kecualikan secret, provider exported=false, smoke watchdog+TOCTOU ok.
 - Temuan baru dilaporkan ke user, belum diperbaiki (menunggu perintah): 1 sedang (samarkanLog 12 regex di dalam synchronized logBuffer di LogActivity:384-385,603-604 — tahan lock + risiko ANR; pola benar sudah ada di :631-634), 3 rendah (adaSymlinkInduk fail-open bila lstat gagal; normVersion tanpa validasi → URL asset malformed bila tag API aneh; TlsCert baca-vs-tulis tanpa lock di jeda ensure).
 - Status terakhir: audit sesi #11 selesai, temuan dilaporkan, tanpa perubahan/push di repo app.
+
+## Sesi #12 — 2026-10-07 02:48 UTC (selesai)
+- Perbaiki 4 temuan audit sesi #11 atas perintah user, tiap fix satu commit + push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `fee9f06 fix: samarkan log di luar kunci buffer agar tak tahan thread server` (LogActivity shareLog/copyLog).
+  - `2765079 fix: cek symlink fail-closed bila lstat gagal di perangkat` (FileShareProvider + uji `symlinkIndukBersihDiJvm`).
+  - `b0bf904 fix: tolak tag versi aneh agar tak ditempel ke URL asset` (Updater.normVersion + uji `normVersion_tolakTagAneh`).
+  - `e4a6486 fix: baca ulang sertifikat bila hilang sesaat saat tukar atomik` (TlsCert.sisaMs retry 100ms).
+  - `6ece938 docs: changelog audit lock log symlink versi sertifikat` (md saja, CI dilewati).
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
