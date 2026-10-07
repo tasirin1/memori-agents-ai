@@ -137,3 +137,12 @@
 - Audit agresif putaran ke-9: tanpa kritikal/tinggi/sedang; 1 rendah (pasangan cache lintas-thread tak atomik).
 - Verifikasi: wall-clock bot tak perlu dikunci (thread poll tunggal serial); scope fix hanya Updater.latestVersion + readBundledVersionRaw.
 - Fix `68130f9` + push (tanpa build lokal / tanpa pantau): `fix: kunci pasangan cache versi agar baca tulis atomik` (KUNCI_VERSI; fetch network tetap di luar kunci; bundled first-writer menang).
+
+## Sesi #19 — 2026-10-07 04:39 UTC (selesai)
+- Audit agresif putaran ke-10 (baca-saja): 3 temuan baru (2 sedang + 1 rendah). Area lama (redirect, zip-slip, provider, PIN-bruteforce, port, thread-cache, crypto, samaran-log) terverifikasi bersih; tmp impor terenkripsi sudah dibersihkan (Batal/dismiss/5x).
+- Perbaiki semuanya atas perintah user, 3 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `c8ff07e fix: alarm_secret tak ikut export config agar rahasia alarm tak bocor` (SECRET_PREF_KEYS + KEY_ALARM_SECRET; import allowlist sudah abaikan + uji).
+  - `aaab46e fix: kunci grace PIN terpisah agar commit disk tak blokir cek grace` (KUNCI_GRACE; catatHasil tetap synchronized, perilaku atomik sama).
+  - `7b8274c fix: samaran tg_pass berhenti sebelum kunci berikut agar konteks tak hilang` (lookahead tanpa menelan; simulasi python 4 skenario PASS + uji).
+- Pelajaran: secret per-perangkat wajib masuk daftar kecualikan export sejak lahir; monitor kelas jangan dibagi antara I/O disk dan cek UI cepat; pola samaran rakus butuh lookahead agar tak menelan konteks.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
