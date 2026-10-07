@@ -7,7 +7,10 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-04 21:20 UTC, HEAD cb630de — revert kompatibilitas Scribd, push sukses)
+## Status terakhir (2026-10-07, HEAD 4da4aa4 — audit jilid 31: 3 temuan, semua diperbaiki + push sukses)
+
+- Audit jilid 31 (mode baca-saja, HEAD 37e8ca8): 3 temuan baru — (1) `trimGalleryTop()` baca-tulis selang-seling per cell (layout thrash); (2) `thumbPending` Array O(n) + tumpuk ref saat fling; (3) `notifyItemFinished()` requestCode unik per unduhan (PendingIntent menumpuk).
+- Fix + push sukses: `028082d perf(gallery): scroll jank susulan windowing` (dua pass trim + `thumbPending` jadi `Set`, regen `remote.html`, +CHANGELOG) dan `4da4aa4 fix(notification): PendingIntent selesai menumpuk per unduhan` (requestCode stabil 0, +CHANGELOG). Guard: `security_audit` 0/0, `prepare_remote --check` OK, `git diff --check` bersih.
 
 - HEAD: `004f63c` docs(agents) kunci prefs.
 - Sesi audit jilid 10 (2026-10-03, commit a46de8d, push main sukses): 3 race diperbaiki — (1) `DownloadEngine` reset/hapus `throttleTotals` satu lock dengan `addThrottleTotal`; (2) sampel speed/ETA dua map digabung satu holder `Pair` atomik; (3) `HttpControlServer.uploadLockFor()` nullable + tegak batas `MAX_UPLOAD_LOCKS` atomik. Guard: `security_audit` 0 error/0 warning (self-test OK), `check_readme_sync` sinkron. `prepare_remote --check` tak disentuh (remote tak diubah).
