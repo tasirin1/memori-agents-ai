@@ -118,3 +118,9 @@
 - Akar: ekspektasi test benar, kode produksi salah — nama dikecualikan tak memakan jatah batas sehingga pending basi + 3 file lolos cap.
 - Fix `99b4e9c` + push (tanpa build lokal / tanpa pantau): `simpan++` dipindah sebelum cek kecualikan.
 - Pelajaran: pengecualian dari batas harus tetap dihitung dalam budget, bila tidak cap bocor +1 tiap siklus.
+
+## Sesi #16 — 2026-10-07 03:52 UTC (selesai)
+- User lapor gagal build lagi run `37568189123` (head `99b4e9c`): test yang sama merah. Coba 1 salah: `simpan++` sebelum skip tak berpengaruh karena nama dikecualikan paling tua (diurut terakhir).
+- Akar benar: pengecualian harus mengurangi jatah (`jatah = batas-1`), bukan dihitung di urutan. Disimulasikan murni via python (2 skenario PASS) sebelum push.
+- Fix + push (tanpa build lokal / tanpa pantau): `fix: jatah batas dikurangi pengecualian agar cap tepat`.
+- Pelajaran: exclusion-from-cap = kurangi budget, bukan hitung-di-urutan — beda hasil bila item dikecualikan bukan yang terbaru.
