@@ -357,3 +357,9 @@
   3. (sedang) `ServerVideoDurations.recordProbeFailure`: eviksi hanya `removeAll` kedaluwarsa; bila >2000 gagal semua dalam TTL 10 mnt tak ada yang terbuang → map tumbuh tanpa batas. Pemicu: galeri ~3000 entri + probe gagal massal.
 - Yang diverifikasi bersih: `isPathAllowed` kanonikalisasi internal (input absolutePath tetap aman — tuduhan symlink gugur), `streamMedia` total -1 via chunked, SSE reconnect 1x + give-up + cooldown, throttle snapshot/login per-IP, reservasi upload + drain/close, zip strip-lock, `failedUrls`/`credCache` iter.remove aman (bukan CHM).
 - Guard: `security_audit --self-test` OK. Tanpa push repo (tak ada perubahan kode).
+
+## Sesi fix 3 temuan jilid 27 (2026-10-07 11:20 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `bf4d2ae` + 1 entri `CHANGELOG.md`, push `main` sukses tanpa pantau workflow (aturan 19).
+- Fix: (1) `cachedMediaMeta` eviksi via snapshot kunci (`keys.toList()` + `remove`) bukan `iter.remove` (CHM tak dukung remove); (2) `serveShare` contentUri pola `serveFile` (runCatching + tutup stream + 404 + invalidasi galeri) + `streamMedia` dalam try/catch penutup; (3) `recordProbeFailure` paksa buang setengah tertua bila masih >MAX setelah buang kedaluwarsa.
+- Guard: `security_audit` 0/0 (24 rules), `git diff --check` bersih; `check_repo --pre-commit` tak selesai dalam jendela eksekusi (sama seperti jilid 26 — tak terkait diff). Compile penuh milik CI.
