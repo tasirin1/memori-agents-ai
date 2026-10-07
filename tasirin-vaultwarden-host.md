@@ -240,3 +240,8 @@
 - Bersih: semua di atas hardened/fail-closed.
 - 1 temuan Sedang baru: Start saat update web-vault berjalan menghapus staging AKTIF — sisaStagingWebVault (Updater.java:640) cocok ke `web-vault.new-<cap>` unik, meniadakan klaim komentar stagingWebVault bahwa cleanup tak bisa membuang staging aktif; update gugur (versi lama aman, tinggal retry). Fix benar: registry staging aktif yang dilewati cleanup.
 - Dilapor ke user, belum diperbaiki (tunggu perintah).
+
+## Sesi #30 — 2026-10-07 (fix race staging web-vault, selesai)
+- User: "perbaiki semuanya" (temuan audit #29). 1 commit + push ke `main` (`41ed89d`, tanpa build lokal / tanpa pantau CI):
+  - `fix: lindungi staging web-vault aktif dari sapu cleanup Start` — registry STAGING_AKTIF (Set nama tersinkron, murni-JVM) + tandaiStagingAktif/lepasStagingAktif/stagingAktif di Updater; tandai sesudah mkdirs, lepas di 7 jalur gagal + 1 jalur sukses; cleanupTempFilesTerkunci lewati nama aktif; komentar basi stagingWebVault/KUNCI_WEBVAULT/cleanup diluruskan; test baru stagingAktif_lindungiDariSapuLaluLepas (murni, aman JVM).
+- Guard: `git diff --check` bersih + cek-cepat.sh exit 0. Verifikasi milik CI.
