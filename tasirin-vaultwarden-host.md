@@ -74,3 +74,9 @@
 - Diagnosis lanjutan: reset bukan obat (cuma kebetulan jaringan/shim pulih). Akar loop: (1) downloadBinaryInner unduh ~20MB dulu baru pastikan shim — di kernel lama tanpa shim valid, uji asap pasti gagal, tmp dibuang, cek berikut unduh lagi; (2) throttle 6 jam hanya di ensureBinary, jalur AutoUpdate/tryUpdate unduh tiap buka app; (3) tiap gagal auto-update memicu notifikasi "tersedia" tanpa dedup; (4) bolehCobaUnduhLagi salah pasca-reboot (elapsed reset); (5) reset tak buang cap gagal.
 - Fix `75da093` + docs `bf4d51d`, push ke main (tanpa build/pantau): fail-fast shim sebelum unduh; AutoUpdate cooldown berbagi cap (sukses hapus, gagal catat) + tanpa notif tiap gagal; throttle tahan reboot; reset buang cap; AutoUpdateTest baru + uji reboot.
 - Verifikasi milik CI; tidak memantau build sesuai aturan.
+
+## Sesi #10 — 2026-10-07 (selesai)
+- Audit agresif seluruh area atas perintah user: 19k baris dibaca via grep/sed (tanpa build lokal). Vonis: tanpa kritikal; PIN/bot/restore/crypto/TLS/provider/alarm/redirect bersih.
+- Temuan: 2 sedang (health-restart uncapped + spam Telegram; race restartTunda vs killer async = restart hilang diam-diam) + 8 kecil (WV redirect 35MB, Settings activity-leak, toast tiap buka, gagal-unduh-tetap-start x2, START_TERTUNDA hangus, PID-reuse RSS, rotasi log truncate, komentar isPortBusy).
+- Fix 2 commit kode + 1 docs, push ke main (tanpa pantau CI): `ef737ca` (service: sync-wait + recordRestart health, rotasi log, PID ketat, 2 uji), `9987dc6` (updater/UI: cap WV redirect, toast sekali, no-start-on-fail, app-context, flag susulan, 2 uji), `8fb912a` docs.
+- Sengaja tak diubah: cabang prefs.has tg_notified/wv_from di applyPrefsFromJson (mati suri tapi aman untuk config edit-manual).
