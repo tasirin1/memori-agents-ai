@@ -226,3 +226,10 @@
 - Akar: ensure early-return leaf valid-waktu tanpa cek SAN → pemanggil terpaksa hapus dulu. Kini regen lewat jalur .baru→swap yang sudah atomik; gagal generate = leaf lama tetap dipakai.
 - Guard: `git diff --check` bersih + cek-cepat.sh exit 0. Kompilasi + unit test penuh milik CI (build-apk ringan).
 - Verifikasi milik CI; tidak memantau build sesuai aturan.
+
+## Sesi #28 — 2026-10-07 (build gagal → fix, selesai)
+- CI gagal di commit e39deb2: `TlsCertTest.paksaLeafRegenerasiWalauLeafMasihValid` AssertionError (baris 234, ensure pertama null).
+- Akar: TlsCert.ensure tak bisa jalan di JVM unit test — jalur buatLeaf memuat kunci CA via android.util.Base64 yang stub di unit test (melempar) → buatLeaf false → ensure null. Makanya dulu tak ada test yang memanggil ensure.
+- Fix `16437ea`: buang test + 2 import tambahannya; overload paksaLeaf tetap делivered tanpa test (cabang satu-boolean, risiko rendah; verifikasi via CI + manual).
+- Pelajaran: jangan tambah unit test untuk fungsi yang menyentuh API Android (Base64, dsb.) walau file-nya 99% murni — cek import dulu; stub android.jar melempar, bukan mengembalikan default.
+- Push ke main; verifikasi milik CI, tidak memantau build sesuai aturan.
