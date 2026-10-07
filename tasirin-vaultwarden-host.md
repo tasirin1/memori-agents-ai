@@ -219,3 +219,10 @@
 - Bersih: semua jalur di atas sudah hardened (fail-closed + komentar desain konsisten).
 - 1 temuan Sedang baru: regen TLS destruktif — ensureCertWithIps (ServerService.java:3053) hapus cert/key/ipFile DULU lalu panggil TlsCert.ensure yang sebenarnya atomik (.baru→swap, leaf lama dipertahankan bila gagal); hapus-dulu meniadakan jaring itu (IP berubah + storage penuh = cert bagus hilang, server mati total). Akar: ensure early-return leaf valid-waktu tanpa cek SAN, sehingga pemanggil terpaksa hapus dulu. Fix benar: flag paksa-regen-leaf di TlsCert.ensure, bukan hapus-dulu.
 - Dilapor ke user, belum diperbaiki (tunggu perintah).
+
+## Sesi #27 — 2026-10-07 (fix TLS destruktif, selesai)
+- User: "perbaiki semuanya" (temuan audit #26). 1 commit + push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `e39deb2 fix: regen TLS atomik tanpa hapus-dulu` (TlsCert.ensure overload paksaLeaf; ServerService.ensureCertWithIps oper flag ipBerubah, hapus 3x delete-dulu; ips.txt ditulis hanya saat sukses seperti semula; TlsCertTest baru paksaLeafRegenerasiWalauLeafMasihValid — cabang tanpa-paksa adaptif bila DER tak terparse JVM agar tak flaky di CI).
+- Akar: ensure early-return leaf valid-waktu tanpa cek SAN → pemanggil terpaksa hapus dulu. Kini regen lewat jalur .baru→swap yang sudah atomik; gagal generate = leaf lama tetap dipakai.
+- Guard: `git diff --check` bersih + cek-cepat.sh exit 0. Kompilasi + unit test penuh milik CI (build-apk ringan).
+- Verifikasi milik CI; tidak memantau build sesuai aturan.
