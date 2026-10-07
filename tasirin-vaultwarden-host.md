@@ -51,3 +51,8 @@
 - Temuan: 1 bug sedang — `saveAndStart` menerima port 1-1023 lalu server diam-diam jalan di default (prefs/UI/server tak sepakat); fix `b5478ae` sembuhkan ke default di depan + set ulang field + toast/log.
 - `d20832e docs:` lengkapi CHANGELOG untuk 6 fix audit terakhir (lolos CI, hanya md).
 - Verifikasi milik CI; tidak memantau build sesuai aturan.
+
+## Sesi #6 — 2026-10-07 01:42 UTC (selesai)
+- Tanya-jawab baca-saja (tanpa build lokal): user tanya kenapa binary diunduh ulang terus bila tidak di-reset manual.
+- Diagnosis: `ensureBinary` (ServerService.java) hanya pakai cache bila patch-rev cocok + (marker `update_version` ada atau `version.txt` cocok APK) + smoke test `--version` lolos + versi cocok kuncian; gagal satu saja jatuh ke unduh. `tryUpdateVersi`/`AutoUpdate` bandingkan versi PROSES yang sedang jalan (`ServerService.binaryVersion`), bukan file — bila update terunduh tapi server tak restart, tiap cek mengunduh ulang file yang sama. Reset manual (hapus file + `version.txt` + marker) memaksa satu unduhan bersih yang mengisi marker/patch-rev/tag konsisten + proses jalan dari file baru sehingga loop berhenti.
+- Kandidat fix (belum dikerjakan, menunggu perintah): prioritaskan versi file di `tryUpdateVersi`, tulis `KEY_UPDATE_VERSION` di jalur manual-copy path 2, persist `KEY_BIN_PATCH` walau fallback-cache.
