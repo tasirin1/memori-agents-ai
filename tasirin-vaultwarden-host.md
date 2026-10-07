@@ -171,3 +171,4 @@
 - `6176fca feat:` 9 file (PinActivity, 2 layout, test, Main/Settings/manifest/strings/CHANGELOG), push ke `main`. Grace/lockout/upgrade-hash tetap via PinGate/PinCrypto; batal/Back = finish agar tak fail-open.
 - Verifikasi milik CI (tidak pantau build sesuai aturan).
 - `14008a7 fix:` kurung tutup `onActivityResult` Settings hilang saat pasang cabang REQ_PIN (gagal compile CI `illegal start of expression`); tambah `}` + push. Verifikasi milik CI.
+- `8499e0a fix:` ceiling menit lockout (+59999) — 1 uji `PinActivityTest` gagal di CI; push + pantau sampai `37580084500 completed/success`. Halaman login PIN hijau.
