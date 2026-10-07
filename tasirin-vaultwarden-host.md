@@ -196,3 +196,10 @@
 - Batasan sadar: log diagnostik `[app]/[tg]` + pesan bot Telegram tetap Indonesia (test-anchored, mis. webVaultBerubah); tes lain pakai placeholder netral-bahasa sehingga aman.
 - Pelajaran: literal pendek ("Ya", "v", "terbaru") wajib ganti via konteks baris-penuh; escape Java `\n`/`\u` di python butuh backslash ganda; cek-cepat.sh wajib ikut rename file.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #24 — 2026-10-07 (audit agresif, baca-saja)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode baca-saja (tanpa ubah kode app), cek-cepat.sh exit 0.
+- Area disisir: ServerService start/stop/watch/restart/health/ensureBinary/gantiAtomik/detectBinaryVersion, Updater kunciUnduh/redirect/SHA, TgBot auth/pisahkanPin/restore, TgBackup restore/zip-slip/checkpointWal, Settings runBusy/export-TTL, LogActivity clipboard, Boot/AlarmReceiver, TgBotReceiver, PinActivity/Gate/Crypto, TlsCert, FileShareProvider, Util, AutoUpdate.
+- Bersih (dugaan gugur): kunciUnduh pakai ConcurrentHashMap (bukan String-lock), LOG_TS selalu synchronized, readAllBytes dibatasi, tambahUkuranUnzip tanpa overflow, restore stop-server dulu (UI+bot), detectBinaryVersion ada watchdog 10 dtk + batas 50 baris, lockout PIN dual-clock wall+elapsed, FileShareProvider sudah anti-oracle, redirect https+GitHub-only.
+- Temuan baru dilapor ke user: 2 sedang (export-TTL wall-clock; doRestore pegang kunci data selama unduh) + 2 rendah (throttle log wall-clock bikin refresh macet saat jam mundur; tebakan PIN pendek burns lockout = lockout-DoS kecil, by-design).
+- Pelajaran: pola `currentTimeMillis - terakhir > X` selalu curigai jam-mundur; kunci global jangan dipegang selama I/O jaringan.
