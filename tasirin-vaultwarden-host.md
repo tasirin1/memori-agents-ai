@@ -56,3 +56,10 @@
 - Tanya-jawab baca-saja (tanpa build lokal): user tanya kenapa binary diunduh ulang terus bila tidak di-reset manual.
 - Diagnosis: `ensureBinary` (ServerService.java) hanya pakai cache bila patch-rev cocok + (marker `update_version` ada atau `version.txt` cocok APK) + smoke test `--version` lolos + versi cocok kuncian; gagal satu saja jatuh ke unduh. `tryUpdateVersi`/`AutoUpdate` bandingkan versi PROSES yang sedang jalan (`ServerService.binaryVersion`), bukan file — bila update terunduh tapi server tak restart, tiap cek mengunduh ulang file yang sama. Reset manual (hapus file + `version.txt` + marker) memaksa satu unduhan bersih yang mengisi marker/patch-rev/tag konsisten + proses jalan dari file baru sehingga loop berhenti.
 - Kandidat fix (belum dikerjakan, menunggu perintah): prioritaskan versi file di `tryUpdateVersi`, tulis `KEY_UPDATE_VERSION` di jalur manual-copy path 2, persist `KEY_BIN_PATCH` walau fallback-cache.
+
+## Sesi #7 — 2026-10-07 01:42 UTC (selesai)
+- Perbaiki loop unduh binary (laporan user sesi #6), 2 commit + push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `95e532c fix: hentikan unduh binary berulang tanpa reset manual` (Updater nilai versi file dulu + pesan restart bermarker; binary manual catat `update_version`; throttle 6 jam unduhan perbaikan gagal; `bin_dl_gagal_at` tak ikut export; 5 uji baru).
+  - `3ce0a77 docs: changelog unduh binary berulang` (md saja, CI dilewati).
+- Penyimpangan sadar dari usulan awal: `KEY_BIN_PATCH` TIDAK ditulis saat fallback-cache (akan menutupi binary belum-patch); sebagai gantinya throttle coba-ulang.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
