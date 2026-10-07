@@ -212,3 +212,10 @@
 - Guard: `git diff --check` bersih + cek-cepat.sh exit 0. Tidak ada test yang mengunci perilaku lama (TgBotTest hanya pisahkanPin murni).
 - Pelajaran: jam dinding vs elapsed — pola `now - terakhir > X` selalu ganti elapsed bila untuk umur/TTL/throttle; kunci global jangan dipegang selama I/O jaringan; hunk terpisah satu file bisa dipecah via header-diff + apply --cached.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #26 — 2026-10-07 (audit agresif #2, baca-saja)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode baca-saja, working tree bersih, cek-cepat.sh exit 0.
+- Area disisir baru: pollOnce/offset/freshness/callback-PIN, MainActivity PIN-grace + refresh 1-detik, web-vault extract+swap, amanEntriZip/expectedHexEquals, LogExport SAF, enkripsi AES-GCM/PBKDF2 + zeroing, AutoUpdate, AlarmReceiver secret/throttle, rahasiaAlarm, redirect/hostGithubAman/hostTelegramAman, copyBinary, pingRinci/hostname-verifier, loopbackSslFactory cap, collectIps/formatHost, prepareTls/migrasi/bersihKunci, import-allowlist, kirimSinkron queue, healthTick worker, chatIdAman, PinCrypto iter-cap, tryUpdateVersi pin-restore, reset/revert guard, tukarPasanganAtomik, backup-integrity+retry.
+- Bersih: semua jalur di atas sudah hardened (fail-closed + komentar desain konsisten).
+- 1 temuan Sedang baru: regen TLS destruktif — ensureCertWithIps (ServerService.java:3053) hapus cert/key/ipFile DULU lalu panggil TlsCert.ensure yang sebenarnya atomik (.baru→swap, leaf lama dipertahankan bila gagal); hapus-dulu meniadakan jaring itu (IP berubah + storage penuh = cert bagus hilang, server mati total). Akar: ensure early-return leaf valid-waktu tanpa cek SAN, sehingga pemanggil terpaksa hapus dulu. Fix benar: flag paksa-regen-leaf di TlsCert.ensure, bukan hapus-dulu.
+- Dilapor ke user, belum diperbaiki (tunggu perintah).
