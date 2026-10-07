@@ -233,3 +233,10 @@
 - Fix `16437ea`: buang test + 2 import tambahannya; overload paksaLeaf tetap делivered tanpa test (cabang satu-boolean, risiko rendah; verifikasi via CI + manual).
 - Pelajaran: jangan tambah unit test untuk fungsi yang menyentuh API Android (Base64, dsb.) walau file-nya 99% murni — cek import dulu; stub android.jar melempar, bukan mengembalikan default.
 - Push ke main; verifikasi milik CI, tidak memantau build sesuai aturan.
+
+## Sesi #29 — 2026-10-07 (audit agresif #3, baca-saja)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode baca-saja, tree bersih, cek-cepat.sh exit 0.
+- Area disisir baru: catatLog/tailLog/flush/rotasi, cleanupTempFiles vs staging konkuren, dataDirAman segmen/case, kutipRocket, migrasiPort, recordRestart window, isKernelRandomPanic, samarkanLog + semua pemakai, TgBot schedule/pendingIntent/jawabCallback, bukaIkutiRedirect/resume-reset, bolehIkutiRedirectGithub/sambungRedirect, provider query/getType/openFile, HttpsCompat cap, PinGate grace/lockout/catatHasilAsync, kunciBerikutnyaMs flat-5mnt, TgBackup.schedule exact/inexact + cancel lawas, Main Start/Stop flows.
+- Bersih: semua di atas hardened/fail-closed.
+- 1 temuan Sedang baru: Start saat update web-vault berjalan menghapus staging AKTIF — sisaStagingWebVault (Updater.java:640) cocok ke `web-vault.new-<cap>` unik, meniadakan klaim komentar stagingWebVault bahwa cleanup tak bisa membuang staging aktif; update gugur (versi lama aman, tinggal retry). Fix benar: registry staging aktif yang dilewati cleanup.
+- Dilapor ke user, belum diperbaiki (tunggu perintah).
