@@ -175,3 +175,12 @@
 - `0c8b8f2 fix:` ellipsis `...` jadi `…` di `pin_memeriksa` (anotasi lint Ellipsis). Verifikasi milik CI.
 - Audit kode baru PIN (PinActivity, 2 layout, test, wiring Main/Settings, manifest, strings): tak ada bug fungsional — grace tak bisa diperpanjang tanpa PIN (launch hanya bila grace habis; early-OK hanya ms setelah unlock sah), Back/Keluar fail-closed via finish pemanggil, ID layout sama, REQ unik, rotation aman via configChanges, worker vs hash segar + upgrade aman.
 - `d78aa04 chore:` buang 2 import tak terpakai (EditText/InputType) di MainActivity. Verifikasi milik CI.
+
+## Sesi #21 — 2026-10-07 06:33 UTC (selesai)
+- Audit putaran ke-11 atas perintah "cek seluruh kode": 5 temuan baru (semua rendah), area lama bersih (redirect, zip-slip, provider, PIN-bruteforce, port, crypto, samaran-log, export-secret).
+- Perbaiki semuanya, 3 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `f765eef fix: grace PIN tak diperpanjang ganda dan hash hilang lanjut OK` (catatPinDibuka guard dalamGrace di Main+Settings; PinActivity hash-hilang RESULT_OK; bersihkanInput langsung usai salin).
+  - `ebfbd57 fix: kandidat PIN bot bertitik/garis-miring bukan PIN implisit` (TgBot.pisahkanPin tolak `.`/`/`/`\` implisit + 4 uji baru; simulasi python 14 skenario PASS).
+  - `21242c8 fix: layar PIN dikecualikan dari recents` (manifest PinActivity excludeFromRecents; ID layout portrait/landskap sama persis).
+- Pelajaran: callback sukses berlapis (activity + onActivityResult) wajib idempoten tanpa perpanjang jendela; fallback PIN implisit wajib tolak pola mirip-file/versi agar typo tak bakar lockout.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
