@@ -389,3 +389,9 @@
   3. (rendah) ZIP ditampung di RAM s.d. 400 MB (`ZIP_MEMORY_LIMIT`, `downloadZipWithProgress ~3838`: chunks[] + Blob ≈ 2x di memori; TV RAM kecil bisa OOM-crash tab padahal fallback anchor streaming tersedia). Pemicu: ZIP galeri 300 MB di TV 1 GB. Fix: turunkan ambang (64–100 MB) atau deteksi memori kecil.
 - Yang diverifikasi bersih: XSS (escapeHtml di semua nama/error, textContent di modal/toast/meta), CSRF (XHR header + zt sekali-pakai), ID upload crypto-hex 32, retry/finalize caps 3x + 5 mnt, move self-check + validasi server, `beforeunload` saat upload, thumb/media token-encode, D-pad/tabbar, tema, swipe, delegasi SSE 1x+give-up.
 - Guard: `security_audit` 0/0 (24 rules, dari sesi sebelumnya; kode tak berubah). Tanpa push repo (tak ada perubahan kode).
+
+## Sesi fix 3 temuan remote web jilid 29 (2026-10-07 12:00 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `e136dd2` (3 file: `remote.src.html` + `remote.html` regen + 1 entri `CHANGELOG.md`), push `main` sukses tanpa pantau workflow (aturan 19).
+- Fix: (1) auto-logout tunda + re-arm bila video diputar/`fsUploading`/`fsDlActive`/`anyActiveTransfer()`; (2) `runFsActions` `let done` keluar try + `out.done = done` di catch; (3) `ZIP_MEMORY_LIMIT` 400→96MB + komentar.
+- Guard: `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke upload 4 chunk), `security_audit` 0/0 (24 rules), `diff --check` bersih. Compile penuh milik CI.
