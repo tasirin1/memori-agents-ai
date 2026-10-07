@@ -160,3 +160,8 @@
 - `771c25f fix: dialog password import di UI thread + budget lintas dialog` (temuan baru saat bedah: `tanyaPasswordImpor` dibuat di worker runBusy = crash ViewRoot tanpa Looper; seluruh dialog pindah `ui.post`, dekrip PBKDF2 di worker `vw-import-dec` + tombol dikunci, budget 5x kumulatif per sidik SHA-256 berkas + gerbang di `importConfig` + 3 uji baru).
 - Pelajaran: tiap `AlertDialog.Builder`/`EditText` baru wajib cek thread pemanggil (importConfig = worker); counter keamanan wajib kunci identitas objek (sidik isi) bukan identitas sementara (path tmp unik).
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #8 — 2026-10-07 (selesai)
+- Verifikasi agresif atas 20 temuan audit lalu (baca kode + rg, tanpa build lokal): kutipRocket, TOCTOU resume, battery-perm, SECURE_RANDOM, race process, healthTick/onDestroy, TgBotReceiver wakelock, PinGate async, clipboard kill-window, port UI, sleep worker, alarm-exact fallback, FileShareProvider scope, trim log, null-guard import, zip-slip, workflow anchor, tungguBootStabil, loop unduh binary (kandidat sesi #6).
+- Vonis: semua sudah aman — dataDirAman tolak kutip/newline/kontrol/koma-kurawal; SHA akhir fail-closed; battery-perm dipakai Settings; onDestroy removeCallbacks; receiver wakelock finally; port dinormalisasi (sesi #5); unzip cek leksikal+kanonis+cap; workflow assert anchor; tungguBootStabil selalu di worker; tryUpdateVersi prioritaskan versi file + tulis marker (kandidat sesi #6 sudah masuk).
+- Tidak ada patch/commit ke repo app (hindari churn + CI sia-sia). Sisa residual risiko rendah by-design: granularity lastModified FAT, kill-window ms PinGate, clipboard antar-kill (dibersihkan saat buka berikut).
