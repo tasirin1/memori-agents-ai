@@ -165,3 +165,8 @@
 - Verifikasi agresif atas 20 temuan audit lalu (baca kode + rg, tanpa build lokal): kutipRocket, TOCTOU resume, battery-perm, SECURE_RANDOM, race process, healthTick/onDestroy, TgBotReceiver wakelock, PinGate async, clipboard kill-window, port UI, sleep worker, alarm-exact fallback, FileShareProvider scope, trim log, null-guard import, zip-slip, workflow anchor, tungguBootStabil, loop unduh binary (kandidat sesi #6).
 - Vonis: semua sudah aman — dataDirAman tolak kutip/newline/kontrol/koma-kurawal; SHA akhir fail-closed; battery-perm dipakai Settings; onDestroy removeCallbacks; receiver wakelock finally; port dinormalisasi (sesi #5); unzip cek leksikal+kanonis+cap; workflow assert anchor; tungguBootStabil selalu di worker; tryUpdateVersi prioritaskan versi file + tulis marker (kandidat sesi #6 sudah masuk).
 - Tidak ada patch/commit ke repo app (hindari churn + CI sia-sia). Sisa residual risiko rendah by-design: granularity lastModified FAT, kill-window ms PinGate, clipboard antar-kill (dibersihkan saat buka berikut).
+
+## Sesi #9 — 2026-10-07 (selesai)
+- Fitur baru atas saran user: halaman login PIN layar penuh (`PinActivity`) pengganti popup dialog — brand + kolom PIN + Buka/Keluar, D-pad, portrait+landscape ID sama, FLAG_SECURE.
+- `6176fca feat:` 9 file (PinActivity, 2 layout, test, Main/Settings/manifest/strings/CHANGELOG), push ke `main`. Grace/lockout/upgrade-hash tetap via PinGate/PinCrypto; batal/Back = finish agar tak fail-open.
+- Verifikasi milik CI (tidak pantau build sesuai aturan).
