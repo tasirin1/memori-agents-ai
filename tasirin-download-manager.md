@@ -373,3 +373,9 @@
   3. (rendah) Throttle snapshot bisa sajikan `"{}"` (`HttpControlServer.kt:195` init, `:254` throttle 1000 ms `:3286`) — dua request paralel IP sama saat start/restart: yang kedua dapat cache `"{}"` → daftar kosong sekedip sebelum poll berikutnya pulih.
 - Yang diverifikasi bersih (tak diulang jilid 29): mirror GitHub (isGitHubUrl parse host, proxy tak regen), login throttle per-IP + volatile, trackConnection lock, segFlush/throttle lock, probeUrl same-origin auth, Invidious/httpGet redirect eksplisit + strip kredensial, Updater list-first + cap 512KB, WebExtract destroy+stopLoading, SSE 1x+give-up, zip strip-lock + token sekali-pakai, serveFile/serveShare try/catch (jilid 27), eviksi meta snapshot-key (jilid 27), probeFail paksa-paruh (jilid 27).
 - Guard: `security_audit` 0/0 (24 rules). Tanpa push repo (tak ada perubahan kode).
+
+## Sesi fix 3 temuan jilid 28 (2026-10-07 11:25 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `8975508` + 1 entri `CHANGELOG.md` + 1 unit test lintas-jalur, push `main` sukses tanpa pantau workflow (aturan 19).
+- Fix: (1) `MainActivity` dismiss batalkan `socialJob`/`socialDebounce` + null-kan; (2) `ServerSecurity` HMAC token diprefix domain (`partial:`/`upload:`, format kawat tetap `id.expiry.hmac` — token lama otomatis gugur, wajar karena short-lived); (3) throttle snapshot bangun fresh bila cache masih `"{}"` awal.
+- Guard: `security_audit` 0/0 (24 rules), `git diff --check` bersih. Compile + unit test penuh milik CI.
