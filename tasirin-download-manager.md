@@ -402,3 +402,9 @@
 - Penyebab peringkat: (1) UTAMA — 10 thumb paralel vs server 2-4 thread + decode video per `/api/thumb` (CPU berat di TV) → antrean + lambat; `loading="lazy"` dinonaktifkan antrean (src di-set langsung untuk semua cell render incl. luar layar). (2) handler scroll tanpa throttle: `getBoundingClientRect` tiap event (forced reflow) + 3 handler scroll lain. (3) semua cell menumpuk di DOM (content-visibility hanya di browser baru; WebView TV tua tak terbantu). (4) `renderGalleryReset` baca localStorage per item. (5) tiap thumb = 1 koneksi + 1 decode, tanpa batch/prefetch.
 - Opsi fix (belum dipilih owner): A-kecil: turunkan konkurensi thumb 10→3 + IntersectionObserver (hanya thumb terlihat) + throttle scroll rAF. B-sedang: + virtualisasi/windowing buang cell jauh. C-server: kecilkan thumb/kompresi atau cache agresif (cache disk sudah ada).
 - Guard: tanpa perubahan kode. Tanpa push repo.
+
+## Sesi fix galeri seret jilid 30 (2026-10-07 12:20 UTC, push main sukses)
+
+- Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `37e8ca8` (3 file: `remote.src.html` + `remote.html` regen + 1 entri `CHANGELOG.md`), push `main` sukses tanpa pantau workflow (aturan 19).
+- Fix: (1) thumb paralel 10→3 + `IntersectionObserver` lazy (rootMargin 300px, fallback antrean bila IO tak ada; clear ikut unobserve); (2) scroll rAF-throttle + guard route + restore atas; (3) windowing 240 cell (trim atas + padding kompensasi, restore per chunk, reset bersihkan); cell dirender ulang via `renderGalleryCell` (state select dari data, aman).
+- Guard: `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke 4 chunk), `security_audit` 0/0, `diff --check` bersih. Compile penuh milik CI.
