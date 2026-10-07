@@ -103,3 +103,12 @@
   - Coba 2 `da4fab5` hijau: `diJvmUnitTest()` via `java.vm.name` (Dalvik = perangkat) + uji `jvmUnitTestTerdeteksi`; run `37565963777` success, rilis `v1.37.4` 7 aset lengkap.
 - Pelajaran: jangan deteksi stub Android via pesan exception; pakai nama VM yang deterministik.
 - Verifikasi: pantau CI atas perintah eksplisit user (pengecualian aturan #13).
+
+## Sesi #14 — 2026-10-07 03:38 UTC (selesai)
+- Audit agresif lanjutan atas perintah user (baca-saja): 6 temuan baru (3 sedang + 3 rendah). Offset bot, redirect host, zip-slip, provider, PIN sudah terverifikasi bersih.
+- Perbaiki semuanya atas perintah user, 3 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `ee4c9f6 fix: peringatan chat grup Telegram dan ID berawalan plus` (Util.cocokChat strip `+`, Util.chatAdalahGrup + peringatan sekali per proses di TgBot.pollOnce + 2 uji).
+  - `115c48d fix: throttle spoof siaran tanggal dan boot` (AlarmReceiver DATE_CHANGED throttle 60 dtk; BootReceiver throttle 60 dtk via bolehAlarmJalan).
+  - `498ce9a fix: ambang jam clipboard dan batas tumpukan export` (LogActivity BATAS_CLIP_WALL_MS 4e11 + clipPakaiWallClock + uji; SettingsActivity pilihHapusBatasExport cap 3 + 2 uji).
+- Pelajaran: siaran sistem (BOOT/DATE_CHANGED) tak bisa disyaratkan rahasia (legit pun tak membawanya) — throttle adalah pertahanan yang tepat, bukan secret-check.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
