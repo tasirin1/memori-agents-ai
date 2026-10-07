@@ -395,3 +395,10 @@
 - Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `e136dd2` (3 file: `remote.src.html` + `remote.html` regen + 1 entri `CHANGELOG.md`), push `main` sukses tanpa pantau workflow (aturan 19).
 - Fix: (1) auto-logout tunda + re-arm bila video diputar/`fsUploading`/`fsDlActive`/`anyActiveTransfer()`; (2) `runFsActions` `let done` keluar try + `out.done = done` di catch; (3) `ZIP_MEMORY_LIMIT` 400→96MB + komentar.
 - Guard: `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke upload 4 chunk), `security_audit` 0/0 (24 rules), `diff --check` bersih. Compile penuh milik CI.
+
+## Sesi diagnosis galeri seret jilid 30 (2026-10-07 12:10 UTC, tanpa ubah kode)
+
+- Perintah user: "cari bug di remote mengapa galeri nggak lancar saat di scroll" — diagnosis baca-saja `remote.src.html` galeri (thumb-queue/render/sentinel/scroll) + CSS + sisi server (`HttpControlServer` pool 2-4 thread, thumb decode per-request, halaman 100).
+- Penyebab peringkat: (1) UTAMA — 10 thumb paralel vs server 2-4 thread + decode video per `/api/thumb` (CPU berat di TV) → antrean + lambat; `loading="lazy"` dinonaktifkan antrean (src di-set langsung untuk semua cell render incl. luar layar). (2) handler scroll tanpa throttle: `getBoundingClientRect` tiap event (forced reflow) + 3 handler scroll lain. (3) semua cell menumpuk di DOM (content-visibility hanya di browser baru; WebView TV tua tak terbantu). (4) `renderGalleryReset` baca localStorage per item. (5) tiap thumb = 1 koneksi + 1 decode, tanpa batch/prefetch.
+- Opsi fix (belum dipilih owner): A-kecil: turunkan konkurensi thumb 10→3 + IntersectionObserver (hanya thumb terlihat) + throttle scroll rAF. B-sedang: + virtualisasi/windowing buang cell jauh. C-server: kecilkan thumb/kompresi atau cache agresif (cache disk sudah ada).
+- Guard: tanpa perubahan kode. Tanpa push repo.
