@@ -429,3 +429,15 @@
 - Mode audit (SOUL): tidak ubah kode, hanya kumpulkan temuan + bukti baris.
 - Guard: check_repo + security_audit dijalankan (sesi paralel 47838); verifikasi manual: Updater sudah Dispatchers.IO, port 1024..65535, probe sosmed timeout 20 dtk, ZipCreator canonical, wakeLock release di onDestroy.
 - Temuan dilaporkan ke user: 1 Tinggi (Crypto fallback plaintext diam-diam), 3 Sedang (START_STICKY, SSRF DNS-rebinding, wakeLock tanpa timeout), 4 Rendah (notif-ID overflow, fallback APK flag, collapsed race, catch Throwable). Belum diperbaiki — menunggu perintah "perbaiki".
+
+## Sesi fix audit agresif (2026-10-07, push main 924c84f — 7 commit, 1 temuan gugur)
+
+- Perintah user: "perbaiki semuanya" (mengesampingkan batas 1-area SOUL; tiap temuan 1 commit satu tujuan + entri CHANGELOG, push sekali di akhir tanpa pantau per aturan 19).
+- Gugur (tak perlu fix, koreksi audit): race `collapsed_sections` — `setSectionCollapsed` sudah `synchronized(prefsLock)`, baca volatile hanya bisa basi kosmetik.
+- 8442305 fix(security) Crypto: kunci keystore invalid (ganti/hapus lockscreen) tak lagi langsung plaintext — reset entri + retry 1x, flag `encryptFallbackUsed` + Log.e; + test. Guard sempat flag literal log Indonesia ("gagal/simpan") → di-EN-kan + fixup ke commit ini.
+- 2b87584 fix(service): `onStartCommand` NOT_STICKY bila idle (kecuali RESUME_ALL = baru diminta jalan, karena restart-mode ikut return terakhir).
+- 321370a fix(security): `isBlockedRedirectHost` resolve DNS tolak loopback/unspecified (fail-open bila DNS gagal; LAN tetap lolos) + helper murni `isIpLiteral`/`HOSTNAME_RE` + test.
+- 4bdacfa fix(service): wakeLock `acquire(1 jam)` + re-acquire otomatis tiap emisi flow.
+- 1753a10 fix(notification): ID bungkus 900rb→10000 via `getAndUpdate(::wrapNotifId)` + `NotifIdWrapTest`.
+- e43471d fix(app): fallback APK ke-3 +FLAG_ACTIVITY_NEW_TASK. 924c84f fix(app): `catch Throwable` onCreate lempar ulang VM Error/ThreadDeath/LinkageError.
+- Guard: `security_audit` 0/0, `check_repo` 9/10 (sisa [4/10] labeler-yaml = modul pyyaml tak ada di mesin ini, pre-existing environmental, .github/ tak tersentuh). Compile penuh diserahkan ke CI.
