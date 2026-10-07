@@ -187,3 +187,12 @@
 
 ## Sesi #22 — 2026-10-07 (selesai)
 - Pasang deskripsi repo GitHub (sebelumnya kosong): satu baris Indonesia sesuai tagline README. Via `gh repo edit`, tanpa commit/CI.
+
+## Sesi #23 — 2026-10-07 (selesai)
+- User: deskripsi repo Inggris + README default Inggris + README Rusia + bahasa default app Inggris.
+- Deskripsi repo via `gh repo edit` (EN, tanpa commit/CI).
+- Docs `9da4697`: README.md=EN (dari en), README.id.md=ID, README.ru.md baru (RU, 2 selip bahasa diperbaiki), switcher 3 bahasa, AGENTS.md (aturan bahasa + ref README + values-in), CHANGELOG, cek-cepat.sh cek 3 README. CI skip (docs-only).
+- Code `ffcbec1` + push (build APK jalan di CI, tanpa pantau): values/strings.xml EN (147 key, placeholder cocok), values-in/strings.xml ID; literal UI EN di Main/Settings/Log/LogExport/Pin/AutoUpdate-notif; PinActivityTest ikut EN. Guard lokal hijau (cek-cepat.sh exit 0, diff-check bersih).
+- Batasan sadar: log diagnostik `[app]/[tg]` + pesan bot Telegram tetap Indonesia (test-anchored, mis. webVaultBerubah); tes lain pakai placeholder netral-bahasa sehingga aman.
+- Pelajaran: literal pendek ("Ya", "v", "terbaru") wajib ganti via konteks baris-penuh; escape Java `\n`/`\u` di python butuh backslash ganda; cek-cepat.sh wajib ikut rename file.
+- Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
