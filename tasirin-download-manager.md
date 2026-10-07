@@ -422,3 +422,10 @@
 - Perintah user: "perbaiki semuanya" — 1 commit satu tujuan `37e8ca8` (3 file: `remote.src.html` + `remote.html` regen + 1 entri `CHANGELOG.md`), push `main` sukses tanpa pantau workflow (aturan 19).
 - Fix: (1) thumb paralel 10→3 + `IntersectionObserver` lazy (rootMargin 300px, fallback antrean bila IO tak ada; clear ikut unobserve); (2) scroll rAF-throttle + guard route + restore atas; (3) windowing 240 cell (trim atas + padding kompensasi, restore per chunk, reset bersihkan); cell dirender ulang via `renderGalleryCell` (state select dari data, aman).
 - Guard: `prepare_remote --check` OK (sinkron + JS valid + UI Inggris + smoke 4 chunk), `security_audit` 0/0, `diff --check` bersih. Compile penuh milik CI.
+
+## Sesi audit agresif (2026-10-07, HEAD a0a7177, tanpa commit kode — baca-saja)
+
+- Perintah user: "cek seluruh kode dari seluruh area lebih agresif temukan bug".
+- Mode audit (SOUL): tidak ubah kode, hanya kumpulkan temuan + bukti baris.
+- Guard: check_repo + security_audit dijalankan (sesi paralel 47838); verifikasi manual: Updater sudah Dispatchers.IO, port 1024..65535, probe sosmed timeout 20 dtk, ZipCreator canonical, wakeLock release di onDestroy.
+- Temuan dilaporkan ke user: 1 Tinggi (Crypto fallback plaintext diam-diam), 3 Sedang (START_STICKY, SSRF DNS-rebinding, wakeLock tanpa timeout), 4 Rendah (notif-ID overflow, fallback APK flag, collapsed race, catch Throwable). Belum diperbaiki — menunggu perintah "perbaiki".
