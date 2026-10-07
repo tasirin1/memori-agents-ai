@@ -125,3 +125,10 @@
 - Fix + push (tanpa build lokal / tanpa pantau): `fix: jatah batas dikurangi pengecualian agar cap tepat`.
 - Pelajaran: exclusion-from-cap = kurangi budget, bukan hitung-di-urutan — beda hasil bila item dikecualikan bukan yang terbaru.
 - Build sesi #16 user konfirmasi hijau (fix jatah cap lolos CI).
+
+## Sesi #17 — 2026-10-07 (selesai)
+- Audit agresif lanjutan: tanpa kritikal/tinggi/sedang; 3 rendah + 1 info. Area sensitif (crypto, restore, provider, redirect, PIN) terverifikasi bersih.
+- Perbaiki 2 yang beneran bug (2 commit + 1x push, tanpa build lokal / tanpa pantau):
+  - `b2cd06e fix: dialog izin tampil sekali per proses walau baru boot` (StoragePerm.bolehTampilDialogKelola + uji).
+  - `6af3b50 fix: cache IP atomik agar pembaca lintas thread tak dapat versi campur` (ServerService IP_LOCK + ipCacheSegar + uji).
+- Sengaja tak diubah: polling bot 20 dtk (trade-off remote-control by-design) dan `/ca` tanpa PIN (materi publik).
