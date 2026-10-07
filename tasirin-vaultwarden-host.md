@@ -146,3 +146,9 @@
   - `7b8274c fix: samaran tg_pass berhenti sebelum kunci berikut agar konteks tak hilang` (lookahead tanpa menelan; simulasi python 4 skenario PASS + uji).
 - Pelajaran: secret per-perangkat wajib masuk daftar kecualikan export sejak lahir; monitor kelas jangan dibagi antara I/O disk dan cek UI cepat; pola samaran rakus butuh lookahead agar tak menelan konteks.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #20 — 2026-10-07 05:15 UTC (selesai)
+- Audit agresif putaran ke-11 (baca-saja, tanpa ubah kode): sisir seluruh modul (~23rb baris). Tanpa kritikal/tinggi/sedang; 3 rendah + 1 info.
+- Temuan baru: (1) Rendah — `tanyaPasswordImpor` 5x per-dialog bisa di-reset buka-ulang (counter lokal `SettingsActivity.java:2143`); mitigasi: password terlihat di Settings bagi pemegang HP, file .enc bisa brute-force offline. (2) Rendah — plaintext sementara export terenkripsi (`SettingsActivity.java:1940`) bertahan bila kill -9 di jendela tulis; sweeper hanya jalan di onCreate + lewati file <TTL. (3) Rendah — `AutoUpdate.java:86` `sp.getLong` mentah (ClassCastException → retry unduh makan kuota sekali; heal race vs onCreate). (4) Info — `binaryAssetUrl` strip satu 'v' tak terjangkau (pin divalidasi `normalisasiPinVersi`).
+- Terverifikasi bersih: handler-leak MainActivity (`onDestroy:279`), orphan pending LogExport (`:93-103`), cap iterasi PBKDF2 anti-DoS (`PinCrypto.java:141`), `normalisasiPort` total, TOCTOU provider, `TUGAS_BERAT` queue-full (`TgBot.java:1357`), `DEFAULT_DATA_DIR` tinggal deklarasi, `stempelUnik` 48-bit, allowlist import + SECRET_KEYS, split pesan 4000, `authDangerous` fail-closed, decrypt VWB2 SHA256-dulu, `restoreFromZip` allowlist+zip-slip+aturan WAL.
+- Belum diperbaiki (tunggu perintah "perbaiki"): 3 rendah di atas.
