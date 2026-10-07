@@ -124,3 +124,4 @@
 - Akar benar: pengecualian harus mengurangi jatah (`jatah = batas-1`), bukan dihitung di urutan. Disimulasikan murni via python (2 skenario PASS) sebelum push.
 - Fix + push (tanpa build lokal / tanpa pantau): `fix: jatah batas dikurangi pengecualian agar cap tepat`.
 - Pelajaran: exclusion-from-cap = kurangi budget, bukan hitung-di-urutan — beda hasil bila item dikecualikan bukan yang terbaru.
+- Build sesi #16 user konfirmasi hijau (fix jatah cap lolos CI).
