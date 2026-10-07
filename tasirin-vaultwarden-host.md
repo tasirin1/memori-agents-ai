@@ -172,3 +172,4 @@
 - Verifikasi milik CI (tidak pantau build sesuai aturan).
 - `14008a7 fix:` kurung tutup `onActivityResult` Settings hilang saat pasang cabang REQ_PIN (gagal compile CI `illegal start of expression`); tambah `}` + push. Verifikasi milik CI.
 - `8499e0a fix:` ceiling menit lockout (+59999) — 1 uji `PinActivityTest` gagal di CI; push + pantau sampai `37580084500 completed/success`. Halaman login PIN hijau.
+- `0c8b8f2 fix:` ellipsis `...` jadi `…` di `pin_memeriksa` (anotasi lint Ellipsis). Verifikasi milik CI.
