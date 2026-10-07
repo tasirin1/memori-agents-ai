@@ -441,3 +441,10 @@
 - 1753a10 fix(notification): ID bungkus 900rb→10000 via `getAndUpdate(::wrapNotifId)` + `NotifIdWrapTest`.
 - e43471d fix(app): fallback APK ke-3 +FLAG_ACTIVITY_NEW_TASK. 924c84f fix(app): `catch Throwable` onCreate lempar ulang VM Error/ThreadDeath/LinkageError.
 - Guard: `security_audit` 0/0, `check_repo` 9/10 (sisa [4/10] labeler-yaml = modul pyyaml tak ada di mesin ini, pre-existing environmental, .github/ tak tersentuh). Compile penuh diserahkan ke CI.
+
+## Sesi audit agresif jilid 2 (2026-10-08, HEAD 924c84f, baca-saja tanpa commit kode)
+
+- Perintah: "cek seluruh kode dari seluruh area lebih agresif temukan bug".
+- Temuan baru: (1) Crypto.invalidateKey() terlalu agresif — dipanggil untuk SEMUA gagal enkripsi, bisa menghapus kunci sehat + yatimkan kredensial lama (fix presisi: hanya saat KeyPermanentlyInvalidatedException); (2) PTS overflow HLS jahat → mux gagal aman/fail-safe (Rendah, hardening opsional clamp EXTINF); (3) dugaan writeAll buffer tak tumbuh saat frame > buffer (perlu uji, writeTrackPts sudah grow); (4) token partial ke player eksternal by-design time-bound (Rendah).
+- Diverifikasi bersih: XSS remote, SSE, reservasi upload, PIN/cookie, free-space, SegmentPlanner, overlayProgress, storedCreds, StorageCleanup, WebView destroy, DiffUtil payloads, build.yml bump, FileProvider wrap.
+- Guard: security_audit 0/0 (ronde lalu); check_repo 9/10 sisa yaml-env. Belum diperbaiki — menunggu "perbaiki".
