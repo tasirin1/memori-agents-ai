@@ -184,3 +184,6 @@
   - `21242c8 fix: layar PIN dikecualikan dari recents` (manifest PinActivity excludeFromRecents; ID layout portrait/landskap sama persis).
 - Pelajaran: callback sukses berlapis (activity + onActivityResult) wajib idempoten tanpa perpanjang jendela; fallback PIN implisit wajib tolak pola mirip-file/versi agar typo tak bakar lockout.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #22 — 2026-10-07 (selesai)
+- Pasang deskripsi repo GitHub (sebelumnya kosong): satu baris Indonesia sesuai tagline README. Via `gh repo edit`, tanpa commit/CI.
