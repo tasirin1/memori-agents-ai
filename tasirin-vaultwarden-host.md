@@ -132,3 +132,8 @@
   - `b2cd06e fix: dialog izin tampil sekali per proses walau baru boot` (StoragePerm.bolehTampilDialogKelola + uji).
   - `6af3b50 fix: cache IP atomik agar pembaca lintas thread tak dapat versi campur` (ServerService IP_LOCK + ipCacheSegar + uji).
 - Sengaja tak diubah: polling bot 20 dtk (trade-off remote-control by-design) dan `/ca` tanpa PIN (materi publik).
+
+## Sesi #18 — 2026-10-07 (selesai)
+- Audit agresif putaran ke-9: tanpa kritikal/tinggi/sedang; 1 rendah (pasangan cache lintas-thread tak atomik).
+- Verifikasi: wall-clock bot tak perlu dikunci (thread poll tunggal serial); scope fix hanya Updater.latestVersion + readBundledVersionRaw.
+- Fix `68130f9` + push (tanpa build lokal / tanpa pantau): `fix: kunci pasangan cache versi agar baca tulis atomik` (KUNCI_VERSI; fetch network tetap di luar kunci; bundled first-writer menang).
