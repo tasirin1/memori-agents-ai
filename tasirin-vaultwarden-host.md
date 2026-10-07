@@ -112,3 +112,9 @@
   - `498ce9a fix: ambang jam clipboard dan batas tumpukan export` (LogActivity BATAS_CLIP_WALL_MS 4e11 + clipPakaiWallClock + uji; SettingsActivity pilihHapusBatasExport cap 3 + 2 uji).
 - Pelajaran: siaran sistem (BOOT/DATE_CHANGED) tak bisa disyaratkan rahasia (legit pun tak membawanya) — throttle adalah pertahanan yang tepat, bukan secret-check.
 - Verifikasi milik CI (build-apk ringan); tidak memantau build sesuai aturan.
+
+## Sesi #15 — 2026-10-07 03:45 UTC (selesai)
+- User lapor gagal build run `37567656916` (head `498ce9a`): 1 test merah `SettingsActivityTest.batasExportPertahankanPendingSegar` (340 tests, 1 failed).
+- Akar: ekspektasi test benar, kode produksi salah — nama dikecualikan tak memakan jatah batas sehingga pending basi + 3 file lolos cap.
+- Fix `99b4e9c` + push (tanpa build lokal / tanpa pantau): `simpan++` dipindah sebelum cek kecualikan.
+- Pelajaran: pengecualian dari batas harus tetap dihitung dalam budget, bila tidak cap bocor +1 tiap siklus.
