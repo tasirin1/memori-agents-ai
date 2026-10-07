@@ -80,3 +80,9 @@
 - Temuan: 2 sedang (health-restart uncapped + spam Telegram; race restartTunda vs killer async = restart hilang diam-diam) + 8 kecil (WV redirect 35MB, Settings activity-leak, toast tiap buka, gagal-unduh-tetap-start x2, START_TERTUNDA hangus, PID-reuse RSS, rotasi log truncate, komentar isPortBusy).
 - Fix 2 commit kode + 1 docs, push ke main (tanpa pantau CI): `ef737ca` (service: sync-wait + recordRestart health, rotasi log, PID ketat, 2 uji), `9987dc6` (updater/UI: cap WV redirect, toast sekali, no-start-on-fail, app-context, flag susulan, 2 uji), `8fb912a` docs.
 - Sengaja tak diubah: cabang prefs.has tg_notified/wv_from di applyPrefsFromJson (mati suri tapi aman untuk config edit-manual).
+
+## Sesi #11 — 2026-10-07 02:48 UTC (selesai)
+- Audit agresif baca-saja seluruh area atas perintah user (tanpa build lokal, sesuai Aturan No.1): ServerService (lock/log/health/smoke), Updater (resume/hash/redirect), TgBackup (GCM/restore/import), TgBot auth, PinCrypto/PinGate, TlsCert/HttpsCompat, FileShareProvider, StoragePerm, Alarm/Boot receiver, AutoUpdate, Util, manifest.
+- Vonis: tanpa kritikal/tinggi. Terverifikasi bersih: baca logBuffer semua terkunci, LOG_TS semua synchronized, redirect max-5 https+host-GitHub, TUGAS_DATA semua try-finally, configJson kecualikan secret, provider exported=false, smoke watchdog+TOCTOU ok.
+- Temuan baru dilaporkan ke user, belum diperbaiki (menunggu perintah): 1 sedang (samarkanLog 12 regex di dalam synchronized logBuffer di LogActivity:384-385,603-604 — tahan lock + risiko ANR; pola benar sudah ada di :631-634), 3 rendah (adaSymlinkInduk fail-open bila lstat gagal; normVersion tanpa validasi → URL asset malformed bila tag API aneh; TlsCert baca-vs-tulis tanpa lock di jeda ensure).
+- Status terakhir: audit sesi #11 selesai, temuan dilaporkan, tanpa perubahan/push di repo app.
