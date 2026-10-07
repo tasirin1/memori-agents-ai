@@ -448,3 +448,11 @@
 - Temuan baru: (1) Crypto.invalidateKey() terlalu agresif — dipanggil untuk SEMUA gagal enkripsi, bisa menghapus kunci sehat + yatimkan kredensial lama (fix presisi: hanya saat KeyPermanentlyInvalidatedException); (2) PTS overflow HLS jahat → mux gagal aman/fail-safe (Rendah, hardening opsional clamp EXTINF); (3) dugaan writeAll buffer tak tumbuh saat frame > buffer (perlu uji, writeTrackPts sudah grow); (4) token partial ke player eksternal by-design time-bound (Rendah).
 - Diverifikasi bersih: XSS remote, SSE, reservasi upload, PIN/cookie, free-space, SegmentPlanner, overlayProgress, storedCreds, StorageCleanup, WebView destroy, DiffUtil payloads, build.yml bump, FileProvider wrap.
 - Guard: security_audit 0/0 (ronde lalu); check_repo 9/10 sisa yaml-env. Belum diperbaiki — menunggu "perbaiki".
+
+## Sesi fix audit jilid 2 (2026-10-08, push main b5c5692 — 2 fix + 2 gugur)
+
+- Koreksi audit sendiri: PTS-overflow HLS GUGUR (`hlsSegmentDurationUs` sudah jepit 24 jam + playlist max 1MB → sum tak bisa overflow); klaim "writeTrackPts sudah grow" juga salah (grow hanya di writeAacFrames).
+- 4132d9f fix(security) Crypto: reset kunci hanya bila rantai exception memuat KeyPermanentlyInvalidatedException (+ `isKeyInvalidated` internal + test); gagal lain langsung fallback tanpa menyatimkan kredensial lama.
+- b5c5692 fix(download) muxer: `writeAll` baca ulang buffer lebih besar bila frame melebihi klaim (tanpa advance), cap 64MB → IOException aman bukan OOM (+ tambah import IOException, val→var; pesan EN agar lolos guard i18n).
+- Temuan #4 (token partial ke player eksternal) by-design time-bound → tanpa perubahan kode.
+- Guard: audit 0/0, check_repo 9/10 (yaml-env). Compile penuh di CI.
