@@ -173,3 +173,5 @@
 - `14008a7 fix:` kurung tutup `onActivityResult` Settings hilang saat pasang cabang REQ_PIN (gagal compile CI `illegal start of expression`); tambah `}` + push. Verifikasi milik CI.
 - `8499e0a fix:` ceiling menit lockout (+59999) — 1 uji `PinActivityTest` gagal di CI; push + pantau sampai `37580084500 completed/success`. Halaman login PIN hijau.
 - `0c8b8f2 fix:` ellipsis `...` jadi `…` di `pin_memeriksa` (anotasi lint Ellipsis). Verifikasi milik CI.
+- Audit kode baru PIN (PinActivity, 2 layout, test, wiring Main/Settings, manifest, strings): tak ada bug fungsional — grace tak bisa diperpanjang tanpa PIN (launch hanya bila grace habis; early-OK hanya ms setelah unlock sah), Back/Keluar fail-closed via finish pemanggil, ID layout sama, REQ unik, rotation aman via configChanges, worker vs hash segar + upgrade aman.
+- `d78aa04 chore:` buang 2 import tak terpakai (EditText/InputType) di MainActivity. Verifikasi milik CI.
