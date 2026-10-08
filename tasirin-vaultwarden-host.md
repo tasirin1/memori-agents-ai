@@ -267,3 +267,15 @@
   - `3136e5c chore: dokumentasikan residu String PIN sebagai risiko diterima` (PinActivity; tanpa patch murah — String immutable, Editable sumber memang sudah dibersihkan).
   - `93181c4 fix: cek panjang segmen folder data dalam byte UTF-8` (ServerService + test dataDirAmanTolakSegmenMultibyte255Byte; fully-qualified StandardCharsets agar tak tergantung import).
 - 1 push sekaligus agar CI jalan sekali; tiap fix commit terpisah. Guard `git diff --check` bersih. Verifikasi milik CI.
+
+## Sesi #34 — 2026-10-08 01:49 UTC (audit agresif #6 + fix semua, selesai)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug" lalu "perbaiki semuanya". Audit baca-saja dulu (tanpa build lokal, Aturan No.1), lalu fix semua temuan.
+- 4 temuan audit: (1 Tinggi) LogActivity.bersihkanBilaIsiKita finally baca ulang prefs sehingga timer basi menghapus penanda salinan baru (auto-hapus 30 dtk gugur, rahasia menempel); (2 Sedang) ServerService.killStaleVaultwarden bunuh via PID tanpa verifikasi ulang (start konkuren/PID-reuse bisa membunuh server fresh); (3 Rendah) throttle Alarm/BootReceiver statik saja, reset tiap proses mati; (4 Rendah, dugaan) TgBot.catatWall read-modify-write non-atomik.
+- Bersih terverifikasi: PinCrypto.verify (try luar + cap iterasi/heks), Updater resume (perluResetResume + rangeCocok), TgBot callback auth + umur tombol, restore allowlist + kanonis, restartAttempt batas array, pinExec shutdown, FileShareProvider TOCTOU.
+- Fix 4 commit + docs + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `d1c002c fix: timer basi clipboard tak hapus penanda salinan baru` (LogActivity: sidik asal ditangkap, finally pakai sidikKita).
+  - `d0d46be fix: verifikasi ulang sebelum bunuh proses basi agar server fresh selamat` (ServerService: cek runningChildPid + pidMilikiServer ulang sebelum killProcess).
+  - `ba68744 fix: throttle alarm dan boot tahan mati proses via prefs` (AlarmReceiver + BootReceiver + test throttleTersimpanMenutupResetProses).
+  - `515258f fix: kunci tanda air wall-clock agar maksimum tak hilang saat poll tumpang tindih` (TgBot KUNCI_WALL di catatWall + muatWallMaks).
+  - `882e9c2 docs: changelog audit clipboard kill throttle wall-clock` (md saja, CI dilewati).
+- Guard `git diff --check` bersih tiap commit. Verifikasi milik CI (build-apk ringan).
