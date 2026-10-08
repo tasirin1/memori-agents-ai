@@ -456,3 +456,9 @@
 - b5c5692 fix(download) muxer: `writeAll` baca ulang buffer lebih besar bila frame melebihi klaim (tanpa advance), cap 64MB → IOException aman bukan OOM (+ tambah import IOException, val→var; pesan EN agar lolos guard i18n).
 - Temuan #4 (token partial ke player eksternal) by-design time-bound → tanpa perubahan kode.
 - Guard: audit 0/0, check_repo 9/10 (yaml-env). Compile penuh di CI.
+
+## Sesi fix build gagal (2026-10-08, push fed46e2)
+
+- Laporan user "gagal build" = Build APK + CodeQL gagal di push b5c5692.
+- Akar: `HOSTNAME_RE` tertulis `\.` (escape tak valid di string Kotlin) di DownloadEngine.kt:3513 → `compileDebugKotlin` FAILED; CodeQL ikut gagal karena butuh build. Pelajaran: heredoc python memakan satu backslash (`\\.` di sumber python → `\.` di file); regex baru wajib ditulis `\\\\.` di sumber patch atau dicek `cat` setelah patch.
+- Fix: `\\.` + validasi semantik pola via python (10 kasus). Guard: audit 0/0, check_repo 9/10 (yaml-env). Verifikasi compile penuh ikut push ini (tanpa pantau per aturan 19).
