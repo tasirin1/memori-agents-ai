@@ -356,3 +356,8 @@
 - User: "cek seluruh kode ... temukan kode sampah dan selalu pastikan bukan kode yang terpakai". Mode audit baca-saja, tanpa patch app.
 - Sapu bukti-pakai (rg lintas java+test+res+manifest): string 142/142 terpakai, drawable 43/43, layout 9/9 (4 setContentView + 5 include), tema via manifest (false-positive titik), member private 0 mati, asset hanya github-chain.pem (dipakai HttpsCompat), 8 ID layout tak terpakai profiler static (judul/wrapper section — disengaja, bukan sampah).
 - Temuan baru 1 Sedang: `simpanNamaBot` (TgBot.java:492) tak pernah dipanggil + tak ada getMe di repo → `tg_bot_user` selamanya kosong → semua perintah grup ber-@suffix (termasuk milik bot sendiri) diabaikan diam-diam; user grup yang ketuk perintah dari menu (otomatis ber-suffix) tak pernah direspons tanpa pesan galat. Perintah tanpa suffix tetap jalan.
+
+## Sesi #48 — 2026-10-08 (fix temuan audit #47: simpanNamaBot mati)
+- Masalah: `simpanNamaBot` tak pernah dipanggil + tanpa `getMe` → `tg_bot_user` kosong selamanya → perintah grup ber-@suffix milik bot sendiri dibuang diam-diam.
+- Perbaikan (commit a70d1f1): `pollOnce` panggil `isiNamaBotBilaKosong` (getMe best-effort, sekali sampai tersimpan; gagal = fail-closed lama) + `parseUsernameBot` murni + uji `parseUsernameBot_kupasUsernameGetMe`. `git diff --check` bersih, push main ok. Tanpa pantau CI (aturan #13).
+- Tugas terbuka: repo kini bersih dari temuan audit; sesi berikut kembali ke mode audit baca-saja bila user minta cek ulang.
