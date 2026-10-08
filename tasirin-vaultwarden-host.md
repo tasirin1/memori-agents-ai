@@ -299,3 +299,10 @@
 - User: "cek seluruh kode dan temukan bug". Mode audit baca-saja, tree bersih, tanpa patch app.
 - Area disisir baru/ulang: PinGate dual-clock + catatHasil, pisahkanPin/authDangerous, start env (kutipRocket/tokenAdmin/TOCTOU/batalStart), port+dataDir, Updater pin/norm/banding, build-apk.yml, layout ID parity (main+pin OK), strings 147/147 + placeholder, colors 30/30, vektor 0.x, drawable refs, PIN wiring Main/Settings, TgBotReceiver wakelock, AutoUpdate kuota, rahasiaAlarm, HttpsCompat cap, LogExport orphan, healkanStringPrefs, schedule exact + cancel legacy, import 512KB + allowlist, wakeLock 12 jam, downloadStatus volatile.
 - Hasil: tanpa Kritikal/Tinggi/Sedang. 3 Rendah baru (dilapor, belum diperbaiki): (1) ServerService ACTION_RESTART Handler MainLooper tanpa guard (pola clipboard #35, praktis tak terpicu di perangkat); (2) TgBot.refreshMenuAsync getApplicationContext tanpa guard null; (3) indentasi terapkanImporJson menyesatkan (kosmetik).
+
+## Sesi #38 — 2026-10-08 (fix 3 rendah audit #37, selesai)
+- User: "perbaiki semuanya". 3 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `e393714 fix:` restart Telegram guard Looper null + fallback panggil start langsung (thread-safe).
+  - `e08b8de fix:` refreshMenuAsync guard ctx null + applicationContext null.
+  - `a8f4882 chore:` indentasi isi try terapkanImporJson (+4 spasi, balance kurawal 0).
+- Guard `git diff --check` bersih. Tanpa CHANGELOG (minor rendah). Verifikasi milik CI.
