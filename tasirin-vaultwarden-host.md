@@ -294,3 +294,8 @@
   - `fb11e29 docs:` changelog.
 - Temuan throttle-reboot dinilai by-design tanpa patch (sekali-lolos wajib pasca-reboot + jalur ber-rahasia/dedup).
 - Guard: `git diff --check` bersih tiap commit; cek bare-return method boolean bersih. Verifikasi milik CI.
+
+## Sesi #37 — 2026-10-08 (audit baca-saja #7, tanpa patch)
+- User: "cek seluruh kode dan temukan bug". Mode audit baca-saja, tree bersih, tanpa patch app.
+- Area disisir baru/ulang: PinGate dual-clock + catatHasil, pisahkanPin/authDangerous, start env (kutipRocket/tokenAdmin/TOCTOU/batalStart), port+dataDir, Updater pin/norm/banding, build-apk.yml, layout ID parity (main+pin OK), strings 147/147 + placeholder, colors 30/30, vektor 0.x, drawable refs, PIN wiring Main/Settings, TgBotReceiver wakelock, AutoUpdate kuota, rahasiaAlarm, HttpsCompat cap, LogExport orphan, healkanStringPrefs, schedule exact + cancel legacy, import 512KB + allowlist, wakeLock 12 jam, downloadStatus volatile.
+- Hasil: tanpa Kritikal/Tinggi/Sedang. 3 Rendah baru (dilapor, belum diperbaiki): (1) ServerService ACTION_RESTART Handler MainLooper tanpa guard (pola clipboard #35, praktis tak terpicu di perangkat); (2) TgBot.refreshMenuAsync getApplicationContext tanpa guard null; (3) indentasi terapkanImporJson menyesatkan (kosmetik).
