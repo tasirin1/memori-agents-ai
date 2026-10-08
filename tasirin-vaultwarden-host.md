@@ -334,3 +334,8 @@
 - Temuan baru: 1 Rendah (residu kosmetik patch #42: logCount hitung buffer penuh sedang tampil ekor; potongEkorBaris fallback tengah-baris bila newline tepat di batas — keduanya kosmetik langka).
 - Bersih: import allowlist+keep-rahasia, crypto stream tanpa OOM, sweep sisa kill, resume+SHA fail-closed, watchdog 10dtk+cap 50 baris, health TCP-lolos anti-bunuh-sia-sia, susulan flag hapus-tepat (retry hingga observed-running), trust union bukan ganti, pesan basi 5mnt+offset maju.
 - Alur START_TERTUNDA sempat dicurigai flag tak terhapus, ternyata benar: retry tiap buka hingga server observed-running lalu dibuang (by-design, idempoten).
+
+## Sesi #44 — 2026-10-08 08:05 UTC (fix residu audit #43, selesai)
+- User: "perbaiki semuanya". 1 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `ed5c0b7 fix:` label baris dihitung dari teks tampil (ekor) agar cocok layar; lastLogLen tetap panjang penuh untuk deteksi trim. potongEkorBaris sadar-newline-ujung (tak ada ekor kosong/tengah-baris; tetap terbatas maks) + 1 uji baru (3 kasus); 3 uji lama tetap lolos (simulasi manual).
+- Guard `git diff --check` bersih. Verifikasi milik CI (build-apk ringan).
