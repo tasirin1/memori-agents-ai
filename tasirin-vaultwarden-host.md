@@ -316,3 +316,8 @@
 - User: "perbaiki semuanya". 1 commit docs + push (CI dilewati, docs-only):
   - `docs:` /ca + /cabackup masuk kelompok wajib PIN di README.md/id/ru (selaras kode).
 - Verifikasi: diff sebaris per bahasa, `git diff --check` bersih.
+
+## Sesi #41 — 2026-10-08 07:20 UTC (audit baca-saja #9, tanpa patch)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode audit baca-saja (SOUL: cek=kumpulkan temuan, jangan ubah kode). Tanpa build lokal (Aturan No.1), tree bersih, tanpa push app.
+- Area disisir: Util/redirect/normalisasiHost, ServerService dataDirAman/kutipRocket/tokenAdmin/stopAndWait/RESTART_TIMES/logBuffer sync, Updater URL/normalisasiPinVersi, TgBot pisahkanPin/authDangerous/doRestore/TUGAS_BERAT, TgBackup restore allowlist+kanonis/bacaResponsBatas/downloadLastBackup, PinCrypto verify caps/isEqual, PinGate grace/lockout, Settings PIN min-4 atomic, LogActivity samarkanLog/clipboard, FileShareProvider TOCTOU, TlsCert, HttpsCompat cap, Boot/Alarm/TgBotReceiver wakelock+throttle, manifest.
+- Temuan baru (dilapor, belum diperbaiki): 1 Sedang (refreshLog 1-dtk samarkanLog 14-regex di UI thread atas 300KB → jank/ANR STB) + 1 Rendah (timer clipboard basi hapus salinan baru lebih awal). Bersih: RESTART_TIMES/logBuffer sync, doRestore kunci, PIN atomic, verify caps, allowlist+kanonis restore, redirect fail-closed, wakelock finally.
