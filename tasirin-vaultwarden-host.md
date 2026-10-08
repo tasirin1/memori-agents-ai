@@ -279,3 +279,9 @@
   - `515258f fix: kunci tanda air wall-clock agar maksimum tak hilang saat poll tumpang tindih` (TgBot KUNCI_WALL di catatWall + muatWallMaks).
   - `882e9c2 docs: changelog audit clipboard kill throttle wall-clock` (md saja, CI dilewati).
 - Guard `git diff --check` bersih tiap commit. Verifikasi milik CI (build-apk ringan).
+
+## Sesi #35 — 2026-10-08 06:07 UTC (audit baca-saja, tanpa patch)
+- User: "cek seluruh kode dan temukan bug". Mode audit baca-saja (SOUL: cek=kumpulkan temuan, jangan ubah kode). Tanpa build lokal (Aturan No.1), tanpa push app.
+- Area disisir: Util/PinCrypto/PinGate/PinActivity, KernelCompat/StoragePerm/HttpsCompat, FileShareProvider (TOCTOU+symlink), TlsCert, ServerService (health/restart/stopAndWait/ensureBinary/cleanup), Updater (redirect+resume+hash), TgBot (auth grup/PIN/hapus pesan), TgBackup (zip-slip/allowlist/enkripsi/restore), LogActivity/LogExport (samarkan/clipboard), Main/Settings (clipboard/export), Alarm/BootReceiver (throttle), manifest.
+- Temuan baru dilapor ke user (2 Tinggi: hapusPesan grup chatId<=0 blokir ID negatif; grup via @username fail-open; sisanya Rendah: Handler clipboard tanpa guard, toast salin bohong, throttle bypass sekali selepas reboot). Detail + level di chat sesi ini.
+- Bersih terverifikasi: resume-hash prefix digest, stopAndWait dicek pemanggil, formatHost IPv6, redirect fail-closed + hostBerubah, restore allowlist + kanonis, PBKDF2 cap, clipboard sidik + penanda cocok.
