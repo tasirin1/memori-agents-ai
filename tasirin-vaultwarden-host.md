@@ -306,3 +306,8 @@
   - `e08b8de fix:` refreshMenuAsync guard ctx null + applicationContext null.
   - `a8f4882 chore:` indentasi isi try terapkanImporJson (+4 spasi, balance kurawal 0).
 - Guard `git diff --check` bersih. Tanpa CHANGELOG (minor rendah). Verifikasi milik CI.
+
+## Sesi #39 — 2026-10-08 (audit baca-saja #8, tanpa patch)
+- User: "cek seluruh kode dan temukan bug". Mode audit baca-saja, tree bersih, tanpa patch app.
+- Area disisir: alur perintah bot (/restore konfirmasi+lock, /ca//cabackup//status//log PIN-gate, /versi//alive tanpa PIN), pecahPesan 4000 + antrean prioritas, TUGAS_BERAT + pool BG.ParseResult, swap web-vault staging unik, buffer log 300KB, README trio sinkron, /ca-vs-docs, doRestore decrypt+lock+cleanup, batas unduh 20MB.
+- Hasil: tanpa Kritikal/Tinggi/Sedang. 1 Rendah baru (docs): README trio (EN/ID/RU) menyebut /ca cukup auth chat, padahal kode mewajibkan PIN saat PIN aktif (/ca + /cabackup tak disebut di kalimat PIN). Belum diperbaiki.
