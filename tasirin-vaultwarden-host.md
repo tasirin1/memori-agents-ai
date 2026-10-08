@@ -339,3 +339,9 @@
 - User: "perbaiki semuanya". 1 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
   - `ed5c0b7 fix:` label baris dihitung dari teks tampil (ekor) agar cocok layar; lastLogLen tetap panjang penuh untuk deteksi trim. potongEkorBaris sadar-newline-ujung (tak ada ekor kosong/tengah-baris; tetap terbatas maks) + 1 uji baru (3 kasus); 3 uji lama tetap lolos (simulasi manual).
 - Guard `git diff --check` bersih. Verifikasi milik CI (build-apk ringan).
+
+## Sesi #45 — 2026-10-08 08:15 UTC (audit baca-saja #11, tanpa patch)
+- User: "cek seluruh kode temukan kode yang rusak". Mode audit baca-saja, tree bersih, tanpa patch app.
+- Area disisir: switch perintah bot (break+default lengkap), `==` string (nihil), killProcess (uid+cmdline+verifikasi-ulang), format-string vs argumen (cocok semua, 2 bahasa), referensi test→main (7 nama dicek langsung, semua ada — false-positive regex), kelas manifest (9/9 ada), R.id Pin/Log (15/15 ada), vektor 0.x (nihil), private淋mati (semua hidup via method-ref kecuali wizard), refresh Main (keyed + murah), webVaultFromVersion (prefs, murah).
+- Temuan baru: 1 Rendah (kode mati: subtree wizard SettingsActivity maybeShowWizard/tampilWizardGabungan/inputWizard/wizardSelesai + string wiz_* tak pernah dipanggil — sengaja dipensiunkan per komentar; hanya perluWizard dipakai test). Bukan perilaku rusak; saran biarkan/hapus di sesi khusus.
+- Info: 2 TODO lama TlsCert (regen saat jam pulih) masih by-design (dipakai sementara + logged).
