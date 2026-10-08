@@ -311,3 +311,8 @@
 - User: "cek seluruh kode dan temukan bug". Mode audit baca-saja, tree bersih, tanpa patch app.
 - Area disisir: alur perintah bot (/restore konfirmasi+lock, /ca//cabackup//status//log PIN-gate, /versi//alive tanpa PIN), pecahPesan 4000 + antrean prioritas, TUGAS_BERAT + pool BG.ParseResult, swap web-vault staging unik, buffer log 300KB, README trio sinkron, /ca-vs-docs, doRestore decrypt+lock+cleanup, batas unduh 20MB.
 - Hasil: tanpa Kritikal/Tinggi/Sedang. 1 Rendah baru (docs): README trio (EN/ID/RU) menyebut /ca cukup auth chat, padahal kode mewajibkan PIN saat PIN aktif (/ca + /cabackup tak disebut di kalimat PIN). Belum diperbaiki.
+
+## Sesi #40 — 2026-10-08 (fix docs audit #39, selesai)
+- User: "perbaiki semuanya". 1 commit docs + push (CI dilewati, docs-only):
+  - `docs:` /ca + /cabackup masuk kelompok wajib PIN di README.md/id/ru (selaras kode).
+- Verifikasi: diff sebaris per bahasa, `git diff --check` bersih.
