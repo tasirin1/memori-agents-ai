@@ -285,3 +285,12 @@
 - Area disisir: Util/PinCrypto/PinGate/PinActivity, KernelCompat/StoragePerm/HttpsCompat, FileShareProvider (TOCTOU+symlink), TlsCert, ServerService (health/restart/stopAndWait/ensureBinary/cleanup), Updater (redirect+resume+hash), TgBot (auth grup/PIN/hapus pesan), TgBackup (zip-slip/allowlist/enkripsi/restore), LogActivity/LogExport (samarkan/clipboard), Main/Settings (clipboard/export), Alarm/BootReceiver (throttle), manifest.
 - Temuan baru dilapor ke user (2 Tinggi: hapusPesan grup chatId<=0 blokir ID negatif; grup via @username fail-open; sisanya Rendah: Handler clipboard tanpa guard, toast salin bohong, throttle bypass sekali selepas reboot). Detail + level di chat sesi ini.
 - Bersih terverifikasi: resume-hash prefix digest, stopAndWait dicek pemanggil, formatHost IPv6, redirect fail-closed + hostBerubah, restore allowlist + kanonis, PBKDF2 cap, clipboard sidik + penanda cocok.
+
+## Sesi #36 — 2026-10-08 06:20 UTC (fix audit sesi #35, selesai)
+- User: "perbaiki semuanya". 3 fix commit + 1 docs + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `0065ffe fix:` hapus pesan ber-PIN di grup (TgBot guard `<=0`→`==0`; ID grup negatif ikut dihapus).
+  - `9794de6 fix:` username fail-closed (Util.chatPerluAnggapGrup baru + TgBot gate/warning + catch prefs→true; chatAdalahGrup tak berubah; uji baru).
+  - `bc4e106 fix:` clipboard guard Looper null + boolean jujur (Log/Main/Settings; tanpa string baru, pakai galat_awalan).
+  - `fb11e29 docs:` changelog.
+- Temuan throttle-reboot dinilai by-design tanpa patch (sekali-lolos wajib pasca-reboot + jalur ber-rahasia/dedup).
+- Guard: `git diff --check` bersih tiap commit; cek bare-return method boolean bersih. Verifikasi milik CI.
