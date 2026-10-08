@@ -351,3 +351,8 @@
   - `ecbc00d chore:` hapus 82 baris (maybeShowWizard/tampilWizardGabungan/inputWizard/wizardSelesai) + 5 string wiz_* di 2 bahasa (142/142 sinkron). Sengaja dipertahankan: perluWizard (dipakai unit test), KEY_WIZARD_DONE + tulisnya (preferensi lama tetap terbaca), validator galat* (dipakai form + test).
 - Guard `git diff --check` bersih; tanpa referensi sisa (rg nihil). Verifikasi milik CI.
 - Pelajaran: guard hapus-kode wajib cek definisi (bukan sekadar nama) — pemanggil validator hidup di dalam kode mati sempat memicu false-positive guard lalu diperketat.
+
+## Sesi #47 — 2026-10-08 08:00 UTC (audit kode sampah, baca-saja)
+- User: "cek seluruh kode ... temukan kode sampah dan selalu pastikan bukan kode yang terpakai". Mode audit baca-saja, tanpa patch app.
+- Sapu bukti-pakai (rg lintas java+test+res+manifest): string 142/142 terpakai, drawable 43/43, layout 9/9 (4 setContentView + 5 include), tema via manifest (false-positive titik), member private 0 mati, asset hanya github-chain.pem (dipakai HttpsCompat), 8 ID layout tak terpakai profiler static (judul/wrapper section — disengaja, bukan sampah).
+- Temuan baru 1 Sedang: `simpanNamaBot` (TgBot.java:492) tak pernah dipanggil + tak ada getMe di repo → `tg_bot_user` selamanya kosong → semua perintah grup ber-@suffix (termasuk milik bot sendiri) diabaikan diam-diam; user grup yang ketuk perintah dari menu (otomatis ber-suffix) tak pernah direspons tanpa pesan galat. Perintah tanpa suffix tetap jalan.
