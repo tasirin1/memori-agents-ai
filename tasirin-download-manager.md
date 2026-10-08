@@ -475,3 +475,8 @@
 - Satu observasi Rendah: extractor teruskan Referer lintas-host (Cookie/Auth di-strip, Referer tidak) — isi hanya watch-URL publik; hardening opsional.
 - Dugaan gugur: `interruptedResumed` non-atomik ternyata aman — kedua pemanggil (MainActivity + Service onCreate) jalan di main thread.
 - Diverifikasi bersih: networkSecurityConfig (cleartext global + github HTTPS-only), CSRF/XHR gate, traversal/canonical roots, token HMAC domain-separated + MAX_LEN, throttle @Volatile + prune ber-lock, paginasi galeri anti-overflow (max 3000), cookie URL_SAFE, redirect POST 307/308, launchItem synchronized, PIN-enforce di switch manual + autostart, CrashLog/ServerLog cap, extractUrls filter http(s), Updater cache TTL+https.
+
+## Sesi fix audit jilid 3 (2026-10-08, push 68f0c35 — 1 fix)
+
+- 68f0c35 fix(privacy): `stripExtractCredentials` kini turunkan Referer lintas-host ke origin+`/` (seperti browser); Origin header sudah origin-only jadi dipertahankan; `refererOrigin()` internal + unit test. Risiko: CDN yang butuh path di Referer (sangat jarang; cek hotlink umumnya per-host) — catat bila ada laporan 403.
+- Guard: audit 0/0, check_repo 9/10 (yaml-env). Lint+test ikut CI.
