@@ -321,3 +321,9 @@
 - User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode audit baca-saja (SOUL: cek=kumpulkan temuan, jangan ubah kode). Tanpa build lokal (Aturan No.1), tree bersih, tanpa push app.
 - Area disisir: Util/redirect/normalisasiHost, ServerService dataDirAman/kutipRocket/tokenAdmin/stopAndWait/RESTART_TIMES/logBuffer sync, Updater URL/normalisasiPinVersi, TgBot pisahkanPin/authDangerous/doRestore/TUGAS_BERAT, TgBackup restore allowlist+kanonis/bacaResponsBatas/downloadLastBackup, PinCrypto verify caps/isEqual, PinGate grace/lockout, Settings PIN min-4 atomic, LogActivity samarkanLog/clipboard, FileShareProvider TOCTOU, TlsCert, HttpsCompat cap, Boot/Alarm/TgBotReceiver wakelock+throttle, manifest.
 - Temuan baru (dilapor, belum diperbaiki): 1 Sedang (refreshLog 1-dtk samarkanLog 14-regex di UI thread atas 300KB → jank/ANR STB) + 1 Rendah (timer clipboard basi hapus salinan baru lebih awal). Bersih: RESTART_TIMES/logBuffer sync, doRestore kunci, PIN atomic, verify caps, allowlist+kanonis restore, redirect fail-closed, wakelock finally.
+
+## Sesi #42 — 2026-10-08 07:35 UTC (fix 2 temuan audit #41, selesai)
+- User: "perbaiki semuanya". 1 commit + 1x push ke `main` (tanpa build lokal / tanpa pantau CI):
+  - `45da597 fix:` LogActivity: refresh tampil ekor 100KB (BATAS_TAMPIL_LOG + potongEkorBaris, di bawah cap sorot 150KB; salin/bagi/simpan tetap buffer penuh) + timer clipboard bawa sidik tangkapan (bersihkanBilaIsiKita banding isi vs sidik timer, bukan prefs terkini) + 3 uji potongEkorBaris.
+- Guard `git diff --check` bersih. Verifikasi milik CI (build-apk ringan).
+- Pelajaran: timer yang menjadwalkan aksi atas "isi saat ini" wajib membawa identitas yang ditangkap saat jadwal (bukan baca ulang saat eksekusi), kalau tidak timer basi membunuh data baru.
