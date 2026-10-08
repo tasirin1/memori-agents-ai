@@ -468,3 +468,10 @@
 - Masih gagal setelah fix regex: `lintDebug` 2 error NewApi, dua-duanya fungsi Crypto baru — `encryptOnce()` memanggil `key()` dan `isKeyInvalidated()` merujuk `KeyPermanentlyInvalidatedException` tanpa guard dalam-metode (lint tak mewarisi guard pemanggil; refactor keluar dari `encrypt()` yang ber-guard menghilangkan bukti). Pelajaran: tiap fungsi baru yang menyentuh API-23+ wajib guard `SDK_INT` sendiri.
 - Warning ke-3 (Gradle 9.8.1 tersedia) pre-existing, bukan error. `getAndUpdate` (API 24) lolos lint karena desugaring — aman.
 - Fix: guard di kedua fungsi (+ runtime defense-in-depth). Guard lokal hijau seperti biasa. Verifikasi lint+test ikut push ini.
+
+## Sesi audit agresif jilid 3 (2026-10-08, HEAD ea71bbc build hijau, baca-saja)
+
+- Build ea71bbc hijau (APK+CodeQL+Gitleaks). Audit tanpa temuan aksi: kode dalam kondisi sehat.
+- Satu observasi Rendah: extractor teruskan Referer lintas-host (Cookie/Auth di-strip, Referer tidak) — isi hanya watch-URL publik; hardening opsional.
+- Dugaan gugur: `interruptedResumed` non-atomik ternyata aman — kedua pemanggil (MainActivity + Service onCreate) jalan di main thread.
+- Diverifikasi bersih: networkSecurityConfig (cleartext global + github HTTPS-only), CSRF/XHR gate, traversal/canonical roots, token HMAC domain-separated + MAX_LEN, throttle @Volatile + prune ber-lock, paginasi galeri anti-overflow (max 3000), cookie URL_SAFE, redirect POST 307/308, launchItem synchronized, PIN-enforce di switch manual + autostart, CrashLog/ServerLog cap, extractUrls filter http(s), Updater cache TTL+https.
