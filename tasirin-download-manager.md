@@ -480,3 +480,7 @@
 
 - 68f0c35 fix(privacy): `stripExtractCredentials` kini turunkan Referer lintas-host ke origin+`/` (seperti browser); Origin header sudah origin-only jadi dipertahankan; `refererOrigin()` internal + unit test. Risiko: CDN yang butuh path di Referer (sangat jarang; cek hotlink umumnya per-host) — catat bila ada laporan 403.
 - Guard: audit 0/0, check_repo 9/10 (yaml-env). Lint+test ikut CI.
+
+## 2026-10-08 — build gagal `68f0c35` (kurung ganda)
+- `refererOrigin` = expression-body `runCatching {}.getOrNull()` tak butuh `}` blok; sisa penutup lama ikut tinggal → object tertutup prematur → ratusan `Unresolved reference` + `Expecting top level declaration` di compileDebugKotlin + CodeQL ikut merah.
+- Fix `af3185c`: hapus 1 `}`. Guard: audit 0e/0w, check_repo 9/10 ([4/10] yaml pre-existing).
