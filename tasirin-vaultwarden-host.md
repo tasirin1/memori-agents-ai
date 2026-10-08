@@ -327,3 +327,10 @@
   - `45da597 fix:` LogActivity: refresh tampil ekor 100KB (BATAS_TAMPIL_LOG + potongEkorBaris, di bawah cap sorot 150KB; salin/bagi/simpan tetap buffer penuh) + timer clipboard bawa sidik tangkapan (bersihkanBilaIsiKita banding isi vs sidik timer, bukan prefs terkini) + 3 uji potongEkorBaris.
 - Guard `git diff --check` bersih. Verifikasi milik CI (build-apk ringan).
 - Pelajaran: timer yang menjadwalkan aksi atas "isi saat ini" wajib membawa identitas yang ditangkap saat jadwal (bukan baca ulang saat eksekusi), kalau tidak timer basi membunuh data baru.
+
+## Sesi #43 — 2026-10-08 07:50 UTC (audit baca-saja #10, tanpa patch)
+- User: "cek seluruh kode dari seluruh area lebih agresif temukan bug". Mode audit baca-saja, tree bersih, tanpa patch app.
+- Area disisir: self-review patch #42, Settings import allowlist/terapkanImporJson/tanyaPasswordImpor/sapuSisaImpor, TgBackup crypto stream/VWB1-VWB2/deriveKey-100k, export sweep mtime+cap, Updater resume/SHA/buangParsialRusak, ServerService ensureBinary/detectBinaryVersion-watchdog/health-pingRinci, PinActivity, AutoUpdate tanpaKuota/notif, LogExport MediaStore+legacy TOCTOU, Main susulan START_TERTUNDA, Boot/AlarmReceiver, HttpsCompat union-trust, KernelCompat, grace PIN, vektor 0.x, workflow APK.
+- Temuan baru: 1 Rendah (residu kosmetik patch #42: logCount hitung buffer penuh sedang tampil ekor; potongEkorBaris fallback tengah-baris bila newline tepat di batas — keduanya kosmetik langka).
+- Bersih: import allowlist+keep-rahasia, crypto stream tanpa OOM, sweep sisa kill, resume+SHA fail-closed, watchdog 10dtk+cap 50 baris, health TCP-lolos anti-bunuh-sia-sia, susulan flag hapus-tepat (retry hingga observed-running), trust union bukan ganti, pesan basi 5mnt+offset maju.
+- Alur START_TERTUNDA sempat dicurigai flag tak terhapus, ternyata benar: retry tiap buka hingga server observed-running lalu dibuang (by-design, idempoten).
