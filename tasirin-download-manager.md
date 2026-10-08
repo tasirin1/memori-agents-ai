@@ -462,3 +462,9 @@
 - Laporan user "gagal build" = Build APK + CodeQL gagal di push b5c5692.
 - Akar: `HOSTNAME_RE` tertulis `\.` (escape tak valid di string Kotlin) di DownloadEngine.kt:3513 → `compileDebugKotlin` FAILED; CodeQL ikut gagal karena butuh build. Pelajaran: heredoc python memakan satu backslash (`\\.` di sumber python → `\.` di file); regex baru wajib ditulis `\\\\.` di sumber patch atau dicek `cat` setelah patch.
 - Fix: `\\.` + validasi semantik pola via python (10 kasus). Guard: audit 0/0, check_repo 9/10 (yaml-env). Verifikasi compile penuh ikut push ini (tanpa pantau per aturan 19).
+
+## Sesi fix build gagal jilid 2 (2026-10-08, push ea71bbc)
+
+- Masih gagal setelah fix regex: `lintDebug` 2 error NewApi, dua-duanya fungsi Crypto baru — `encryptOnce()` memanggil `key()` dan `isKeyInvalidated()` merujuk `KeyPermanentlyInvalidatedException` tanpa guard dalam-metode (lint tak mewarisi guard pemanggil; refactor keluar dari `encrypt()` yang ber-guard menghilangkan bukti). Pelajaran: tiap fungsi baru yang menyentuh API-23+ wajib guard `SDK_INT` sendiri.
+- Warning ke-3 (Gradle 9.8.1 tersedia) pre-existing, bukan error. `getAndUpdate` (API 24) lolos lint karena desugaring — aman.
+- Fix: guard di kedua fungsi (+ runtime defense-in-depth). Guard lokal hijau seperti biasa. Verifikasi lint+test ikut push ini.
