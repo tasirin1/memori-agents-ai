@@ -100,3 +100,8 @@ barusan adalah aksi kemarin. Aturan perbaikan:
   `v2.0` terbit ulang. Empty commit TIDAK memicu Build (paths-ignore vakum).
 - Pelajaran: tiap commit kode wajib sertakan CHANGELOG; verifikasi lokal tanpa
   JDK tak bisa tangkap error kompilasi — andalkan CI.
+
+## Sesi #9 — 2026-10-12 09:34 UTC — selesai
+- Permintaan: terapkan aturan baru (cek program lokal + larangan instal berat) ke semua repo kelolaan memori.
+- Perubahan (docs-only): aturan 1 ditegaskan (DILARANG instal emulator/system-image/NDK berat; debug lokal cukup SDK yang ada, tanpa emulator) + aturan 13 baru (cek program lokal di awal tiap pekerjaan, manfaatkan `rg`/`fd`/`jq` maksimal; rilis tetap via CI).
+- Validasi: `scripts/check_repo.py` ✅ + `git diff --check` bersih. Commit `f0fe03b`, push `origin master` sukses.

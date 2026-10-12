@@ -484,3 +484,6 @@
 ## 2026-10-08 — build gagal `68f0c35` (kurung ganda)
 - `refererOrigin` = expression-body `runCatching {}.getOrNull()` tak butuh `}` blok; sisa penutup lama ikut tinggal → object tertutup prematur → ratusan `Unresolved reference` + `Expecting top level declaration` di compileDebugKotlin + CodeQL ikut merah.
 - Fix `af3185c`: hapus 1 `}`. Guard: audit 0e/0w, check_repo 9/10 ([4/10] yaml pre-existing).
+
+## 2026-10-12 — aturan baru AGENTS.md (cek program lokal + larangan instal berat)
+- Commit `41058a8 docs(agents): aturan cek program lokal dan larangan instal berat` (push main sukses): aturan 1 ditegaskan (DILARANG instal emulator/system-image/NDK tambahan, jangan unduh ratusan MB-GB) + aturan 20 baru (cek `command -v`/`--version` di awal tiap pekerjaan, manfaatkan `rg`/`fd`/`jq`/`bat`/`eza` maksimal, toolchain Android tetap dilarang). Guard: `verifikasi-path` LOLOS + `cek-cepat` exit 0 + `git diff --check` bersih. Tanpa CHANGELOG (docs-only).

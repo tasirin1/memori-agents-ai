@@ -361,3 +361,6 @@
 - Masalah: `simpanNamaBot` tak pernah dipanggil + tanpa `getMe` → `tg_bot_user` kosong selamanya → perintah grup ber-@suffix milik bot sendiri dibuang diam-diam.
 - Perbaikan (commit a70d1f1): `pollOnce` panggil `isiNamaBotBilaKosong` (getMe best-effort, sekali sampai tersimpan; gagal = fail-closed lama) + `parseUsernameBot` murni + uji `parseUsernameBot_kupasUsernameGetMe`. `git diff --check` bersih, push main ok. Tanpa pantau CI (aturan #13).
 - Tugas terbuka: repo kini bersih dari temuan audit; sesi berikut kembali ke mode audit baca-saja bila user minta cek ulang.
+
+## Sesi 2026-10-12 09:34 UTC — aturan baru AGENTS.md (selesai)
+- Aturan 16 baru (cek program lokal dulu + manfaatkan maksimal: `rg`/`fd`/`jq`/`bat`/`eza`/dst.) + aturan 1 ditegaskan (DILARANG instal SDK/emulator/NDK berat lokal). Commit `1fa5b8e` + `8ebef7e`, push main sukses. Aturan yang sama diterapkan ke `tasirin-download-manager` (`41058a8`), `Red-Eye-Mobile` (`3e987b8`), `netradar` (`f0fe03b`).

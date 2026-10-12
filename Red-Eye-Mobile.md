@@ -935,3 +935,8 @@
 - Validasi: brace/paren 7 file seimbang, 19 XML OK, `grep BOT_TOKEN|CHAT_ID` bersih, tanpa Gradle lokal.
 - Rilis: commit `2b863e6` (fix) + `e4d3f37` (bump `versionCode` 143/`1.6.116` + CHANGELOG) + tag `v1.6.116`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.116` rilis, menunggu hasil CI.
+
+## Sesi #125 (2026-10-12 09:34 UTC) — selesai
+- Permintaan: terapkan aturan baru (cek program lokal + larangan instal berat) ke semua repo kelolaan memori.
+- Perubahan (docs-only, tanpa bump/tag sesuai pengecualian §8): §1 ditambah larangan instal berat lokal (emulator/system-image, NDK, SDK tambahan; jangan unduh ratusan MB-GB) + aturan cek program lokal di awal tiap pekerjaan (`rg`/`fd`/`jq`/dst., tetap tanpa `./gradlew`).
+- Validasi: `tools/verifikasi-path.py` LOLOS + `scripts/cek-cepat.sh` exit 0 + `git diff --check` bersih. Commit `3e987b8`, push `origin main` sukses.
