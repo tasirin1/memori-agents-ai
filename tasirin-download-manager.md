@@ -502,3 +502,10 @@
 - Diverifikasi bersih tanpa perubahan: snapshot/itemsJson cache+throttle, SSE+poll adaptif, servePartial sortedBy (guard korektness prefix-kontinu, path jarang), LogActivity highlight, Gallery throttle+DiffUtil, FileSaver merge staging, thumb staging+evict, MediaLibrary token memo/scan TTL, DownloadService throttle notif, Main progressSig/buildSections sekali-pass, Crypto/TLS/boot/FileProvider guard.
 - Terbuka (sengaja tak di-fix, scope): limit per-item (`setLimitAndPriority`) hanya berlaku untuk download baru — konsisten dengan caching koneksi lain; catat bila user protes.
 - Guard: verifikasi-path LOLOS (helper baru tanpa test langsung — private/needs-context, perilaku via CI), cek-cepat 0, audit 0/0, diff--check bersih. Push main sukses tanpa pantau.
+
+## 2026-10-12 23:02 UTC — sapuan kinerja jilid 17 (push 5977e07)
+- Perintah user: scan teliti semua area lagi (abaikan token).
+- Temuan (inefisiensi request-path): tiap cek path file manager me-canonical ulang N root (1 I/O syscall per root × belasan cek per request) — kini `canonicalRootPaths()` sekali per perubahan settings + varian Fast (`isPathAllowed/isBrowseableAncestor/isRemoteDestinationAllowed/isMediaStorePathAllowed`) yang semantik-identik; fungsi lama mendelegasi sehingga test existing hijau; cache sejajar di HttpControlServer + semua call-site dialihkan (verifikasi: tak ada pemanggil List<File> tersisa di server); segmen path manual tanpa alokasi (`hasBadSegment`).
+- Test ekuivalensi baru di ServerSecurityTest (klasik vs fast + segmen buruk).
+- Diverifikasi bersih tanpa perubahan: MediaLibrary scan/SQL/filter, engine monitor/retry/mirror/cleanup-map, WebExtract nav-guard, MediaStream/ServerStreams/ChainInputStream fd-discipline, ServerSecurity lain, remote SSE+poll, Log/Gallery/Main tick, FileSaver merge, thumb staging.
+- Guard: verifikasi-path LOLOS, cek-cepat 0, audit 0/0, diff--check bersih, brace/paren 0. Push main sukses tanpa pantau.
