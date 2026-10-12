@@ -487,3 +487,10 @@
 
 ## 2026-10-12 — aturan baru AGENTS.md (cek program lokal + larangan instal berat)
 - Commit `41058a8 docs(agents): aturan cek program lokal dan larangan instal berat` (push main sukses): aturan 1 ditegaskan (DILARANG instal emulator/system-image/NDK tambahan, jangan unduh ratusan MB-GB) + aturan 20 baru (cek `command -v`/`--version` di awal tiap pekerjaan, manfaatkan `rg`/`fd`/`jq`/`bat`/`eza` maksimal, toolchain Android tetap dilarang). Guard: `verifikasi-path` LOLOS + `cek-cepat` exit 0 + `git diff --check` bersih. Tanpa CHANGELOG (docs-only).
+
+## 2026-10-12 22:47 UTC — sapuan kinerja jilid 15 (push dc4c93e)
+- Perintah user: scan seluruh kode teliti (abaikan hemat token), hapus kode tak efisien/sampah/penyebab bug Android 6+.
+- Hasil sapuan: 13 jilid sebelumnya sudah sikat hot-path; area terverifikasi bersih tanpa perubahan (App/wakelock/GC-callback, engine watchdog/SSRF-guard/disconnect, server SSE/upload/ZIP/snapshot, MediaLibrary/FileSaver galeri, SocialMediaExtractor regex precompile, Main/Settings/Gallery/Adapter tick, remote JS, Crypto/PIN/TLS, notifikasi immutable, boot job, FileProvider<24 guard, startForegroundService>=26 guard).
+- 4 temuan parse/serialize ganda (satu tema, satu commit): (1) `DownloadRepository.load()` parse blob 3x (length+decode+readStoredCreds) → satu parse + `DownloadItemCodec.decode(JSONArray)` overload; (2) `Updater.checkLatest()` parse daftar rilis 2x → satu parse + hapus `isReleasesList()` (masuk bekas-hapusan.txt); (3) `WebExtractActivity.trimEpisodes()` serialize→reparse tiap tick 1 dtk → terima JSONArray langsung (semantik "[]" dipertahankan); (4) `PinHash.hexToBytesOrNull()` regex+substring per byte → nibble sekali jalan (huruf besar tetap ditolak, byte-identik).
+- 2 test pengaman: `decode array setara string` (codec) + `pinHash_menolakHexHurufBesar` (salt/digest saja, tanpa split — detector pola boros menegur `.split(` bahkan di test).
+- Guard: verifikasi-path LOLOS (3 peringatan jinak: helper privat baru tanpa test langsung), cek-cepat exit 0, security_audit 0/0, diff--check bersih, brace/paren seimbang 7 file. Push main sukses tanpa pantau (aturan 19); compile/lint/unit-test ikut CI.
