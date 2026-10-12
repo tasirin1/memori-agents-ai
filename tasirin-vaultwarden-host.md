@@ -364,3 +364,9 @@
 
 ## Sesi 2026-10-12 09:34 UTC — aturan baru AGENTS.md (selesai)
 - Aturan 16 baru (cek program lokal dulu + manfaatkan maksimal: `rg`/`fd`/`jq`/`bat`/`eza`/dst.) + aturan 1 ditegaskan (DILARANG instal SDK/emulator/NDK berat lokal). Commit `1fa5b8e` + `8ebef7e`, push main sukses. Aturan yang sama diterapkan ke `tasirin-download-manager` (`41058a8`), `Red-Eye-Mobile` (`3e987b8`), `netradar` (`f0fe03b`).
+
+## Sesi 2026-10-12 09:46 UTC — audit-64 sapuan penuh + fix pool runBusy (selesai)
+- User: "scan seluruh kode teliti, hapus kode tak efisien/sampah/bug Android 5+, abaikan hemat token".
+- Sapuan penuh: 21 berkas java + manifest + res (ID port/land sinkron, 13+4) + pola (tanpa TODO/printStackTrace/System.out/gc/Timer/AsyncTask/Uri.fromFile), HttpURLConnection ber-timeout+disconnect di worker, Pattern/SimpleDateFormat/MessageDigest/SecureRandom terpusat, PendingIntent IMMUTABLE + channel O+, host verifier loopback ketat, zip-slip kanonis + batas zip-bomb, provider TOCTOU ganda, thread berat (TLS/RSA/unduh) di worker, lifecycle removeCallbacks lengkap. Guard `verifikasi-patch --semua` LOLOS (38 berkas) + `cek-cepat` hijau.
+- Temuan nyata 1 (Sedang): `SettingsActivity.runBusy` menjalankan 12 tugas menit-lama (unduh binary/web-vault 35MB, backup/restore/unggah Telegram, generate RSA) di `Util.jalankanBg` (pool ringan 3-thread shared proses untuk cek port/refresh/redaksi) — melanggar dokumen pool BG_LAMA di `Util` + preseden `MainActivity` (pakai `jalankanLama`). Fix 1 baris + komentar (`6015253`, commit `perf: audit-64 ...`) + entri CHANGELOG audit-64. Tanpa test baru (routing executor butuh runtime Android). Push main sukses, tanpa pantau CI (aturan #14).
+- Pelajaran: tiap audit pool-thread wajib cek pemetaan tugas→pool (dokumen vs pemakaian nyata), bukan sekadar keberadaan pool.
