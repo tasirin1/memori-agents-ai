@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-13 07:24 UTC)
+## Status terakhir (2026-10-13 07:26 UTC)
 
-- Sesi #69: audit ulang seluruh area dengan fokus Android 10+; targetSdk 28, legacy storage, MediaStore, dan eksekusi binary internal konsisten dengan kebutuhan; guard lokal lolos, tidak ada temuan baru yang terbukti, tidak ada perubahan aplikasi.
+- Sesi #70: audit ulang seluruh area dengan fokus Android 14/API 34; kewajiban yang ditargetkan API 34 tidak berlaku ke targetSdk 28, perilaku untuk semua aplikasi ditangani; guard lokal lolos, tidak ada temuan baru yang terbukti, tidak ada perubahan aplikasi.
 
 ## Tugas terbuka
 
@@ -410,5 +410,13 @@
 - Permintaan: audit seluruh area untuk stabilitas/kinerja Android 10+. Repo aplikasi bersih; HEAD `083df6e`.
 - Telusur source Java, manifest, resource, workflow, shim, skrip, khususnya targetSdk, eksekusi binary, penyimpanan eksternal, MediaStore, dan service/alarm lintas versi. Dokumentasi Android Developers resmi dicek untuk W^X API 29+ dan scoped storage.
 - Binary dipasang di internal app storage; targetSdk tetap 28 karena kebutuhan execve; akses eksternal default masih memakai model legacy target 28, permission sesuai, dan log ekspor memakai MediaStore mulai API 29. Tidak ditemukan bug Android 10+ baru yang dapat dibuktikan.
+- `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas); `bash scripts/cek-cepat.sh` LOLOS; `git diff --check` bersih. Build/test/lint Android lokal tidak dijalankan.
+- Tidak ada perubahan kode aplikasi atau push app; audit selesai tanpa temuan.
+
+
+## Sesi #70 — 2026-10-13 07:26 UTC (audit fokus Android 14+, selesai)
+- Permintaan: audit semua area untuk Android 14+. Repo bersih; HEAD `083df6e`.
+- Audit source Java, manifest/resource, workflow, shim dan skrip; telusur perubahan API 34: foreground service type/permission, dynamic receiver export, DCL read-only, exact alarm, notification, implicit intent, ZIP path, OpenJDK behavior. Dokumentasi resmi Android Developers dipakai untuk memilah perubahan target 34 vs semua aplikasi.
+- Target app tetap 28; service mendeklarasikan dataSync + permission, alarm memeriksa canScheduleExactAlarms dan fallback, tidak ada registerReceiver dinamis, ZIP extract punya validasi jalur, komponen manifest exported terdefinisi. Tidak ditemukan regresi Android 14+ baru yang terbukti.
 - `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas); `bash scripts/cek-cepat.sh` LOLOS; `git diff --check` bersih. Build/test/lint Android lokal tidak dijalankan.
 - Tidak ada perubahan kode aplikasi atau push app; audit selesai tanpa temuan.
