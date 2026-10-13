@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-13 07:21 UTC)
+## Status terakhir (2026-10-13 07:24 UTC)
 
-- Sesi #68: audit ulang seluruh area dengan fokus Android 8+; jalur foreground service, notifikasi, receiver, dan alarm konsisten; guard lokal lolos, tidak ada temuan baru yang terbukti, tidak ada perubahan aplikasi.
+- Sesi #69: audit ulang seluruh area dengan fokus Android 10+; targetSdk 28, legacy storage, MediaStore, dan eksekusi binary internal konsisten dengan kebutuhan; guard lokal lolos, tidak ada temuan baru yang terbukti, tidak ada perubahan aplikasi.
 
 ## Tugas terbuka
 
@@ -402,5 +402,13 @@
 - Permintaan: audit seluruh area, fokus bug/performa/stabilitas Android 8+. Repo aplikasi bersih di awal; HEAD `083df6e`.
 - Telusur 21 Java, manifest, seluruh resource, workflow, shim, dan skrip. Fokus API Oreo+: startForegroundService/startForeground, channel, status foreground untuk semua action service, jalur start dari AlarmReceiver/BootReceiver/bot/activity, exact alarm, callback lifecycle, serta guard API lintas versi.
 - Jalur service konsisten: helper start memakai startForegroundService pada O+, tiap action yang sah mengaktifkan foreground sebelum kerja latar, notification channel dibuat sebelum notifikasi, alarm menangani izin exact dan fallback. Tidak ditemukan bug Android 8+ baru yang dapat dibuktikan.
+- `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas); `bash scripts/cek-cepat.sh` LOLOS; `git diff --check` bersih. Build/test/lint Android lokal tidak dijalankan.
+- Tidak ada perubahan kode aplikasi atau push app; audit selesai tanpa temuan.
+
+
+## Sesi #69 — 2026-10-13 07:24 UTC (audit fokus Android 10+, selesai)
+- Permintaan: audit seluruh area untuk stabilitas/kinerja Android 10+. Repo aplikasi bersih; HEAD `083df6e`.
+- Telusur source Java, manifest, resource, workflow, shim, skrip, khususnya targetSdk, eksekusi binary, penyimpanan eksternal, MediaStore, dan service/alarm lintas versi. Dokumentasi Android Developers resmi dicek untuk W^X API 29+ dan scoped storage.
+- Binary dipasang di internal app storage; targetSdk tetap 28 karena kebutuhan execve; akses eksternal default masih memakai model legacy target 28, permission sesuai, dan log ekspor memakai MediaStore mulai API 29. Tidak ditemukan bug Android 10+ baru yang dapat dibuktikan.
 - `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas); `bash scripts/cek-cepat.sh` LOLOS; `git diff --check` bersih. Build/test/lint Android lokal tidak dijalankan.
 - Tidak ada perubahan kode aplikasi atau push app; audit selesai tanpa temuan.
