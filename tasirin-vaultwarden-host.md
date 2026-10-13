@@ -7,9 +7,9 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-03)
+## Status terakhir (2026-10-13 07:18 UTC)
 
-- `AGENTS.md` ditambah pointer wajib baca/update `MEMORY.md` tiap sesi (repo download-manager sudah lebih dulu).
+- Sesi #67: audit ulang seluruh area kode secara baca-saja; guard lokal lolos, tidak ada temuan baru yang terbukti, tidak ada perubahan aplikasi.
 
 ## Tugas terbuka
 
@@ -388,3 +388,11 @@
 - Sapuan penuh 21 berkas (~24rb baris) + manifest + res via rg/skrip-python tanpa toolchain: metode/field private mati = 0, import yatim = 0, string/color/drawable/dimen/style yatim = 0, tanpa TODO/System.out/printStackTrace/Log.d-v, tanpa String+= di loop, semua Pattern/SecureRandom/MessageDigest/SimpleDateFormat statis/terpusat, HttpURLConnection ber-timeout + disconnect di worker, commit() hanya jalur daya-tahan (receiver/worker, berkomentar), getSharedPreferences hanya jalur dingin/tick-cache, refresh delta + versi-gate, buffer 64KB + baca terbatas, TextWatcher debounce + siram saat destroy, lifecycle removeCallbacks lengkap, API guard lengkap (channel O+, alarm M+/31+, IMMUTABLE M+, MediaStore 29+, Html 24+, startForegroundService O+), kripto AES-GCM + PBKDF2 batas-DoS, SHA fail-closed + hapus-tmp + smoke-test, manifest exported + foregroundServiceType + cleartext=false, vektor 0.x + android:src ImageView aman API 21+.
 - Regresi audit-64/65/TLS utuh (runBusy→jalankanLama, paksaCacheUbah, bungkusTls12/cipherKuat/elapsedAman). Guard lokal LOLOS (verifikasi-patch + cek-cepat exit 0). Working tree bersih — tanpa patch/commit app (aturan: jangan churn tanpa temuan nyata).
 - Pelajaran: repo pasca-65 audit jenuh temuan; sapuan berikut cukup sampling + regresi, bukan full-scan tiap sesi.
+
+
+## Sesi #67 — 2026-10-13 07:18 UTC (audit ulang seluruh area, selesai)
+- Permintaan: sapu semua area dan buang kode tak efisien/sampah/bug Android 5+. Repo aplikasi bersih di awal (`main`, HEAD `083df6e`).
+- Audit baca-saja 21 Java (24.288 baris), manifest, seluruh resource, 3 workflow, shim C, skrip, dan verifikator. Cek pola API Android, lifecycle callback, jaringan, logging, dan regresi temuan audit-64/65/TLS.
+- `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas); `bash scripts/cek-cepat.sh` LOLOS; `git diff --check` bersih. Tidak menjalankan build/test/lint lokal.
+- Tidak ditemukan masalah baru yang bisa dibuktikan aman untuk dihapus atau diperbaiki; tidak ada perubahan/commit aplikasi. Temuan spekulatif ditahan karena butuh runtime/CI untuk membuktikannya.
+- Status: audit selesai, repo aplikasi tetap bersih, belum ada tugas terbuka.
