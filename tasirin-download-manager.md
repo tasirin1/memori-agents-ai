@@ -7,6 +7,13 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
+## Sapuan Android 8+ jilid 3 (2026-10-13, tanpa commit — bersih)
+
+- Perintah user (ulangan ke-2): sapuan teliti seluruh kode, sikat inefisien/sampah/bug Android 8+.
+- Area disisir (fokus lapis server/engine/remote): monitorLoop 30 mnt + probe HEAD 8 dtk + fallback Range 0-0 (anti lapor 1-byte), globalRateLimiter setLimit tanpa restart, snapshotJson cache + itemsSignature 64-bit + rebuild tanpa keys() + publikasi atomik, ServerLog cap 300x400 + snapshot revisi, DownloadRepository satu-parse + credCache + lock monitor tunggal + degraded-guard, autoOpen map in-place + prune ambang, SSE client + polling adaptif 2s/10s + reconnect counter, Updater 512KB-cap + cache-hanya-saat-exception, checkUpdate/about di IO, SocialMediaExtractor timeout 4-6 dtk + total-timeout.
+- Hasil: tidak ada sampah/bocor/bug Android 8+ baru yang layak dihapus — tanpa perubahan kode.
+- Guard: `verifikasi-path` LOLOS, `security_audit` 0/0, `prepare_remote --check` OK + smoke OK, `check_readme_sync` OK, tree bersih.
+
 ## Sapuan Android 8+ jilid 2 (2026-10-13, tanpa commit — bersih)
 
 - Perintah user (ulangan): sapuan teliti seluruh kode, sikat inefisien/sampah/bug Android 8+.
