@@ -517,3 +517,11 @@
 - Temuan 3: `pruneZipCache()` memanggil `file.length()` (stat syscall) per entri per prune (sumOf + per eviksi = ~2N syscall) — kini ukuran disimpan saat insert (`Triple(createdAt, file, size)`, satu stat dipakai guard + simpan) dan eviksi memakai nilai tersimpan; hit-path tetap validasi `isFile/length` (1 stat, perlu untuk deteksi hapus eksternal).
 - Diverifikasi bersih tanpa perubahan: regex precompile, snapshot/SSE, upload reservasi+lock, MediaLibrary scan/TTL, thumb lock+staging, HLS parser tunggal, repository satu-parse, WebView/JS, crypto/PIN/TLS, notifikasi/wakelock, boot, manifest.
 - Guard: verifikasi-path LOLOS (peringatan CHANGELOG hilang setelah entri ditambah), cek-cepat 0, security_audit 0/0 (+self-test OK), prepare_remote --check OK, readme-sync OK, diff--check bersih. Push main sukses tanpa pantau (aturan 19); compile/lint/unit-test ikut CI.
+
+## 2026-10-13 00:45 UTC — sapuan kinerja jilid 19 (push 0298704)
+- Perintah user: scan seluruh kode teliti semua area (abaikan hemat token), hapus tak-efisien/sampah/bug Android 6+.
+- Temuan 1 (adapter): `DownloadAdapter.bindItem()` membangun 3 `ColorStateList.valueOf()` baru per baris per full-bind (terjadi tiap recycle-scroll) padahal `cachedTint()` sudah ada (dipakai `bindProgress`) — kini 3 situs pakai `cachedTint`; `textName`/`statusBadge` via `setTextIfChanged` (tag hanya dipakai helper itu, aman) agar rebind tak layout ulang.
+- Temuan 2 (service): `DownloadService` kolektor membangun `activeIds` via `filter+map+toSet` (2 ArrayList buangan per emisi tick) — kini `buildSet` satu pass (stdlib, aman semua API).
+- Temuan 3 (notifikasi): `buildNotification()` memindai daftar 3x per refresh (`filter` aktif + `any` resumable + `count` completed) — kini satu loop (`active` presized + 2 flag); `aggregateDownloadProgress` teruji tetap dipakai untuk subset aktif; semantik CANCELLED identik (diabaikan ketiga versi).
+- Diverifikasi bersih tanpa perubahan: itemsJson/signature cache, SSE, upload reservasi+lock, zip Triple-size, durations prune-on-write, MediaLibrary/MimeTypes cache, SpeedTracker, Main sig-gate/autoOpen, FileSaver, thumb staging, HLS tunggal, crypto/PIN/TLS, boot, WebView/JS.
+- Guard: verifikasi-path LOLOS (4 berkas), audit 0/0, cek-cepat 0, diff--check bersih. Push main tanpa pantau (aturan 19); compile/lint/unit-test ikut CI.
