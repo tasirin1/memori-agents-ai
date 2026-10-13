@@ -7,6 +7,13 @@
 - Repo: `tasirin1/tasirin-download-manager` — download manager Android (Kotlin, minSdk 21, targetSdk 36).
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI, DILARANG install SDK lokal; UI Inggris, komentar Indonesia; commit `type(scope): deskripsi`; jangan ubah `versionName`/`versionCode` manual (CI bump per run); sumber remote web = `remote.src.html` + `python3 scripts/prepare_remote.py` (jangan edit `assets/remote.html` manual); guard `scripts/check_repo.py` + `scripts/security_audit.py`; perubahan kode wajib entri `CHANGELOG.md`; setelah fix langsung push tanpa pantau workflow (aturan 19).
 
+## Sapuan Android 8+ (2026-10-13, commit 241c661, push main sukses)
+
+- Perintah user: sapuan teliti seluruh kode, sikat inefisien/sampah/bug Android 8+, plus tanya versi Android perubahan drastis.
+- Area diverifikasi bersih: regex hoist semua (HlsParser/Engine/ServerSecurity/SocialMediaExtractor top-level), TlsCompat cache, SpeedTracker EMA, tick MainActivity 400ms+sig, adapter payload+cache warna/tint, statPool auto-heal 2-4 thread, snapshot throttle, upload lock per-ID, galeri token/diff, WebView destroy+removeCallbacks, PendingIntent IMMUTABLE, channel notif, JobScheduler boot, FGS dataSync+startForegroundCompat, izin POST_NOTIF/WRITE_23-28/AllFiles, desugaring aman.
+- 1 fix: `HttpControlServer.ipv4Addresses()` memuat semua interface apa adanya (VPN putus/P2P idle/IMS, link-local 169.254.x.x, hostAddress kosong jadi `http://:port/`, urutan acak bikin firstOrNull lotre) — kini skip interface mati (`isUp` fail-open), saring link-local, `mapNotNull` buang kosong, `distinct+sorted` deterministik. 4 pemanggil (Settings x3, MainActivity openRemote) ikut sembuh tanpa ubah signature.
+- Guard: `git diff --check` bersih, `verifikasi-path` LOLOS, `prepare_remote --check` OK, `security_audit --self-test` OK, `check_readme_sync` OK. Push main sukses tanpa pantau workflow (aturan 19).
+
 ## Status terakhir (2026-10-07, HEAD a0a7177 — loop perintah chat jilid 33-38: 1 fix + 5 bersih berturut-turut = STOP)
 
 - Loop perintah `/root/chat.md` jilid 33-38 (HEAD a0a7177, push main sukses, guard `security_audit` 0/0 + `git diff --check` bersih):
