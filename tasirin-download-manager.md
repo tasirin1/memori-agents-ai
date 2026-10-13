@@ -509,3 +509,11 @@
 - Test ekuivalensi baru di ServerSecurityTest (klasik vs fast + segmen buruk).
 - Diverifikasi bersih tanpa perubahan: MediaLibrary scan/SQL/filter, engine monitor/retry/mirror/cleanup-map, WebExtract nav-guard, MediaStream/ServerStreams/ChainInputStream fd-discipline, ServerSecurity lain, remote SSE+poll, Log/Gallery/Main tick, FileSaver merge, thumb staging.
 - Guard: verifikasi-path LOLOS, cek-cepat 0, audit 0/0, diff--check bersih, brace/paren 0. Push main sukses tanpa pantau.
+
+## 2026-10-13 00:32 UTC — sapuan kinerja jilid 18 (push f7e804c)
+- Perintah user: scan seluruh kode teliti semua area (abaikan hemat token), hapus kode tak efisien/sampah/bug Android 6+.
+- Temuan 1: 6 situs notifikasi selesai/gagal memanggil `_items.value.find()` O(n) ulang tepat setelah `updateItem()` — kini `updateItem()` mengembalikan item baru (`DownloadItem?`, null bila hilang) dan 6 situs (`handleFailure` 3 cabang + `finishHls`/`completeMulti`/`completeSingle`) memakai nilai kembaliannya; fallback `?: item` menjaga semantik lama (find null → item lama).
+- Temuan 2: `ServerVideoDurations.of()` memanggil `prune()` + `cacheLocked()` 2x per item galeri (puluhan cek batas per request) — kini `of()` sekali baca tanpa prune; prune pindah ke `cacheDuration()` (saat tulis) sekali jalan.
+- Temuan 3: `pruneZipCache()` memanggil `file.length()` (stat syscall) per entri per prune (sumOf + per eviksi = ~2N syscall) — kini ukuran disimpan saat insert (`Triple(createdAt, file, size)`, satu stat dipakai guard + simpan) dan eviksi memakai nilai tersimpan; hit-path tetap validasi `isFile/length` (1 stat, perlu untuk deteksi hapus eksternal).
+- Diverifikasi bersih tanpa perubahan: regex precompile, snapshot/SSE, upload reservasi+lock, MediaLibrary scan/TTL, thumb lock+staging, HLS parser tunggal, repository satu-parse, WebView/JS, crypto/PIN/TLS, notifikasi/wakelock, boot, manifest.
+- Guard: verifikasi-path LOLOS (peringatan CHANGELOG hilang setelah entri ditambah), cek-cepat 0, security_audit 0/0 (+self-test OK), prepare_remote --check OK, readme-sync OK, diff--check bersih. Push main sukses tanpa pantau (aturan 19); compile/lint/unit-test ikut CI.
