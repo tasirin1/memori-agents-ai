@@ -543,3 +543,10 @@
 ## 2026-10-13 01:10 UTC — percobaan betulkan pesan commit 0d8366e (GAGAL, dibiarkan)
 - User setuju pesan commit diperbaiki → amend lokal sukses (`43e9b5a`, pesan ASCII bersih), tapi `push --force-with-lease` DITOLAK (`protected branch hook declined`): branch `main` protekted, rewrite history tak diizinkan.
 - Tindakan: lokal di-`reset --hard origin/main` (kembali 0d8366e, tree bersih) agar tak divergen. Pesan cacat tetap di history; kode + CHANGELOG benar. Pelajaran: (1) cek pesan `git log` sebelum push; (2) jangan janjikan amend di branch protected — verifikasi proteksi dulu.
+
+## 2026-10-13 01:20 UTC — fokus D-pad oranye ala vault (push da3e265)
+- Perintah user: fokus D-pad kadang biru tua (salah pilih) — buat selalu oranye tebal mirip vaultwarden-host.
+- Acuan vault: ring fokus SELALU aksen `#F57C00` 3dp + isi tekan tint oranye (`item_focus_bg`, `bg_btn_tv`, `bg_input_tv`, `bg_btn_primary`, `bg_btn_stop`, `bg_chip`); `state_focused` selalu item pertama.
+- Native (9 drawable): `bg_btn_tv`/`bg_input_tv` ring biru→aksen 3dp; `bg_btn_accent` ring `primary_dark`→oranye tua `#8A3D00` 3dp (kontras di atas isi oranye); `item_focus_bg`/`bg_section_header` tint tekan biru→`#33F57C00` + stroke 2dp→3dp; `bg_chip` tint `#14`→`#33` + 3dp; `bg_btn_filled`/`bg_fab_pill` 2dp→3dp; `bg_ripple_item` (foreground row) biru→oranye agar tekan OK tak kilat biru. Biru tersisa hanya isi tombol (paritas vault).
+- Remote: `--accent-soft` baru (terang+gelap); `input/select/textarea:focus` biru→aksen; semua `:focus-visible` 2px→3px (daftar, galeri, player; player tetap putih di atas video hitam).
+- Guard: prepare_remote --check + smoke OK, verifikasi LOLOS (12 berkas), cek-cepat 0, audit 0/0, diff--check bersih. Pesan commit ASCII terverifikasi dulu (pelajaran 0d8366e). Push tanpa pantau; compile/lint ikut CI.
