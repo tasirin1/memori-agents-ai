@@ -539,3 +539,7 @@
 - Diverifikasi bersih tanpa perubahan: regex hoist, tick/bind adapter, snapshot/SSE/sig-gate, upload reservasi+lock, ZIP Triple-size, durations prune-on-write, MediaLibrary/TTL, repository satu-parse, HLS tunggal, dialog probe, crypto/PIN/TLS, ServerLog + redaksi, notifikasi satu-loop, wakelock, boot job, WebExtract tick, `updateRows` sig-gate + `rebuildList` hanya struktural, galeri in-place select, manifest/desugaring (`removeIf` aman Android 6).
 - Guard: verifikasi-path LOLOS (3 berkas), cek-cepat exit 0, security_audit 0/0, diff--check bersih. Push main tanpa pantau (aturan 19); compile/lint/unit-test ikut CI.
 - CATATAN: pesan commit 0d8366e cacat ketik ("labelිබ badge" — karakter asing nyelip). Sengaja TIDAK di-amend/force-push agar tak memicu rilis ganda (push = release); CHANGELOG (riwayat user-facing) sudah benar. Pelajaran: ketik pesan commit ASCII murni, verifikasi sebelum push.
+
+## 2026-10-13 01:10 UTC — percobaan betulkan pesan commit 0d8366e (GAGAL, dibiarkan)
+- User setuju pesan commit diperbaiki → amend lokal sukses (`43e9b5a`, pesan ASCII bersih), tapi `push --force-with-lease` DITOLAK (`protected branch hook declined`): branch `main` protekted, rewrite history tak diizinkan.
+- Tindakan: lokal di-`reset --hard origin/main` (kembali 0d8366e, tree bersih) agar tak divergen. Pesan cacat tetap di history; kode + CHANGELOG benar. Pelajaran: (1) cek pesan `git log` sebelum push; (2) jangan janjikan amend di branch protected — verifikasi proteksi dulu.
