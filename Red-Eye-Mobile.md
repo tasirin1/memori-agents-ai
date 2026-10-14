@@ -1228,3 +1228,11 @@
 - Validasi: brace/paren 0/0 (3 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `6f9e614` + bump `versionCode` 234/`1.6.207` + tag `v1.6.207`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.207` rilis, menunggu hasil CI.
+
+## Sesi #162 (2026-10-14 21:42 UTC) — selesai
+- Permintaan: build gagal sejak v1.6.201 — ternyata gagal sejak v1.6.207 (user salah ingat versi).
+- Akar via `gh run view --log-failed`: 5 `Unresolved reference` Kotlin — variabel dalam `try` tak terlihat di `finally` (video/audio progress), dan `when` CrashReporter buang nilai `delivered`. Cek lokal (brace/paren) tak bisa tangkap ini karena bukan kompilasi beneran.
+- Perbaikan: deklarasi progress pindah ke scope fungsi; `val delivered: Boolean = try...` langsung.
+- Pelajaran: wajib curiga kompilasi lokal-buta tiap CI merah; `gh run view --log-failed` + grep `e: file` adalah jalan tercepat.
+- Rilis: commit `59dc9dd` + bump `versionCode` 235/`1.6.208` + tag `v1.6.208`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.208` rilis, menunggu hasil CI.
