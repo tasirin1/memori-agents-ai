@@ -997,3 +997,10 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `fd5c796` + bump `versionCode` 206/`1.6.179` + tag `v1.6.179`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.179` rilis, menunggu hasil CI.
+
+## Sesi #133 (2026-10-14 05:45 UTC) — selesai
+- Permintaan: buat lebih pintar lagi → dipilih owner: jaga kamera pintar (foto hanya saat berubah, lewati gelap/duplikat).
+- Perbaikan: `photoLuma` (luma rata-rata, fail-open 255) + `photoHash` (aHash 8×8) + `hammingDistance`; guard di `onPhotoTaken` (gelap <12 / duplikat Hamming ≤6 vs `lastPhotoHash` persisten; manual dapat kabar, auto/patrol senyap); hash disimpan saat SENT/KEPT. Trigger gerak/suara live tak diambil (perlu preview-stream, di luar patch minimal).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `3514197` + bump `versionCode` 207/`1.6.180` + tag `v1.6.180`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.180` rilis, menunggu hasil CI.
