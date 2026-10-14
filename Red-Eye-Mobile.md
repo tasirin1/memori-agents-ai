@@ -1118,3 +1118,11 @@
 - Validasi: brace/paren 0/0 (3 file), XML OK, secret bersih (hanya regex), `verifikasi-path.py` LOLOS (1 peringatan false-positive `split` literal), `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `d05e996` + bump `versionCode` 221/`1.6.194` + tag `v1.6.194`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.194` rilis, menunggu hasil CI.
+
+## Sesi #148 (2026-10-14 11:44 UTC) — selesai
+- Permintaan: 6 saran lanjutan, user jawab "semua".
+- Implementasi (`PreferencesManager.kt` +3 key/var: `watch_numbers`, `curfew_time`, `curfew_alert_date`; `MonitoringService.kt` +4 command +4 helper): (1) `/darurat` — lokasi+foto+baterai+antrean, tembus jeda; (2) `/jampulang HH:MM|off` — alert 1x/hari lewat jam malam di luar rumah + alert jam sekolah Senin–Jumat 08–15 di luar sekolah (`checkCurfew` di loop); (3) `/minggu` — top kontak, jam tersibuk, begadang, watch hit (sampel 200); (4) `/watchnomor` — label `🚨 Nomor diawasi` + hitung digest/mingguan; (5) tombol `mainMenu()` di `/status` `/ringkas` `/digest` `/minggu`; (6) Indonesia: menu bot, `/help`, `/status`, SMS/panggilan, patroli, pesan umum (`Usage`→`Cara pakai`, dsb).
+- `CURFEW_REGEX` statis di companion (verifier `.matches` false-positive, tetap LOLOS).
+- Validasi: brace/paren 0/0, XML OK, secret bersih (hanya regex), `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `763735c` + bump `versionCode` 222/`1.6.195` + tag `v1.6.195`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.195` rilis, menunggu hasil CI.
