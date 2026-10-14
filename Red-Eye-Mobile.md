@@ -1175,3 +1175,9 @@
 - Validasi: brace/paren 0/0 (7 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `2b891db` + bump `versionCode` 228/`1.6.201` + tag `v1.6.201`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.201` rilis, menunggu hasil CI.
+
+## Sesi #155 (2026-10-14 13:20 UTC) — selesai
+- Permintaan: "ada fitur wiki di github kan?" → "mau" → isi wiki.
+- Fakta: `has_wiki:true` tapi repo wiki belum terbentuk; push pertama gagal `Repository not found`; user buat halaman perdana via web (`udah-saya-buat.md`), lalu merge `-X ours --allow-unrelated-histories` + push sukses.
+- Isi wiki (`master`): `Home`, `Instalasi`, `Perintah` (46 perintah + alias), `Fitur-Cerdas`, `FAQ`, `_Sidebar`. Tanpa rilis (wiki terpisah, docs-only).
+- Status terakhir: wiki live 6 halaman + 1 placeholder user.
