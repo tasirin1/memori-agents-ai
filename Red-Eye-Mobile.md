@@ -958,3 +958,12 @@
 - Validasi: `git diff --check` bersih, 20 XML OK, brace/paren seimbang, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, hook pre-push via `core.hooksPath`.
 - Rilis: commit `3f255ee` + bump `versionCode` 201/`1.6.174` + tag `v1.6.174`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.174` rilis, menunggu hasil CI.
+
+## Sesi #128 (2026-10-14 04:05 UTC) — selesai
+- Permintaan: audit ulang lebih teliti pelan-pelan (baca-saja, tanpa subagen), lalu perbaiki semuanya.
+- Audit (baca penuh: `MessageQueue`, `SendMessageWorker`, `CrashReporter`, `BootReceiver`, `BootRestartWorker`, `SmsRepository`, `CallLogRepository`, `TelegramApi`, util kecil, `MainActivity` + jalur kritis `MonitoringService`/`NotificationForwarderService`): 2 sedang + 5 rendah baru.
+- Koreksi audit penting: dugaan "`Rejected` tak break di sendChunked" GUGUR (`break` sudah ada `:474`); dugaan "`isFreshLocation` basi pasca-reboot" GUGUR (`getLastKnownLocation` tak survive reboot); "batch N→1" diturunkan (isi blob utuh, bukan data-loss); "non-cancel hilangkan tail sendFitted" GUGUR (`sendToTelegram` catch-all).
+- Perbaikan (5 berkas): spam-throttle lepas dari drop-notice 400; `failedIds` pra-429/auth ikut budget; `maxRetry` survivors-only; crash chat-missing catat `credentialError` + tulis `rest` atomik; 4 log `MainActivity` khusus debug.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, manifest OK, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `e0734df` + bump `versionCode` 202/`1.6.175` + tag `v1.6.175`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.175` rilis, menunggu hasil CI.
