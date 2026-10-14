@@ -1051,3 +1051,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, 20 XML OK, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `c9013ce` + bump `versionCode` 213/`1.6.186` + tag `v1.6.186`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.186` rilis, menunggu hasil CI.
+
+## Sesi #140 (2026-10-14 09:10 UTC) — selesai
+- Permintaan: audit 3 sudut (PendingIntent, secret-log, HTML) + perbaiki semuanya.
+- Audit: PendingIntent 6 titik aman; 130+ log aman (1 tanpa redact tapi DEBUG + tanpa secret); HTML: 2 lubang (saran typo + `/version`); `wakePingIds` lost-update; regresi `v1.6.186` bersih.
+- Perbaikan: escape saran + Build `/version`; `wakeIdsLock`.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `8bbb263` + bump `versionCode` 214/`1.6.187` + tag `v1.6.187`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.187` rilis, menunggu hasil CI.
