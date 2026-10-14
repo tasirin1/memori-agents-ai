@@ -1018,3 +1018,10 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS (1 peringatan awal soal `Calendar` langsung dibetulkan), `cek-cepat.sh` exit 0; matematika jam verified via Python.
 - Rilis: commit `e065d0b` + bump `versionCode` 209/`1.6.182` + tag `v1.6.182`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.182` rilis, menunggu hasil CI.
+
+## Sesi #136 (2026-10-14 06:50 UTC) — selesai
+- Permintaan: kerjakan semua 6 saran cerdas.
+- Perbaikan: digest 6 jam + baterai <15% (throttle 24 jam) di loop monitoring; `isPriorityNotif` (OTP/missed-call/bank) bypass batch via `fwdSerial` (spam-filter tetap); lokasi hemat 100 m (patrol skip koordinat, `/location` sebut jarak; `lastLocLatE6/LonE6`); `/ringkas` (SENSITIVE, menu, `/help`, `KNOWN_COMMANDS`); label OTP/promo di `formatSmsMessage` (`smsTag` + regex/keyword).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `613290b` + bump `versionCode` 210/`1.6.183` + tag `v1.6.183`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.183` rilis, menunggu hasil CI.
