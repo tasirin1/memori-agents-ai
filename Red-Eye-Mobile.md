@@ -1189,3 +1189,11 @@
 - Validasi: brace/paren 0/0 (2 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `acf6193` + bump `versionCode` 229/`1.6.202` + tag `v1.6.202`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.202` rilis, menunggu hasil CI.
+
+## Sesi #157 (2026-10-14 13:46 UTC) — selesai
+- Permintaan: pikirkan agar jaringan jelek/kosong tak menumpuk tugas.
+- Analisis: 54 titik panggil `scheduleMessageSend` (APPEND_OR_REPLACE) → rantai run menumpuk di belakang constraint CONNECTED/flood-wait; tiap run murah tapi bangunkan radio satu-satu.
+- Perbaikan: counter `outstandingSends` (maks 3 antre + 1 jalan, skip kembalikan true), `set(1)` saat REPLACE, `set(0)` saat cancel, decrement di `finally` doWork (semua jalan keluar), sembuh-sendiri 10 menit, reset tiap ganti proses. Antrean pesan sendiri sudah bounded (100+5).
+- Validasi: brace/paren 0/0, XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal. Wiki `Fitur-Cerdas` +1 bullet.
+- Rilis: commit `7457bcb` + bump `versionCode` 230/`1.6.203` + tag `v1.6.203`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.203` rilis, menunggu hasil CI.
