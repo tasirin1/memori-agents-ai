@@ -1142,3 +1142,12 @@
 - Validasi: brace/paren 0/0 (7 file), XML OK, secret hanya regex, marker per file OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `1d6eb44` + bump `versionCode` 224/`1.6.197` + tag `v1.6.197`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.197` rilis, menunggu hasil CI.
+
+## Sesi #151 (2026-10-14 12:43 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu "perbaiki semua".
+- Audit (2 subagen + verifikasi mandiri ketat): klaim darurat-Kritikal GUGUR sebagian (regex 7–15 digit sudah menahan semua nomor darurat listed; gate eksplisit ditambah defense-in-depth); pool-starvation GUGUR (ConnectionPool idle-bukan-cap, dispatcher terpisah); record-tanpa-watchdog GUGUR (cancellable + finally benar); OOM materialisasi GUGUR (`result.size < limit` di kode).
+- Temuan diakui: replay via `edited_message` (Tinggi), expiry lolos tanpa tanggal, ring baseline-unknown, `/ping` abaikan patrol, skew `isAuthBlocked`, pindai fuzzy selalu full-scan, crash tahan boot 90 detik, storage volatil senyap.
+- Perbaikan: gate darurat + `isEmergencySmsNumber`; edit-update diabaikan + buang `NO_REPLAY_COMMANDS` mati; dateless mutating ditolak; ring batal bila baseline <0; `/ping` cek patrol; auth tahan mundur; exact-match dulu (SMS+call); flush crash sesudah start; reminder saat volatil. Coalesce APPEND di-revert (risiko stall) + worker-success + smsconfirm-parsial diterima by-design.
+- Validasi: brace/paren 0/0 (5 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `3e2cf66` + bump `versionCode` 225/`1.6.198` + tag `v1.6.198`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.198` rilis, menunggu hasil CI.
