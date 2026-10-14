@@ -1181,3 +1181,11 @@
 - Fakta: `has_wiki:true` tapi repo wiki belum terbentuk; push pertama gagal `Repository not found`; user buat halaman perdana via web (`udah-saya-buat.md`), lalu merge `-X ours --allow-unrelated-histories` + push sukses.
 - Isi wiki (`master`): `Home`, `Instalasi`, `Perintah` (46 perintah + alias), `Fitur-Cerdas`, `FAQ`, `_Sidebar`. Tanpa rilis (wiki terpisah, docs-only).
 - Status terakhir: wiki live 6 halaman + 1 placeholder user.
+
+## Sesi #156 (2026-10-14 13:38 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki (pola lanjutan).
+- Audit (2 subagen + verifikasi mandiri): FGS-silent GUGUR (manifest lengkap + recovery ada → Rendah); revive-tanpa-bg BENAR; toast-tanpa-guard BENAR; double-start BENAR; notif-toggle-spam BENAR; boot-notice-ganda BENAR (sempit); initial-retry aman (kursor); sisanya by-design/info (backlog, lock, ping, fetch, channel, USER_UNLOCKED, refresh, revive-guard, regex, clear-window).
+- Perbaikan: revive syarat bg-location; guard toast status; `startingMonitoring` + `lastNotifToggleAt`; kabar reboot 1x/jam via `boot_meta`.
+- Validasi: brace/paren 0/0 (2 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `acf6193` + bump `versionCode` 229/`1.6.202` + tag `v1.6.202`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.202` rilis, menunggu hasil CI.
