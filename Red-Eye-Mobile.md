@@ -967,3 +967,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, manifest OK, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `e0734df` + bump `versionCode` 202/`1.6.175` + tag `v1.6.175`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.175` rilis, menunggu hasil CI.
+
+## Sesi #129 (2026-10-14 04:25 UTC) — selesai
+- Permintaan: buat app lebih kebal dari pembokiran izin di Android 14+.
+- Investigasi: command-path sudah cek izin per perintah; yang bolong = jalur background sunyi (sync SMS/call return kosong saat `SecurityException`, lokasi null, listener mati) + tak ada alert proaktif; `requestRebind` forwarder + watchdog 15 mnt + `computeForegroundTypes` subset sudah ada (tak diubah).
+- Perbaikan (2 berkas): `checkPermissionHealth` tiap siklus sync — 10 titik (baca/kirim SMS, call log, kontak, kamera, mic, lokasi + latar, akses notifikasi, baterai), alert gabungan throttle 24 jam (`permHealthAlertAt` + `setPermHealthAlertAtSync`); mencakup auto-reset Android bila app lama tak dibuka.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `137e8ac` + bump `versionCode` 203/`1.6.176` + tag `v1.6.176`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.176` rilis, menunggu hasil CI.
