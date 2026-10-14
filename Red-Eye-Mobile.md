@@ -1197,3 +1197,10 @@
 - Validasi: brace/paren 0/0, XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal. Wiki `Fitur-Cerdas` +1 bullet.
 - Rilis: commit `7457bcb` + bump `versionCode` 230/`1.6.203` + tag `v1.6.203`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.203` rilis, menunggu hasil CI.
+
+## Sesi #158 (2026-10-14 13:59 UTC) — selesai
+- Permintaan: 6 saran cerdas baru, user jawab "semua".
+- Implementasi (`PreferencesManager` +3 key/var: `trail_24`, `begadang_date`, `jemput_radius_m`; `MonitoringService` +4 command +4 helper; `TimeFmt.short`): (1) `/jejak` — 24 titik + tautan `maps/dir` (catat di `rememberSentLatLon`); (2) `/waspada` — skor 0–100 (watch 25/hit cap 50, nomor baru 10 cap 20, begadang 2 cap 20, luar rumah 10); (3) `/hilang` — ring 60 + lokasi + foto; (4) `checkBegadang` auto pagi (loop, 1x/hari); (5) sparkline 24 jam di `/minggu`; (6) `/jemput` one-shot di `checkGeofence` (auto-off). Alias +4, menu +4, help +4.
+- Validasi: brace/paren 0/0 (3 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS (1 false-positive split), `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal. Wiki `Perintah`+`Fitur-Cerdas` update.
+- Rilis: commit `e0552a8` + bump `versionCode` 231/`1.6.204` + tag `v1.6.204`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.204` rilis, menunggu hasil CI.
