@@ -1004,3 +1004,10 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `3514197` + bump `versionCode` 207/`1.6.180` + tag `v1.6.180`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.180` rilis, menunggu hasil CI.
+
+## Sesi #134 (2026-10-14 06:05 UTC) — selesai
+- Permintaan: saran no.5 (koreksi salah ketik perintah).
+- Perbaikan (`MonitoringService.kt`): `KNOWN_COMMANDS` 36 perintah + `editDistance` (Levenshtein) + `transposedEquals` (tukar-tetangga=1) + `suggestCommand` (ambang 1 bila ≤5 char, 2 bila lebih); cabang unknown balas "Maksudnya X?" (Indonesia). Verifikasi ambang via Python: `/staus`→`/status`, `/hlep`→`/help`, `/xyzabc`→tanpa saran.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `7d4266d` + bump `versionCode` 208/`1.6.181` + tag `v1.6.181`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.181` rilis, menunggu hasil CI.
