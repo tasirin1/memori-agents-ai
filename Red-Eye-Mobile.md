@@ -982,3 +982,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `6c8f5c9` + bump `versionCode` 204/`1.6.177` + tag `v1.6.177`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.177` rilis, menunggu hasil CI.
+
+## Sesi #131 (2026-10-14 05:05 UTC) — selesai
+- Permintaan: tanpa izin jangan hanya kirim warning + jangan kirim suara/video blank.
+- Investigasi: foto sudah pre-check izin+policy; blank berasal dari file 0-byte (kill tengah capture, `send*File` tanpa guard, flush tanpa guard) + video/audio tanpa pre-check mic (video butuh MIC).
+- Perbaikan (`MonitoringService.kt` saja): pre-check mic audio/video + policy video (fail-fast ringkas); `onPhotoTaken` tolak file kosong; backstop kosong di `sendPhotoFile`/`sendVideoFile`/`sendAudioFile`; 3 flush lewati file kosong diam-diam.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0; typo CJK di CHANGELOG dibetulkan sebelum commit.
+- Rilis: commit `0a1c75a` + bump `versionCode` 205/`1.6.178` + tag `v1.6.178`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.178` rilis, menunggu hasil CI.
