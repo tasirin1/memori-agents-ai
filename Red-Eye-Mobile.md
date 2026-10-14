@@ -1159,3 +1159,11 @@
 - Validasi: brace/paren 0/0 (6 file), XML OK, sintaks sh/py OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `d688fc8` + bump `versionCode` 226/`1.6.199` + tag `v1.6.199`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.199` rilis, menunggu hasil CI.
+
+## Sesi #153 (2026-10-14 13:02 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki (pola lanjutan).
+- Audit (2 subagen + verifikasi mandiri): 2 Tinggi (tombol-mati-dateless BENAR mekanisme, langka; curfew-starvation BENAR), 1 Sedang (`/pulang` slash bocor koordinat BENAR), plus viewer-spam, state-korup, double-count, exact-mubazir, format-ketat, owner-terdepak, pause-reboot, volatile, status, regex, clear-window. GUGUR: pause-reboot (penulis wall-clock), exact-mubazir (murah terindeks), format-ketat + owner-terdepak + smsconfirm-parsial + clear-window (by-design aman).
+- Perbaikan: callback dateless → menu baru; curfew jemput fix bila basi >30 mnt + `schoolAlertDate` pisah; `privateChat` threading + rincian-5 private-only + tolak grup senyap; state `!in 1..2` sembuh; hitung-sekali + kata-buang dikabari; 4 `@Volatile`.
+- Validasi: brace/paren 0/0, XML OK, secret hanya regex, `verifikasi-path.py` LOLOS (1 false-positive split), `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `a86ea03` + bump `versionCode` 227/`1.6.200` + tag `v1.6.200`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.200` rilis, menunggu hasil CI.
