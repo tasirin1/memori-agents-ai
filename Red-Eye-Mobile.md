@@ -1126,3 +1126,11 @@
 - Validasi: brace/paren 0/0, XML OK, secret bersih (hanya regex), `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `763735c` + bump `versionCode` 222/`1.6.195` + tag `v1.6.195`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.195` rilis, menunggu hasil CI.
+
+## Sesi #149 (2026-10-14 11:53 UTC) — selesai
+- Permintaan: audit menyeluruh pelan-pelan (tanpa patch), lalu "perbaiki semua".
+- Audit: 0 kritikal, 0 tinggi, 3 sedang (alias grup picu obrolan biasa + bocor help/jam malam; `/watchnomor` 7–9 digit tak cocok lintas format; sentinel sepi 12 jam false-positive), 7 rendah (curfew tak bungkus tengah malam; cek sekolah tak terdokumentasi + jendela 8..14; digest manual ganda; curfew pakai posisi basi; 3 query per SMS; sisa Inggris; fence tanpa label). Verified baik: `/darurat` tembus jeda by-design, offset `finally`, scanner-DM tanpa oracle, hash menu ikut `versionCode`, `isKnownContact` fail-tutup.
+- Perbaikan: alias slashless khusus private owner + gate tunggal poll-loop (inner dibuang); `watchNumberHit` ekor-7; sepi 48 jam; curfew `h<5 & ch>=12` + sekolah 8..15 + dokumen `/help`; manual `/digest` tandai tanggal; `lastLocAt` + skip basi >6 jam; `batchFreqMap` + map per batch; Indonesia (`/location` `/camera` `/version` `/storage` `/apps` `/log` sinkron awal, tipe model); fence `Rumah/Sekolah`.
+- Validasi: brace/paren 0/0 (5 file), XML OK, secret hanya regex, sisa Inggris 0, `verifikasi-path.py` LOLOS tanpa peringatan, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `3e80cb1` + bump `versionCode` 223/`1.6.196` + tag `v1.6.196`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.196` rilis, menunggu hasil CI.
