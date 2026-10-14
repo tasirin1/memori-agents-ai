@@ -1034,3 +1034,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `3536307` + bump `versionCode` 211/`1.6.184` + tag `v1.6.184`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.184` rilis, menunggu hasil CI.
+
+## Sesi #138 (2026-10-14 08:10 UTC) — selesai
+- Permintaan: audit menyeluruh pelan-pelan (handler perintah, initial-sync, start/destroy, callback, kontak) + perbaiki semuanya.
+- Audit: 1 sedang + 7 rendah, tanpa kritikal/tinggi; regresi `v1.6.184` bersih.
+- Perbaikan (`MonitoringService.kt` saja): refresh start di background; owner verify-disk; dedup pasca-gate; kontak lintas-format; label digest; reset idle pasca-sync; hint pairing pra-owner; uptime clamp.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `53fcaf0` + bump `versionCode` 212/`1.6.185` + tag `v1.6.185`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.185` rilis, menunggu hasil CI.
