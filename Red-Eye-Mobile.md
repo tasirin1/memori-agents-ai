@@ -1204,3 +1204,11 @@
 - Validasi: brace/paren 0/0 (3 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS (1 false-positive split), `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal. Wiki `Perintah`+`Fitur-Cerdas` update.
 - Rilis: commit `e0552a8` + bump `versionCode` 231/`1.6.204` + tag `v1.6.204`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.204` rilis, menunggu hasil CI.
+
+## Sesi #159 (2026-10-14 20:14 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki (pola lanjutan).
+- Audit (2 subagen + verifikasi mandiri): `/hilang` blokir handler 60 dtk BENAR; begadang query tiap siklus BENAR; waspada 400 query + skor basi BENAR; jejak header BENAR; jemput-offline ternyata AMAN (antre worker); jemput-sekolah by-design; counter macet GUGUR (finally+clamp+self-heal); sms-staging GUGUR (koheren via stagedAt); smsconfirm-parsial by-design (ada warning); OTP-flood by-design (dedup+cap); boot-dup sudah dijaga v1.6.202.
+- Perbaikan: `/hilang` bunyi background + guard busy; begadang tandai tanggal tiap evaluasi (1x/hari); waspada `knownCache` + `locNote` basi >6 jam; header jejak "10 terakhir".
+- Validasi: brace/paren 0/0, XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `fa1539d` + bump `versionCode` 232/`1.6.205` + tag `v1.6.205`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.205` rilis, menunggu hasil CI.
