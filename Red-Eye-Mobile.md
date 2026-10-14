@@ -975,3 +975,10 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `137e8ac` + bump `versionCode` 203/`1.6.176` + tag `v1.6.176`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.176` rilis, menunggu hasil CI.
+
+## Sesi #130 (2026-10-14 04:45 UTC) — selesai
+- Permintaan: app lebih pintar — tahu izin yang dimiliki + lapor Telegram saat izin hilang.
+- Perbaikan (2 berkas): snapshot bitmask 10 izin (`permSnapshot`); sentinel lapor transisi "Izin hilang"/"Izin kembali" tanpa throttle + reminder 24 jam bila belum kembali + inventaris penuh saat baseline; freeze bit dependen (lokasi latar, akses notifikasi) cegah alert palsu; perintah owner `/perms` (SENSITIVE + freshness, menu bot + `/help`).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `6c8f5c9` + bump `versionCode` 204/`1.6.177` + tag `v1.6.177`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.177` rilis, menunggu hasil CI.
