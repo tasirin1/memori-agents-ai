@@ -1220,3 +1220,11 @@
 - Validasi: brace/paren 0/0, XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `cefc1a6` + bump `versionCode` 233/`1.6.206` + tag `v1.6.206`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.206` rilis, menunggu hasil CI.
+
+## Sesi #161 (2026-10-14 20:59 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu "semua" (perbaiki semua temuan).
+- Audit (2 subagen + verifikasi mandiri): 3 High (prune hapus unsent, fallback drop silent, worker rejected tak antre), 3 Medium (initial-sync duplikat, crash fallback blind, initial-sync guard), 3 Low/OK (unescape lengkap, rights-limited aman, race boot).
+- Perbaikan: prune rename `.sent` + filter non-sent; MonitoringService/Worker/CrashReporter fallback plain 400 non-chat/non-rights → queue (tak drop); Worker `Rejected` → requeue seperti `Failed`; `sendInitialData` cursor hanya maju saat sukses (sudah benar, guard); CrashReporter fallback klasifikasi error + retry passif.
+- Validasi: brace/paren 0/0 (3 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `6f9e614` + bump `versionCode` 234/`1.6.207` + tag `v1.6.207`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.207` rilis, menunggu hasil CI.
