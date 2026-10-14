@@ -990,3 +990,10 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0; typo CJK di CHANGELOG dibetulkan sebelum commit.
 - Rilis: commit `0a1c75a` + bump `versionCode` 205/`1.6.178` + tag `v1.6.178`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.178` rilis, menunggu hasil CI.
+
+## Sesi #132 (2026-10-14 05:25 UTC) — selesai
+- Permintaan: buat lebih pintar lagi → dipilih owner: hemat baterai adaptif.
+- Perbaikan (`MonitoringService.kt`): `checkAndSendNewData` kembalikan aktivitas; `idleDataCycles` → `effectiveSyncMillis` (1×/2×/3×/4× interval user, cap 30 mnt, watchdog ikut); kamera auto-skip saat >=3 siklus sepi + layar mati (`isScreenOn`); `/photo` manual + polling perintah tak tersentuh; `/status` tampilkan status adaptif.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `fd5c796` + bump `versionCode` 206/`1.6.179` + tag `v1.6.179`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.179` rilis, menunggu hasil CI.
