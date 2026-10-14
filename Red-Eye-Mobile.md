@@ -949,3 +949,12 @@
 - Validasi: brace/paren semua `.kt` seimbang, 20 XML OK, grep secret bersih (hanya `KEY_*`/regex), `git diff --check` bersih, `verifikasi-path.py` LOLOS (hook pre-push).
 - Rilis: commit `8c8f19f` + bump `versionCode` 200/`1.6.173` + tag `v1.6.173`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.173` rilis, menunggu hasil CI.
+
+## Sesi #127 (2026-10-14 03:40 UTC) — selesai
+- Permintaan: cek seluruh area kode temukan bug (mode baca-saja, 4 subagen paralel), lalu perbaiki semuanya.
+- Audit: 4 tinggi (suffix short-code `PhoneNumbers.suffixMatch`; persist coalesce 2 dtk forwarder; fallback plain buang rights-limited; FGS 5-tipe dari boot) + 8 sedang (scheduler `workerRunning` balapan; batch 5 dtk vs klaim; spam drop volatil; SMS multipart hitung ganda; offset-`finally` diam; callback SENSITIVE lewati expiry; `ContentQuery` telan SecurityException; `join(500)` di main) + 4 rendah (dead `NO_REPLAY` callback; wake ~55 dtk; `DiscardPolicy`; repo trunc + limit).
+- Disproved: dugaan listener-leak gugur (`registerOnSharedPreferenceChangeListener` idempoten, `WeakHashMap`); FGS manifest dipertahankan (`computeForegroundTypes` sudah subset bertahap); `resolveChatId`-batalkan-save by-design (dilewati).
+- Perbaikan (11 berkas): guard `short<10`; `SecurityException` log + `coerceIn(1,200)` + log trunc; `CallerRunsPolicy`; guard main `startBackgroundThread`; hapus dead `NO_REPLAY` + expiry `SENSITIVE` + `confirmedParts` + `Log.w` offset; fallback rights antre + `flushSync` destroy + spam ikut drop-notice; `scheduleRateLimited` selalu `REPLACE`; `saveCoreConfig/Test` Boolean + toast persist + cek seq.
+- Validasi: `git diff --check` bersih, 20 XML OK, brace/paren seimbang, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, hook pre-push via `core.hooksPath`.
+- Rilis: commit `3f255ee` + bump `versionCode` 201/`1.6.174` + tag `v1.6.174`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.174` rilis, menunggu hasil CI.
