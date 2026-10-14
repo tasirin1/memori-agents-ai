@@ -1110,3 +1110,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `c5297a8` + bump `versionCode` 220/`1.6.193` + tag `v1.6.193`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.193` rilis, menunggu hasil CI.
+
+## Sesi #147 (2026-10-14 11:31 UTC) — selesai
+- Permintaan: usul 6 fitur cerdas, lalu user jawab "1 2 3 4 5 6" (kerjakan semua).
+- Implementasi (`PreferencesManager.kt` +14 key/var: `watch_keywords`, `home/school lat/lon/rad/state`, `night_digest_date`, `last_data_at`, `loc_fail_count`, `health_alert_at`; `MonitoringService.kt` +11 helper +4 command; `NotificationForwarderService.kt` prioritas+label watch): (1) `/watch kata,status,off` — label `⚠️ Watch` di SMS + prioritas+label notif; (2) `/home`+`/school lat,lon,rad|status|off` — alert masuk/keluar sekali via `checkGeofence` di `patrolRound` (state 0=unknown saintsent); (3) label `🆕 Nomor baru` (lookup kontak ringan, fail-tutup) + `🔁 Nx hari ini` di SMS/panggilan; (4) `/digest` + auto jam 21:00+ (`nightDigestDate`) — SMS/call 24 jam, kontak teratas, watch hit, antrean, baterai; (5) alias tanpa `/` (`dimana`, `foto`, `ding`, `kunci`, `baterai`, `bantu`, dll) di poll-loop + `handleTelegramCommand`; (6) `checkQuietHealth` — sepi >12 jam / lokasi gagal ≥5x / antrean ≥50, throttle 12 jam.
+- Menu/help/status: 4 entri `botCommandList`, 4 baris `/help`, baris Watch+Fence di `/status`.
+- Validasi: brace/paren 0/0 (3 file), XML OK, secret bersih (hanya regex), `verifikasi-path.py` LOLOS (1 peringatan false-positive `split` literal), `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `d05e996` + bump `versionCode` 221/`1.6.194` + tag `v1.6.194`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.194` rilis, menunggu hasil CI.
