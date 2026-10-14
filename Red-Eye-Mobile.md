@@ -1084,3 +1084,12 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, manifest OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `c72c2ea` + bump `versionCode` 217/`1.6.190` + tag `v1.6.190`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.190` rilis, menunggu hasil CI.
+
+## Sesi #144 (2026-10-14 11:00 UTC) — selesai
+- Permintaan: audit 3 sudut baru (thread kedua, prefs/worker/scheduler, Setup/Camera sisa) + perbaiki semuanya.
+- Audit: 2 sedang + 7 rendah + 2 gugur (`lastSyncTime` hidup; consent-reboot aman); aritmetika/`exported`/scheduler benar.
+- Perbaikan (7 berkas): flag upgrade terakhir; deny-clear consent; hapus menu global; guard tap; admin result + 2 string; shot gate; throttle pasca-notify; buang `workerRunning`+pool `run` (+`bekas-hapusan.txt`); paircode lock + cek manual.
+- Insiden: edit launcher hapus deklarasi (braces retak) — tertangkap grep, diperbaiki sebelum commit.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `00eda9e` + bump `versionCode` 218/`1.6.191` + tag `v1.6.191`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.191` rilis, menunggu hasil CI.
