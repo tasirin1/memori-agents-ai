@@ -1059,3 +1059,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `8bbb263` + bump `versionCode` 214/`1.6.187` + tag `v1.6.187`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.187` rilis, menunggu hasil CI.
+
+## Sesi #141 (2026-10-14 09:40 UTC) — selesai
+- Permintaan: audit penuh forwarder + perbaiki semuanya.
+- Audit (baca penuh ±1200 baris): 1 sedang (drop-notice destroy tanpa flush) + 3 rendah (prioritas overload, wake-400, revive gate); koreksi: overload-32 tetap via emitPost.
+- Perbaikan (`NotificationForwarderService.kt` saja): flush destroy; prioritas overload ikut antrean; backoff semua 400; revive tanpa gate izin (degraded + sentinel, throttle 30 mnt notice jaga dari spam).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `75ba1ee` + bump `versionCode` 215/`1.6.188` + tag `v1.6.188`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.188` rilis, menunggu hasil CI.
