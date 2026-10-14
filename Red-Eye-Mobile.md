@@ -1067,3 +1067,12 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `75ba1ee` + bump `versionCode` 215/`1.6.188` + tag `v1.6.188`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.188` rilis, menunggu hasil CI.
+
+## Sesi #142 (2026-10-14 10:10 UTC) — selesai
+- Permintaan: audit menyeluruh (operator crash, Setup lifecycle, capture kamera) + perbaiki semuanya.
+- Audit: 2 sedang + 7 rendah; `!!` nihil, aritmetika `L` bersih, PendingIntent berflag.
+- Perbaikan: tmp gagal-tulis dibersihkan; close camera/session di semua error; stop-gagal = error; rilis recorder-dulu; cause di pesan; clear ikut cancel worker; `configChanges` anti-recreate; rationale → Settings; jarak gagal = -1.
+- Sengaja tanpa patch: `recording` lokal (volatile mustahil; CAS cukup), fallback metering, deny policy (by-design).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, 20 XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `5699f5d` + bump `versionCode` 216/`1.6.189` + tag `v1.6.189`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.189` rilis, menunggu hasil CI.
