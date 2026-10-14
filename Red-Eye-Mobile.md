@@ -1101,3 +1101,12 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `41b79b3` + bump `versionCode` 219/`1.6.192` + tag `v1.6.192`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.192` rilis, menunggu hasil CI.
+
+## Sesi #146 (2026-10-14 11:45 UTC) — selesai
+- Permintaan: audit rekonsiliasi perintah + perbaiki semuanya.
+- Audit: 39 branch = 39 KNOWN; menu kurang `/patrolinterval` + `/start`; 2 string mati; guard API bersih.
+- Temuan dalam: hash menu (token:owner) skip registrasi pasca-upgrade → semua tambahan menu lama tak pernah tayang di install-upgrade; perbaiki dengan ikutkan `versionCode`.
+- Perbaikan: 2 entri menu + hash versi + buang 2 string.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `c5297a8` + bump `versionCode` 220/`1.6.193` + tag `v1.6.193`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.193` rilis, menunggu hasil CI.
