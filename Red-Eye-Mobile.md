@@ -1042,3 +1042,12 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `53fcaf0` + bump `versionCode` 212/`1.6.185` + tag `v1.6.185`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.185` rilis, menunggu hasil CI.
+
+## Sesi #139 (2026-10-14 08:45 UTC) — selesai
+- Permintaan: audit menyeluruh 3 sudut (thread/lock, jam/waktu, kode-mati/manifest) + perbaiki semuanya.
+- Audit: 1 tinggi (commit keystore di main saat start) + belasan sedang/rendah; aritmetika expiry bersih (semua `L`), `exported`/FGS-type/manifest benar, `builder.sh` legacy terkonfirmasi.
+- Perbaikan (6 berkas): restore+ring background; guard cap-masa-depan (baterai/digest/izin/SMS/pending); `markHandled` + volatile patrol/handler; hapus string+style mati + izin `MODIFY_AUDIO_SETTINGS`.
+- Insiden: blok `setStreamVolume(MAX)` asing terselip di draft edit — tertangkap review diff, dibuang sebelum commit.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, 20 XML OK, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `c9013ce` + bump `versionCode` 213/`1.6.186` + tag `v1.6.186`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.186` rilis, menunggu hasil CI.
