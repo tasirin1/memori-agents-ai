@@ -1134,3 +1134,11 @@
 - Validasi: brace/paren 0/0 (5 file), XML OK, secret hanya regex, sisa Inggris 0, `verifikasi-path.py` LOLOS tanpa peringatan, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `3e80cb1` + bump `versionCode` 223/`1.6.196` + tag `v1.6.196`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.196` rilis, menunggu hasil CI.
+
+## Sesi #150 (2026-10-14 12:24 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu "perbaiki semua".
+- Audit (2 subagen + verifikasi mandiri): 1 tinggi (dedup telan prioritas), 5 sedang (persist 2 detik, curfew-buta-diam, expiry wall-clock, test timpa interval, chunk-cancel ganda), 7 rendah (batch 5 detik, boot-FGS, consent senyap, migrasi mikro, cred jam-mundur, adopt apply, spam by-design). Koreksi: dual-worker overlap BUKAN bug (unique-work serial), ANR batch BUKAN bug (Dispatchers.IO), busy kamera + manifest benar.
+- Perbaikan: prioritas sebelum dedup; `removeMessages` persist paksa + `clearQueue` commit; `filterFresh` anti-lompat-jam 4 situs; `origId` hapus-original-sesudah-sisa; `lastLocAt` tiap fix; `saveTestIdentity` tanpa interval; cred butuh `now >= errAt`; `setChatIdSync` 3 situs; `salvageBatch` + `onTaskRemoved`; kabar boot gagal-start + screenshot hangus. R4/R7 diterima by-design.
+- Validasi: brace/paren 0/0 (7 file), XML OK, secret hanya regex, marker per file OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `1d6eb44` + bump `versionCode` 224/`1.6.197` + tag `v1.6.197`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.197` rilis, menunggu hasil CI.
