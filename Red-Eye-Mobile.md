@@ -940,3 +940,12 @@
 - Permintaan: terapkan aturan baru (cek program lokal + larangan instal berat) ke semua repo kelolaan memori.
 - Perubahan (docs-only, tanpa bump/tag sesuai pengecualian §8): §1 ditambah larangan instal berat lokal (emulator/system-image, NDK, SDK tambahan; jangan unduh ratusan MB-GB) + aturan cek program lokal di awal tiap pekerjaan (`rg`/`fd`/`jq`/dst., tetap tanpa `./gradlew`).
 - Validasi: `tools/verifikasi-path.py` LOLOS + `scripts/cek-cepat.sh` exit 0 + `git diff --check` bersih. Commit `3e987b8`, push `origin main` sukses.
+
+## Sesi #126 (2026-10-14 02:29 UTC) — selesai
+- Permintaan: cek seluruh kode temukan bug, lalu perbaiki semuanya.
+- Audit (4 subagen paralel, mode baca-saja): 2 kritikal + 6 tinggi + 4 sedang — antrean dibuang pasca-reboot (`elapsedRealtime` reset); tugas restore prefs/antrean bisa dibuang `DiscardPolicy`; Save offline simpan kredensial unverifikasi; sufiks 7-digit over-match + pindai 5000 baris; dual-orde offset; fallback plain `429`/`5xx` dicap drop `400`; expiry menu inline palsu; SMS parsial clear pending; wake reset basi; `sendChunked` reset retry; ring stuck MAX; channel resume `HIGH` bersuara; `mapping.txt` tak diunggah; klaim `QUICKBOOT` `1.6.170` salah; hardcode warna kalkulator.
+- Perbaikan: `isFresh` fallback wall-clock; `Background.runCritical` + 7 call-site kritis; `setMonitoringActive` `commit()`; Save verified-flag + clear reset pause/patrol; gerbang sufiks 10 digit + fallback 4 halaman; `NO_REPLAY` sempit tak-idempoten; menu-expiry khusus mutasi; dedup cap 500; `teardownJobs` restore ring; SMS parsial keep pending + extra part; forwarder fallback transient + offset segar + dedup tanpa notifId + burst notice; worker wariskan `retryCount`; channel resume `MIN` senyap; workflow unggah `mapping.txt`; `calc_accent_text` + `drawable-night/calc_btn_accent.xml`; komentar manifest ID; koreksi `CHANGELOG QUICKBOOT`.
+- Disproved (tanpa patch): `ContentQuery` sudah batasi `result.size < limit`; `answerCallback` baca token live (tanpa cache 5 mnt); clear dedup saat ganti token aman (stream update per-bot beda).
+- Validasi: brace/paren semua `.kt` seimbang, 20 XML OK, grep secret bersih (hanya `KEY_*`/regex), `git diff --check` bersih, `verifikasi-path.py` LOLOS (hook pre-push).
+- Rilis: commit `8c8f19f` + bump `versionCode` 200/`1.6.173` + tag `v1.6.173`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.173` rilis, menunggu hasil CI.
