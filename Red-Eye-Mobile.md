@@ -1025,3 +1025,12 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `613290b` + bump `versionCode` 210/`1.6.183` + tag `v1.6.183`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.183` rilis, menunggu hasil CI.
+
+## Sesi #137 (2026-10-14 07:30 UTC) — selesai
+- Permintaan: audit menyeluruh pelan-pelan (3 subagen + verifikasi silang sendiri), lalu perbaiki semuanya.
+- Audit: 5 sedang + 8 rendah; 6 dugaan gugur/diturunkan (deadlock fwdSerial, ANR commit-main, pair-code race, rights-loop, dedup OTP, save-apply Tinggi→Rendah).
+- Perbaikan (5 berkas): batch re-arm; prioritas tercekik→antre; `configMutex` Save/Test; delta-pass upgrade + `commit`-jujur + log migrasi; `captureLock` + volatile; guard migrasi `sendStatusNow` ×2; hash nol→1L.
+- Sengaja tanpa patch (terdokumentasi): substring prioritas, digest pertama, fallback lensa, toast guard, micro-race memori, hibrida resolveStored + clear-vs-save (residu).
+- Validasi: `git diff --check` bersih, brace/paren seimbang, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `3536307` + bump `versionCode` 211/`1.6.184` + tag `v1.6.184`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.184` rilis, menunggu hasil CI.
