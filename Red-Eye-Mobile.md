@@ -1076,3 +1076,11 @@
 - Validasi: `git diff --check` bersih, brace/paren seimbang, 20 XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `5699f5d` + bump `versionCode` 216/`1.6.189` + tag `v1.6.189`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.189` rilis, menunggu hasil CI.
+
+## Sesi #143 (2026-10-14 10:35 UTC) — selesai
+- Permintaan: audit menyeluruh (worker, receiver, manifest) + perbaiki semuanya.
+- Audit: 1 sedang (filter `MY_PACKAGE_REPLACED` tanpa scheme → buta update) + 3 rendah; koreksi klaim lama soal scheme.
+- Perbaikan: `<data scheme=package>`; kabar antre untuk drop auth/rate; `recordJob` + dedup-boot verified jinak tanpa patch.
+- Validasi: `git diff --check` bersih, brace/paren seimbang, manifest OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `c72c2ea` + bump `versionCode` 217/`1.6.190` + tag `v1.6.190`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.190` rilis, menunggu hasil CI.
