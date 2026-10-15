@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 09:47 UTC = sesi #180)
+## Status terakhir (2026-10-15 09:52 UTC = sesi #181)
 
-- `v1.6.226` rilis (commit `388e69c`, `versionCode` 253): batch Sedang (2 patch + 5 gugur berbukti). Push main + tag sukses, menunggu hasil CI.
+- `v1.6.227` rilis (commit `95657e9`, `versionCode` 254): batch Rendah (grid kalkulator + presisi docs; exported GUGUR). Audit 40 klaim TUNTAS. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.226`.
-- Sisa audit: 4 Rendah (manifest exported, grid kalkulator, format changelog, docs trigger) + 1 keterbatasan `/history` (>2000 baris/tahun, sudah diungkap di balasan).
+- Pantau CI `v1.6.227`.
+- Utang docs kecil: link-ref versi di `CHANGELOG.md` (Keep a Changelog penuh) — opsional, tak fungsional.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +174,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #181 (2026-10-15 09:52 UTC) — selesai
+- Permintaan: "lanjut" = batch Rendah (4 item, terakhir dari audit 40 klaim).
+- Verifikasi: 1 GUGUR — `exported=true` WAJIB untuk terima broadcast sistem (Android 13+), 4 action terproteksi framework (pihak-3 = `SecurityException`), `MY_PACKAGE_REPLACED` cek paket + skema; ubah ke `false` justru merusak boot-start.
+- Perbaikan (3): `btnEquals` `rowSpan` 2→3 (sel kosong tertutup, tanpa ID baru); `# Changelog` judul; presisi `AGENTS.md` (pemicu `main`-only) + `README.md` (pengecualian tag) — koreksi kata, bukan aturan.
+- Validasi: 3 XML OK, secret bersih, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `116fa92` + bump `versionCode` 254/`1.6.227` (commit `95657e9`) + tag `v1.6.227`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: audit TUNTAS (`v1.6.223`–`v1.6.227`, 5 rilis), menunggu hasil CI.
 
 ## Sesi #180 (2026-10-15 09:47 UTC) — selesai
 - Permintaan: "lanjut" = batch Sedang (7 item).
