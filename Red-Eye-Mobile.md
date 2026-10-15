@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:31 UTC = sesi #185)
+## Status terakhir (2026-10-15 10:38 UTC = sesi #186)
 
-- `v1.6.230` rilis (commit `73d69aa`, `versionCode` 257): message-path (400 jujur, parsing `\s+`, edit diproses, skew ditahan, admin refresh). 1 peringatan verifier = false-positive (`split` pakai Regex prekompil). Push main + tag sukses, menunggu hasil CI.
+- `v1.6.231` rilis (commit `d36c962`, `versionCode` 258): recorder-teardown + rebind terjadwal. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.230`.
-- Sisa audit segar: 8 Sedang + 9 Rendah — 1 batch per sesi.
+- Pantau CI `v1.6.231`.
+- Sisa audit segar: 6 Sedang (history-cap, coerce, throttle, overlap-cancel, +2) + 9 Rendah — 1 batch per sesi.
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
@@ -175,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #186 (2026-10-15 10:38 UTC) — selesai
+- Permintaan: "lanjut" = batch lifecycle Sedang.
+- Perbaikan (2): `CameraService` lacak recorder+file aktif (`@Volatile`, disiplin set/badden di semua exit `finish*`) — `forceReset()` stop+rilis+buang parsial (stop Runnable yang selamat berakhir di error jujur, tak ada kirim file hilang); `onListenerDisconnected()` 1x retry terjadwal 60 dtk berflag.
+- Adjudikasi (3 gugur): overlap-cancel (kooperatif + guard `===`, window 1 iterasi); SMS-ganda (CAS + `clearSmsPendingIf` + peringatan duplikat di string); flag-nyangkut (satu-satunya cancel = `onDestroy`).
+- Validasi: brace/paren 0/0 (2 file), diff dikaji penuh, LOLOS, exit 0, tanpa Gradle lokal.
+- Rilis: commit `95e90c2` + bump `versionCode` 258/`1.6.231` (commit `d36c962`) + tag `v1.6.231`, push main + tag.
+- Status terakhir: `v1.6.231` rilis, menunggu hasil CI.
 
 ## Sesi #185 (2026-10-15 10:31 UTC) — selesai
 - Permintaan: "lanjut" = refine + message-path Sedang.
