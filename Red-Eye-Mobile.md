@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:05 UTC = sesi #182)
+## Status terakhir (2026-10-15 10:23 UTC = sesi #184)
 
-- Audit segar #2 (36 klaim, 3 subagen + verifikasi mandiri penuh): 4 Tinggi, 12 Sedang, 9 Rendah terverifikasi; 11 gugur/by-design berbukti. Mode baca-saja — tanpa patch, tanpa rilis. CI hijau semua (`v1.6.225–227` success).
+- `v1.6.229` rilis (commit `d5c9863`, `versionCode` 256): pairing (rotasi 24 jam + lockout global) + poll lolos block chat-400. `v1.6.228` (sesi #183: rantai volatil jujur) tercatat susulan — statusnya tercecer kemarin. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Batch fix berikutnya (tertua dulu): 4 Tinggi — (1) save-volatil toast palsu, (2) status-vs-toggle beda definisi, (3) pairing tanpa lockout/ekspirasi, (4) 400-chat ikut auth-block 30 mnt.
-- Refine patch sendiri: `/smsconfirm` skew jangan wipe (tahan saja); `AdminReceiver` + `refreshInstance()`.
+- Pantau CI `v1.6.228` + `v1.6.229`.
+- Sisa audit segar: 12 Sedang + 9 Rendah + 2 refine (smsconfirm tahan-skew, AdminReceiver refresh) — 1 batch per sesi.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +174,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #184 (2026-10-15 10:23 UTC) — selesai
+- Permintaan: "lanjut" = 2 Tinggi tersisa (pairing + auth-block, area auth).
+- Perbaikan (2): `ensureOwnerPairCode` rotasi 24 jam (`KEY_OWNER_PAIR_AT`; stamp grace untuk kode lama) + lockout global 1 jam tiap 10 tebak salah (`AtomicInteger/Long`, reset saat sukses, tanpa oracle); `isPollBlocked()` baru (401/403 saja) dipakai gerbang poll + kadensi `pollTelegramCommands` + wake-poller — error chat-400 sisi-kirim tak lagi bisukan perintah; kirim/worker tetap full-block.
+- Validasi: brace/paren 0/0 (4 file), dupe-fungsi nihil, secret bersih, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `a0308d7` + bump `versionCode` 256/`1.6.229` (commit `d5c9863`) + tag `v1.6.229`, push main + tag; build + GitHub Release oleh workflow.
+- Pelajaran: status memori #183 tercecer (hanya entri sesi, tanpa status) — perbaiki pola: selalu baca ulang blok status seusai edit.
+- Status terakhir: `v1.6.229` rilis, menunggu hasil CI.
 
 ## Sesi #183 (2026-10-15 10:12 UTC) — selesai
 - Permintaan: "lanjut" = T1+T2 audit segar (rantai volatil, 1 area).
