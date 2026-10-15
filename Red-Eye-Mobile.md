@@ -1324,3 +1324,11 @@
 - Validasi: brace/paren 0/0, XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `41b0ed2` + bump `versionCode` 246/`1.6.219` + tag `v1.6.219`, push main + tag.
 - Status terakhir: `v1.6.219` rilis, menunggu hasil CI.
+
+## Sesi #174 (2026-10-15 02:25 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki.
+- Audit (2 subagen + verifikasi mandiri): 19 klaim, 7 di-fix (statuspending, flag-order, histori-optout, menu-retry, lensa-notice, batch N+1, digest-cap). Gugur/by-design (12): pause-manual (override eksplisit), resume-awet (timed), HOL-sekuensial (reliabilitas), flush-spam (CAS), premium-ID, ring-UX, edit-noop, channel-anon, pairing-notice, pool, debug-log, mask, STORED_MASK, smsconfirm-parsial, trail, sparkline, counter-drift, offline-save, spam-throttle, overflow-cap, read-cap, fuzzy, jam-label, jemput-sekali, unpair-latch, pairing-oracle, TOKEN_REGEX, unescape, safeCut, partial-Sent, exact-murah, directBootAware, drawable-night, changelog-46, gradlew.
+- Perbaikan (7): pending dulu; flag sesudah jalan; histori hormati disable; retry menu/jam; kabar lensa; batch peta; cap jujur.
+- Validasi: brace/paren 0/0 (4 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `be20495` + bump `versionCode` 247/`1.6.220` + tag `v1.6.220`, push main + tag.
+- Status terakhir: `v1.6.220` rilis, menunggu hasil CI.
