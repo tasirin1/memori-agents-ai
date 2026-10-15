@@ -105,3 +105,10 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Permintaan: terapkan aturan baru (cek program lokal + larangan instal berat) ke semua repo kelolaan memori.
 - Perubahan (docs-only): aturan 1 ditegaskan (DILARANG instal emulator/system-image/NDK berat; debug lokal cukup SDK yang ada, tanpa emulator) + aturan 13 baru (cek program lokal di awal tiap pekerjaan, manfaatkan `rg`/`fd`/`jq` maksimal; rilis tetap via CI).
 - Validasi: `scripts/check_repo.py` ✅ + `git diff --check` bersih. Commit `f0fe03b`, push `origin master` sukses.
+
+## Sesi #10 — 2026-10-15 03:20 UTC — selesai
+- Permintaan: terapkan penyederhanaan workflow (gabung verifikasi jadi job build) ke semua proyek kelolaan.
+- Perubahan: `repo-guard.yml` digabung jadi job `guard` pertama di `build.yml` (`build needs: [guard]`); berkas lama dihapus; entri `[Unreleased]` di CHANGELOG.
+- Aturan repo ditaati: tanpa bump versi (versionName tetap "2.0", versionCode otomatis CI), tanpa build lokal.
+- Validasi: YAML valid, `scripts/check_repo.py` + `--readme` ✅, `git diff --check` bersih.
+- Commit `71fb340`, push `origin master` sukses (branch repo ini `master`, bukan `main`).
