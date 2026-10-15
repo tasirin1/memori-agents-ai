@@ -299,3 +299,10 @@
 - GUGUR/diturunkan saat verifikasi: register-listener-dup GUGUR (`SharedPreferences` pakai `WeakHashMap`, objek sama = no-op; `refreshInstance` return-true objek sama); `PhoneNumbers.suffixMatch` contoh 12-vs-12 SALAH (perlu beda panjang; risiko Rendah); ANR `onDestroy` GUGUR (hanya disk I/O + `apply`); deadlock cabang spam SALAH (cabang spam return-dini; yang deadlock cabang prioritas non-spam).
 - Validasi: XML OK, secret hanya nama-key, `git status` bersih (tanpa patch). Build via GitHub Actions bila fix dijalankan sesi berikut.
 - Status terakhir: audit #191 selesai, menunggu perintah batch fix (1 area/sesi).
+
+## Sesi #192 (2026-10-15 12:54 UTC) — selesai
+- Permintaan: "perbaiki" = fix 1 area (temuan tertinggi audit #191).
+- Perbaikan: `NotificationForwarderService.kt:506` — buang `withContext(fwdSerial)` bersarang, panggil `forwardLocked` langsung (semua pemanggil `emitPost` sudah di `fwdSerial`, serialisasi lestari; `flushBatch` di `:971` tak tersentuh karena dari dispatcher lain, aman).
+- Validasi: brace/paren 0/0, secret hanya nama-key, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `6797410` + bump `versionCode` 263/`1.6.236` (commit `65833b5`) + tag `v1.6.236`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.236` rilis, menunggu hasil CI. Sisa audit #191: 3 Tinggi + 6 Sedang antre batch berikut.
