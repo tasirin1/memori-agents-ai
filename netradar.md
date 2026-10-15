@@ -142,3 +142,9 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Permintaan: periksa 6 PR Dependabot terbuka.
 - Hasil: #24 (actions) ✅ merge squash (tambah CHANGELOG dulu); #21/#2 tambah CHANGELOG lalu uji dispatch → gagal kompilasi (butuh compiler Kotlin 2.x); #6/#5/#3 gagal kompilasi (lompatan mayor Gradle 9 / Kotlin 2.4 / AGP 9.3).
 - Tindakan: tutup #21/#2/#6/#5/#3 dengan komentar alasan (reversible; migrasi mayor dikerjakan terpisah). PR terbuka kini 0.
+
+## Sesi #16 — 2026-10-15 05:05 UTC — selesai
+- Permintaan: matikan Dependabot (hapus bot).
+- Perubahan (`0cf5225`, push master): hapus `.github/dependabot.yml` + entri CHANGELOG. Rebase dulu karena merge PR #24 masuk duluan.
+- Validasi: `check_repo.py` ✅, `git diff --check` bersih.
+- Status terakhir: Dependabot mati, tak ada PR otomatis lagi.
