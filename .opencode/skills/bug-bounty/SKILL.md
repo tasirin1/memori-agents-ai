@@ -51,6 +51,7 @@ Full pipeline: Recon -> Learn -> Hunt -> Validate -> Report. One skill for every
 15. **ONE-HOUR RULE** -- stuck on one target for an hour with no progress? SWITCH CONTEXT
 16. **TWO-EYE APPROACH** -- combine systematic testing (checklist) with anomaly detection (watch for unexpected behavior)
 17. **T-SHAPED KNOWLEDGE** -- go DEEP in one area and BROAD across everything else
+18. **NO LOCAL HEAVY PROCESSES** -- NEVER run an emulator (Android Emulator, Genymotion, etc.), NEVER install Android SDK / NDK / system images / platform-tools locally, NEVER build/compile apps locally. Mobile testing is STATIC ONLY (source, manifest, grep). If a tool is missing, ask the owner BEFORE installing -- lightweight single-binary tools only, never SDKs or emulators.
 
 > **For the full hunting methodology** — 5-phase non-linear workflow, developer psychology framework, session discipline, tool routing by phase, and Wide/Deep route selection — see **`skills/bb-methodology/SKILL.md`**.
 
@@ -188,7 +189,11 @@ Client -> CDN -> Load Balancer -> App Server -> Database
 | gf | Grep patterns (xss, sqli, ssrf, redirect) |
 | interactsh-client | OOB callbacks |
 
-## Tools to Install When Needed
+## Optional Tools (install ONLY with owner approval -- NEVER SDKs or emulators)
+
+> Ask the owner before installing anything. Allowed: small single-purpose tools
+> below. FORBIDDEN: Android SDK/NDK, system images, emulators, Docker images,
+> or any toolchain/build. When in doubt, use `grep`/`rg` instead.
 | Tool | Use | Install |
 |------|-----|---------|
 | arjun | Hidden parameter discovery | `pip3 install arjun` |
@@ -202,9 +207,9 @@ Client -> CDN -> Load Balancer -> App Server -> Database
 | sqlmap | SQL injection | `pip3 install sqlmap` |
 | subzy | Subdomain takeover | `go install github.com/LukaSikic/subzy@latest` |
 
-## Static Analysis (Semgrep Quick Audit)
+## Static Analysis (Semgrep Quick Audit -- only if semgrep is already installed, else use `grep` patterns below)
 ```bash
-# Install: pip3 install semgrep
+# Do NOT install semgrep without owner approval. Prefer grep when it's missing.
 
 # Broad security audit
 semgrep --config=p/security-audit ./
@@ -780,13 +785,14 @@ SMUGGLED
 ```
 Frontend reads Content-Length: 13 -> sends all. Backend reads Transfer-Encoding -> sees chunk "0" = end -> "SMUGGLED" left in buffer -> next user's request poisoned.
 
-## Android / Mobile Hunting
-- [ ] Certificate pinning bypass (Frida/objection)
-- [ ] Exported activities/receivers (AndroidManifest.xml)
-- [ ] Deep link injection
-- [ ] Shared preferences / SQLite in cleartext
-- [ ] WebView JavaScript bridge
-- [ ] Mobile API often uses older/different API version than web
+## Android / Mobile Hunting (STATIC ONLY -- no emulator, no Frida, no runtime instrumentation)
+
+- [ ] Exported activities/receivers/services (AndroidManifest.xml)
+- [ ] Deep link injection (intent filters + URI parsing in source)
+- [ ] Shared preferences / SQLite in cleartext (grep `MODE_PRIVATE`, hardcoded paths)
+- [ ] WebView JavaScript bridge (`addJavascriptInterface`, `setJavaScriptEnabled`)
+- [ ] Hardcoded secrets/keys in code or resources (grep + SecretFinder on APK strings)
+- [ ] Mobile API often uses older/different API version than web (compare endpoints)
 
 ## CI/CD Pipeline
 - [ ] GitHub Actions: `pull_request_target` with checkout of PR code
