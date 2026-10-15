@@ -131,3 +131,9 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Perubahan (`269737e`, push master + tag `v2.1.0`): `versionName` manual `"2.1.0"` (`versionCode` tetap otomatis); build trigger tag `v*`; publish hanya saat tag (file `netradar-vX.Y.Z.apk`, upload `--clobber`, tanpa hapus-buat-ulang); guard repo cek semantic `X.Y.Z`; AGENTS (aturan 4, cara rilis, tabel keputusan) + README + CHANGELOG `[Unreleased]` selaras.
 - Validasi: YAML valid, `check_repo.py` + `--readme` ✅, `git diff --check` bersih, tanpa SDK (build + test milik CI).
 - Status terakhir: `v2.1.0` di-tag, menunggu hasil CI (build + rilis otomatis).
+
+## Sesi #14 — 2026-10-15 04:20 UTC — selesai
+- Permintaan: atasi notices migrasi `ubuntu-latest` → Ubuntu 26 (2026-10-19).
+- Perubahan (`fdd1330`, push master): pin `runs-on: ubuntu-24.04` di 5 workflow (build ×2 job, codeql, docs, labeler, stale) + entri CHANGELOG (wajib guard).
+- Validasi: YAML valid semua, `check_repo.py` ✅, `git diff --check` bersih, tanpa SDK.
+- Status terakhir: menunggu hasil CI.
