@@ -120,3 +120,8 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Diterima by-design (didokumentasikan): router-generik-null (presisi), pool CallerRuns, debug-log, drawable-night, directBootAware, mask-exact, pairing-eager, animasi dashboard (indikator live), progress-retry/testimasi.
 - Validasi: brace/paren 0/0 (12 file), `scripts/check_repo.py` ✅, `git diff --check` bersih, tanpa SDK (kompilasi + unit test milik CI).
 - Status terakhir: commit `8ade623` di `master`, menunggu hasil CI (build + unit test + lint).
+
+## Sesi #12 — 2026-10-15 04:03 UTC — selesai
+- Permintaan: build gagal pasca-sesi #11.
+- Akar via CI log: smart-cast Kotlin jebol di lambda `.use` (var luar); diperbaiki jadi `val` lokal (commit `7347ba1`); guard CHANGELOG menuntut entri (commit `58c0deb` docs, tak picu build); bukti hijau via `workflow_dispatch` run `38678919022` success (kompilasi + unit test + lint + R8).
+- Pelajaran: `.use {}` + smart-cast var luar = pola terlarang; guard changelog berlaku tiap push kode.
