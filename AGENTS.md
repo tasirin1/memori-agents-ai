@@ -22,6 +22,7 @@ Identitas agen: `SOUL.md`. Indeks status: `README.md`.
 - `netradar.md` — repo `tasirin1/netradar`, branch `master` (bukan main).
 
 Arsip dingin: `archive/*-arsip.md`. Skill bug-bounty: `.opencode/skills/bug-bounty/SKILL.md` (load via skill tool bila perlu, tidak auto-load).
+Pindah device baru: lihat `BOOTSTRAP.md` (clone sekali + 1 blok tempel per repo app).
 
 ## Batas ukuran
 
