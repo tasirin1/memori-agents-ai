@@ -339,3 +339,11 @@
 - Validasi: brace/paren 0/0, dupe-fungsi nihil, LOLOS, exit 0, diff bersih + dikaji penuh, tanpa Gradle lokal.
 - Rilis: commit `6dd2e01` + bump `versionCode` 267/`1.6.240` (commit `b767412`) + tag `v1.6.240`, push main + tag.
 - Status terakhir: `v1.6.240` rilis, menunggu hasil CI. Sisa audit #191: 6 Sedang antre.
+
+## Sesi #197 (2026-10-15 13:40 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (restart-terkunci, tertua antre audit #191).
+- Perbaikan (`BootRestartWorker.kt:106-109`, 1 baris): cabang `!isStorageEncrypted` kini `return if (runAttemptCount < 5) Result.retry() else Result.success()` — cermin pola auth-blocked 2 baris di atasnya. Pengingat tapping tetap terkendali (throttle 3 jam statis + persisten).
+- Adjudikasi: jalur utama unlock tetap receiver `USER_UNLOCKED` (tak diubah); fresh-install keluar lebih dini di gate consent (tak kena retry sia-sia); perangkat-terkunci-lama kini coba lagi berbatas, bukan diam sampai watchdog 15 mnt.
+- Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `b2eb5c2` + bump `versionCode` 268/`1.6.241` (commit `8b087d1`) + tag `v1.6.241`, push main + tag.
+- Status terakhir: `v1.6.241` rilis, menunggu hasil CI. Sisa audit #191: 5 Sedang antre.
