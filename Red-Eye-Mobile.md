@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:38 UTC = sesi #186)
+## Status terakhir (2026-10-15 10:42 UTC = sesi #187)
 
-- `v1.6.231` rilis (commit `d36c962`, `versionCode` 258): recorder-teardown + rebind terjadwal. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.232` rilis (commit `c19c42b`, `versionCode` 259): rentang-tegas 5 perintah + cap digit history. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.231`.
-- Sisa audit segar: 6 Sedang (history-cap, coerce, throttle, overlap-cancel, +2) + 9 Rendah — 1 batch per sesi.
+- Pantau CI `v1.6.232`.
+- Sisa audit segar: 4 Sedang + 9 Rendah — 1 batch per sesi.
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
@@ -175,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #187 (2026-10-15 10:42 UTC) — selesai
+- Permintaan: "lanjut" = batch input-perintah Sedang.
+- Perbaikan (2): 5 perintah angka rentang-tegas (`!in` + usage, gaya `/record`; negatif/over tak lagi dijepit diam-diam); `/history` 7–20 digit (teks usage ikut jujur via skrip `chr(92)` agar escape utuh).
+- Adjudikasi: throttle-perintah gugur (owner-only + kadensi siklus + busy-flag; spam = tangan owner sendiri).
+- Validasi: brace/paren 0/0, smart-cast rantai if/else utuh, LOLOS, exit 0, tanpa Gradle lokal.
+- Rilis: commit `3e56119` + bump `versionCode` 259/`1.6.232` (commit `c19c42b`) + tag `v1.6.232`, push main + tag.
+- Status terakhir: `v1.6.232` rilis, menunggu hasil CI.
 
 ## Sesi #186 (2026-10-15 10:38 UTC) — selesai
 - Permintaan: "lanjut" = batch lifecycle Sedang.
