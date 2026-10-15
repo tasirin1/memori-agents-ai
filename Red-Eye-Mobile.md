@@ -314,3 +314,12 @@
 - Validasi: brace/paren 0/0, secret nihil di worker, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `47eba0b` + bump `versionCode` 264/`1.6.237` (commit `e393e1f`) + tag `v1.6.237`, push main + tag.
 - Status terakhir: `v1.6.237` rilis, menunggu hasil CI. Sisa audit #191: 2 Tinggi + 6 Sedang antre.
+
+## Sesi #194 (2026-10-15 13:10 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (temuan tertua audit #191).
+- Perbaikan: `MessageQueue.kt:406-413` — blob `queued_messages` rusak kini `remove(KEY_QUEUE)` + `commit()` sinkron di jalur `catch` (semula dipertahankan selamanya dengan harapan pulih yang tak pernah ada pembacanya). Alur sesudahnya tak berubah (cache kosong + return kosong). `commit()` sinkron agar racun benar hilang walau proses mati sedetik kemudian; konsisten dengan `clearQueue`/`persistDropCountsLocked` yang memang `commit()`.
+- Adjudikasi: D6-sesi-#190 "korup batas forensik tanpa patch" ditinjau ulang — data rusak memang tak bisa pulih (tetap tak dipulihkan), tapi putaran racun + bocor storage adalah bug operasional nyata; `Log.w` lestari sebagai jejak.
+- Batas jujur: hitungan drop korup tak masuk counter (tak ada infrastruktur counter korup; tambah counter = scope lain).
+- Validasi: brace/paren 0/0, secret nihil, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `c834bdd` + bump `versionCode` 265/`1.6.238` (commit `dc27776`) + tag `v1.6.238`, push main + tag.
+- Status terakhir: `v1.6.238` rilis, menunggu hasil CI. Sisa audit #191: 1 Tinggi + 6 Sedang antre.
