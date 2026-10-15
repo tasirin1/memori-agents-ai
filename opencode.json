@@ -1,0 +1,5 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["SOUL.md", "README.md"],
+  "skills": ["./.opencode/skills"]
+}
