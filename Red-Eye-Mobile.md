@@ -1260,3 +1260,11 @@
 - Verifikasi: CI `v1.6.211` HIJAU (main + tag, confirmed via `gh run list`).
 - Rilis: commit `12441ea` + bump `versionCode` 238/`1.6.211` + tag `v1.6.211`; GitHub Release terbit oleh workflow.
 - Status terakhir: `v1.6.211` HIJAU, APK tersedia di Releases.
+
+## Sesi #166 (2026-10-15 00:43 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki.
+- Audit (2 subagen + verifikasi mandiri): 16 temuan (SMS stage/confirm, boot ring/HTC/notice, setup test/clear/guard, README basi). Gugur/by-design: OTP-miss, multipart-dup, pairing, manifest, STORED_MASK, smsJob-cancel, boot-dup (dijaga), OTP-flood, owner-terdepak (secure default).
+- Perbaikan (11): HTC QUICKBOOT manifest+receiver+bootClear; ring-restore bersyarat sukses; `cancelBootRestart` + panggil di Clear/Stop; `patrolInterval` reset; notice boot gate konfigurasi; stage banding teks; pending tahan jam mundur; Test tanpa validasi interval; guard `finally`; README APK.
+- Validasi: brace/paren 0/0 (4 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `96c7f3f` + bump `versionCode` 239/`1.6.212` + tag `v1.6.212`, push main + tag.
+- Status terakhir: `v1.6.212` rilis, menunggu hasil CI.
