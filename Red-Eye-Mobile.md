@@ -1308,3 +1308,11 @@
 - Validasi: brace/paren 0/0 (3 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `b99b986` + bump `versionCode` 244/`1.6.217` + tag `v1.6.217`, push main + tag.
 - Status terakhir: `v1.6.217` rilis, menunggu hasil CI.
+
+## Sesi #172 (2026-10-15 01:47 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki.
+- Audit (2 subagen + verifikasi mandiri): 20 klaim, 12 di-fix (pause-manual, resume-timpa, izin-baca ×3, stale-spam, sender-kosong, tombol-stop, alias-help, sekolah-teks, jejak-prune, jemput-gate, digest-tekan). Diterima (8): HOL-sekuensial (reliabilitas>latensi), flush-spam (CAS guard), premium-ID (tanpa daftar otoritatif), ring/record UX, edit-noop, channel-anon, pairing-notice, stop-menu (SUDAH ada mapping, kini tombol), callback-asing (SUDAH dijawab), help-lengkap (kecuali alias), HTML/null aman, jam-label, jemput-sekali (by-design).
+- Perbaikan (12): reply jujur, resume awet, 3 gate izin, menu-owner-only, answer-sepi, tombol Stop, alias di help + /start di menu, teks 08–15, prune 24 jam, fence-nyala, manual tak tekan.
+- Validasi: brace/paren 0/0, XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `c6c5eba` + bump `versionCode` 245/`1.6.218` + tag `v1.6.218`, push main + tag.
+- Status terakhir: `v1.6.218` rilis, menunggu hasil CI.
