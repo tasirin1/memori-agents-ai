@@ -331,3 +331,11 @@
 - Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `80aa621` + bump `versionCode` 266/`1.6.239` (commit `346d55b`) + tag `v1.6.239`, push main + tag.
 - Status terakhir: `v1.6.239` rilis, menunggu hasil CI. Sisa audit #191: 6 Sedang (+ CrashReporter Tinggi-parsial) antre.
+
+## Sesi #196 (2026-10-15 13:30 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (CrashReporter, Tinggi-parsial audit #191).
+- Perbaikan (`CrashReporter.kt`, 1 file): (1) buang gate `saveInProgress` (crash kedua kini antre di `saveLock` lalu digabung, bukan dibuang); (2) helper baru `keepRemainder` (tunggal, cek-dupe nihil) dipakai 5 titik hapus/tulis: hapus hanya bila isi masih sama dengan yang dibaca, bila berubah tulis-gabung (isi baru + sisa tak terkirim) — hilang nol, ganda terbatas.
+- Batas jujur: jalur `/log` (`pendingReport`+`clearPending`) masih tanpa-claim (risiko kecil, manual-diagnostik; scope lain bila diminta).
+- Validasi: brace/paren 0/0, dupe-fungsi nihil, LOLOS, exit 0, diff bersih + dikaji penuh, tanpa Gradle lokal.
+- Rilis: commit `6dd2e01` + bump `versionCode` 267/`1.6.240` (commit `b767412`) + tag `v1.6.240`, push main + tag.
+- Status terakhir: `v1.6.240` rilis, menunggu hasil CI. Sisa audit #191: 6 Sedang antre.
