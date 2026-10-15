@@ -306,3 +306,11 @@
 - Validasi: brace/paren 0/0, secret hanya nama-key, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `6797410` + bump `versionCode` 263/`1.6.236` (commit `65833b5`) + tag `v1.6.236`, push main + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.236` rilis, menunggu hasil CI. Sisa audit #191: 3 Tinggi + 6 Sedang antre batch berikut.
+
+## Sesi #193 (2026-10-15 13:00 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (temuan tertua audit #191).
+- Perbaikan: `SendMessageWorker.kt:458` — `catch (CancellationException)` saat `delay(500)` antar-potongan kini `throw e` (semula `return Sent`); pembukuan lestari (sisa diantre + orig dibuang + jadwal kirim) lalu batal jalan terus ke `sendMessage`/`doWorkInternal`/`doWork` yang semuanya teruskan batal dengan benar. Menyelaraskan dengan semua titik batal lain (sudah `throw e`: `:30`, `:150`, `:373`, `:417`, `:622`).
+- Adjudikasi: duplikat via `sentIds` gugur (remove idempoten); mekanisme nyata = tumpang-tindih run (lama telan batal + lanjut kirim saat run pengganti jalan) + sisa di ekor. Rethrow hentikan run lama; ulir-kirim ≤4 pesan pola at-least-once yang sudah diterima codebase.
+- Validasi: brace/paren 0/0, secret nihil di worker, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `47eba0b` + bump `versionCode` 264/`1.6.237` (commit `e393e1f`) + tag `v1.6.237`, push main + tag.
+- Status terakhir: `v1.6.237` rilis, menunggu hasil CI. Sisa audit #191: 2 Tinggi + 6 Sedang antre.
