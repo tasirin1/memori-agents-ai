@@ -1316,3 +1316,11 @@
 - Validasi: brace/paren 0/0, XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `c6c5eba` + bump `versionCode` 245/`1.6.218` + tag `v1.6.218`, push main + tag.
 - Status terakhir: `v1.6.218` rilis, menunggu hasil CI.
+
+## Sesi #173 (2026-10-15 01:57 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki.
+- Audit (2 subagen + verifikasi mandiri): temuan berat — .sent mati suri (SENT sudah hapus duluan) sehingga prune tetap makan unsent BENAR; FGS-tanpa-tipe mati-diam BENAR; reset-kurang BENAR; idle-auth BENAR. Gugur/by-design (14): pre-claim, replay-0, OTP-ganda, exact, pairing, smsJob-CAS, pool, debug-log, mask, smsconfirm-parsial, trail, sparkline, counter-drift, offline-save, spam-throttle, overflow-cap, read-cap, fuzzy-index, backoff-bersama (Telegram per-bot), initial-race (guard), stale-callback (notify preserved), fallback-remove (settled), mp4-sweep (kini nol-byte), auth-skew (konservatif), watch-7 (heuristik), premium-ID, smsJob-finally, Background-diam, revive-pause (state awet).
+- Perbaikan (4): drain-loop 3 batch ×3 flush + buang rename mati; FGS-catch jadwalkan boot-restart; +10 kunci reset identitas; idle skip saat auth-blocked.
+- Validasi: brace/paren 0/0, XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `41b0ed2` + bump `versionCode` 246/`1.6.219` + tag `v1.6.219`, push main + tag.
+- Status terakhir: `v1.6.219` rilis, menunggu hasil CI.
