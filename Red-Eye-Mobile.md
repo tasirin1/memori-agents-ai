@@ -7,14 +7,15 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:23 UTC = sesi #184)
+## Status terakhir (2026-10-15 10:31 UTC = sesi #185)
 
-- `v1.6.229` rilis (commit `d5c9863`, `versionCode` 256): pairing (rotasi 24 jam + lockout global) + poll lolos block chat-400. `v1.6.228` (sesi #183: rantai volatil jujur) tercatat susulan — statusnya tercecer kemarin. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.230` rilis (commit `73d69aa`, `versionCode` 257): message-path (400 jujur, parsing `\s+`, edit diproses, skew ditahan, admin refresh). 1 peringatan verifier = false-positive (`split` pakai Regex prekompil). Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.228` + `v1.6.229`.
-- Sisa audit segar: 12 Sedang + 9 Rendah + 2 refine (smsconfirm tahan-skew, AdminReceiver refresh) — 1 batch per sesi.
+- Pantau CI `v1.6.230`.
+- Sisa audit segar: 8 Sedang + 9 Rendah — 1 batch per sesi.
+- Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #185 (2026-10-15 10:31 UTC) — selesai
+- Permintaan: "lanjut" = refine + message-path Sedang.
+- Perbaikan (5): 400-permanen 3 cabang tak antre (log jujur; worker memang buang `Rejected`); tahap-1 + `/sms` splitter `\s+`; edit pesan diproses (edit segar jalan, edit basi ditolak umur — bukan diam); skew tak wipe; `AdminReceiver` refresh dulu.
+- Adjudikasi: chunked-`Sent` by-design (removal original bergantung padanya; duplikat justru bila diganti `Failed`).
+- Validasi: brace/paren 0/0 (2 file), diff bersih, LOLOS + 1 peringatan false-positive, exit 0, tanpa Gradle lokal.
+- Rilis: commit `341aed8` + bump `versionCode` 257/`1.6.230` (commit `73d69aa`) + tag `v1.6.230`, push main + tag.
+- Status terakhir: `v1.6.230` rilis, menunggu hasil CI.
 
 ## Sesi #184 (2026-10-15 10:23 UTC) — selesai
 - Permintaan: "lanjut" = 2 Tinggi tersisa (pairing + auth-block, area auth).
