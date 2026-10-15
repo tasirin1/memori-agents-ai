@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:47 UTC = sesi #188)
+## Status terakhir (2026-10-15 11:04 UTC = sesi #189)
 
-- `v1.6.233` rilis (commit `dd829b8`, `versionCode` 260): cancel job lama sebelum overwrite ring/record. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.234` rilis (commit `96fdeac`, `versionCode` 261): replay purba buang-diam. CI `v1.6.232` + `v1.6.233` HIJAU (cek manual). Audit segar TUNTAS. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.233`.
-- Sisa audit segar: 9 Rendah (mayoritas catatan/by-design; sapu sekali bila perlu).
+- Pantau CI `v1.6.234`.
+- Sisa Rendah = catatan by-design terarsip di laporan sesi (unescape, watchdog, reminder, confirm-hilang, forceReset-stres, rowSpan).
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
@@ -175,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #189 (2026-10-15 11:04 UTC) — selesai
+- Permintaan: "lanjut" = sisa Rendah.
+- Perbaikan (1): `COMMAND_SILENT_AGE_SEC=3600` — perintah >1 jam buang diam (replay resync tak spam); 15 mnt–1 jam tetap berbalas; segar utuh.
+- Sisa Rendah ditutup sebagai catatan (tak ada patch): unescape-tradeoff, watchdog-15mnt, reminder-auxiliary, confirm-inflight, forceReset-butuh-stres-device, rowSpan-visual.
+- Validasi: brace/paren 0/0, konst dipakai 2x, LOLOS, exit 0, tanpa Gradle lokal. CI manual: `v1.6.232` + `v1.6.233` success.
+- Rilis: commit `b259195` + bump `versionCode` 261/`1.6.234` (commit `96fdeac`) + tag `v1.6.234`, push main + tag.
+- Status terakhir: audit segar TUNTAS (`v1.6.228`–`v1.6.234`, 7 rilis); `v1.6.234` menunggu CI.
 
 ## Sesi #188 (2026-10-15 10:47 UTC) — selesai
 - Permintaan: "lanjut" = sisa Sedang job-lifecycle.
