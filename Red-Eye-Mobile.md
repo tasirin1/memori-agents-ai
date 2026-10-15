@@ -175,6 +175,13 @@
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
 
+## Sesi #183 (2026-10-15 10:12 UTC) — selesai
+- Permintaan: "lanjut" = T1+T2 audit segar (rantai volatil, 1 area).
+- Perbaikan (2): `saveTestIdentity`/`saveCredentials` return `false` bila masih volatil seusai `upgradeToPersistent()` (toast gagal existing, revive tak jalan palsu); `updateStatus` pakai `prefs.isConfigured()` (tombol Start ikut jujur; pair-code tak dipajang sia-sia).
+- Validasi: brace/paren 0/0 (2 file), secret bersih, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `d5aa802` + bump `versionCode` 255/`1.6.228` (commit `e10a9a6`) + tag `v1.6.228`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.228` rilis, menunggu hasil CI.
+
 ## Sesi #182 (2026-10-15 10:05 UTC) — selesai
 - Permintaan: audit menyeluruh segar (baca-saja, tanpa patch).
 - Metode: 3 subagen (regresi patch kemarin / alur perintah / lifecycle) + verifikasi mandiri 16 titik via `sed`/`rg` langsung ke kode. CI dicek: `v1.6.225–227` success, tanpa merah.
