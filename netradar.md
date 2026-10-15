@@ -112,3 +112,11 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Aturan repo ditaati: tanpa bump versi (versionName tetap "2.0", versionCode otomatis CI), tanpa build lokal.
 - Validasi: YAML valid, `scripts/check_repo.py` + `--readme` ✅, `git diff --check` bersih.
 - Commit `71fb340`, push `origin master` sukses (branch repo ini `master`, bukan `main`).
+
+## Sesi #11 — 2026-10-15 03:40 UTC — selesai
+- Permintaan: audit menyeluruh semua area (tanpa patch).
+- Audit (2 subagen + verifikasi mandiri): 16 temuan (1 Tinggi: FGS tanpa tipe API 34+; 6 Sedang: reader tak-ditutup ×3, UrlPath tanpa semaphore, progress tanpa throttle, pause antar-subnet, router-generik-null, store non-atomik; 9 Rendah).
+- Perbaikan 11 area, commit `8ade623` (`fix: ...`, push `origin master`): FGS `dataSync` eksplisit; `.use` semua reader; semaphore UrlPath (+param speed default); throttle progress 150 mdtk; `checkPause()` per chunk; join job lama sebelum launch baru; mDNS evict entri hilang; `stripPort` IPv6 + unit test `TracerouteTargetTest`; history tmp+rename; rationale toast notif.
+- Diterima by-design (didokumentasikan): router-generik-null (presisi), pool CallerRuns, debug-log, drawable-night, directBootAware, mask-exact, pairing-eager, animasi dashboard (indikator live), progress-retry/testimasi.
+- Validasi: brace/paren 0/0 (12 file), `scripts/check_repo.py` ✅, `git diff --check` bersih, tanpa SDK (kompilasi + unit test milik CI).
+- Status terakhir: commit `8ade623` di `master`, menunggu hasil CI (build + unit test + lint).
