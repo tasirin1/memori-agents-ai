@@ -36,9 +36,15 @@ for f in FILES:
         # file jilid-based (download-manager): cek stempel di heading
         heads = re.findall(r"^## .+", txt, re.M)
         print(f"[OK] {f}: {len(heads)} seksi (mode jilid, tanpa nomor)")
-    rel = RELATIF.findall(txt)
-    if rel:
-        print(f"[WARN] {f}: kata relatif tanpa stempel? {sorted(set(r.lower() for r in rel))[:5]} (pastikan tiap kemunculan ditemani stempel UTC)")
+    hits = set()
+    for line in txt.splitlines():
+        s = line.strip()
+        if s.startswith(">") or "DILARANG" in s:
+            continue  # kutipan / definisi aturan, bukan pemakaian waktu relatif
+        s = re.sub(r"`[^`]*`", "", s)
+        hits.update(r.lower() for r in RELATIF.findall(s))
+    if hits:
+        print(f"[WARN] {f}: kata relatif tanpa stempel? {sorted(hits)[:5]} (pastikan tiap kemunculan ditemani stempel UTC)")
     if len(txt.splitlines()) > 250 and f != "netradar.md":
         print(f"[WARN] {f}: {len(txt.splitlines())} baris > 250, pertimbangkan arsip")
 print("LOLOS" if ok else "GAGAL")

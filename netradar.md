@@ -5,13 +5,13 @@
 ## Konvensi waktu (wajib —(generator kebingungan 2026-10-03)
 
 Semua sesi repo ini pernah terjadi dalam SATU hari (2026-10-03, 11:00–13:35 UTC),
-tapi dulu dilabeli "pagi/sore/malam/kemarin" sehingga agen mengira aksi
-barusan adalah aksi kemarin. Aturan perbaikan:
+tapi dulu dilabeli `"pagi/sore/malam/kemarin"` sehingga agen mengira aksi
+`barusan` adalah aksi `kemarin`. Aturan perbaikan:
 
 - Setiap entri memakai stempel absolut `YYYY-MM-DD HH:MM UTC` (zona UTC; ambil
   via `date -u`, JANGAN pakai jam lokal mesin).
 - DILARANG kata waktu relatif tanpa stempel absolut: kemarin, tadi, barusan,
-  pagi/sore/malam, "sesi sebelumnya", "yang baru saja".
+  pagi/sore/malam, `sesi sebelumnya`, `yang baru saja`.
 - Sesi diberi nomor urut (#1, #2, …); tiap sesi berstatus jelas
   (`selesai` / `dilanjutkan sesi #N`). Entri lama yang statusnya berubah
   (mis. "belum push" lalu sudah push) wajib ditandai, jangan dibiarkan menggantung.
@@ -88,7 +88,7 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 
 ### Sesi #7 — 2026-10-03 13:35 UTC — selesai
 - Perbaiki SEMUA file memori: tulis ulang `netradar.md` ini dengan stempel
-  absolut + nomor sesi (masalah: label relatif "pagi/sore/malam/kemarin" untuk
+  absolut + nomor sesi (masalah: label relatif `"pagi/sore/malam/kemarin"` untuk
   kejadian satu hari yang sama); tambah aturan anti-bingung waktu di `SOUL.md`.
 
 ### Sesi #8 — 2026-10-03 13:36 UTC — selesai
