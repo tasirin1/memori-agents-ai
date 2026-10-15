@@ -125,3 +125,9 @@ barusan adalah aksi kemarin. Aturan perbaikan:
 - Permintaan: build gagal pasca-sesi #11.
 - Akar via CI log: smart-cast Kotlin jebol di lambda `.use` (var luar); diperbaiki jadi `val` lokal (commit `7347ba1`); guard CHANGELOG menuntut entri (commit `58c0deb` docs, tak picu build); bukti hijau via `workflow_dispatch` run `38678919022` success (kompilasi + unit test + lint + R8).
 - Pelajaran: `.use {}` + smart-cast var luar = pola terlarang; guard changelog berlaku tiap push kode.
+
+## Sesi #13 — 2026-10-15 04:11 UTC — selesai
+- Permintaan: versi jangan mentok "2.0" + benahi pengelolaan repo dan rilis. Pilih: Semver + tag rilis.
+- Perubahan (`269737e`, push master + tag `v2.1.0`): `versionName` manual `"2.1.0"` (`versionCode` tetap otomatis); build trigger tag `v*`; publish hanya saat tag (file `netradar-vX.Y.Z.apk`, upload `--clobber`, tanpa hapus-buat-ulang); guard repo cek semantic `X.Y.Z`; AGENTS (aturan 4, cara rilis, tabel keputusan) + README + CHANGELOG `[Unreleased]` selaras.
+- Validasi: YAML valid, `check_repo.py` + `--readme` ✅, `git diff --check` bersih, tanpa SDK (build + test milik CI).
+- Status terakhir: `v2.1.0` di-tag, menunggu hasil CI (build + rilis otomatis).
