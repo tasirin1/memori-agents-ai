@@ -1340,3 +1340,10 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #176 (2026-10-15 02:57 UTC) — selesai
+- Permintaan: sederhanakan workflows biar tak jalan beberapa.
+- Keputusan: verifikasi-path digabung jadi job pertama `build.yml` (`needs`), berkas lama dihapus. Double build main+tag dipertahankan (verifikasi vs rilis).
+- Validasi: YAML valid (pyyaml), LOLOS, exit 0, diff bersih.
+- Rilis: commit `806cf80` + bump `versionCode` 249/`1.6.222` + tag `v1.6.222`, push main + tag.
+- Status terakhir: `v1.6.222` rilis, menunggu hasil CI (struktur workflow baru).
