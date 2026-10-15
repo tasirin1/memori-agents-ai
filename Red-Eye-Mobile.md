@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 09:52 UTC = sesi #181)
+## Status terakhir (2026-10-15 10:05 UTC = sesi #182)
 
-- `v1.6.227` rilis (commit `95657e9`, `versionCode` 254): batch Rendah (grid kalkulator + presisi docs; exported GUGUR). Audit 40 klaim TUNTAS. Push main + tag sukses, menunggu hasil CI.
+- Audit segar #2 (36 klaim, 3 subagen + verifikasi mandiri penuh): 4 Tinggi, 12 Sedang, 9 Rendah terverifikasi; 11 gugur/by-design berbukti. Mode baca-saja — tanpa patch, tanpa rilis. CI hijau semua (`v1.6.225–227` success).
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.227`.
-- Utang docs kecil: link-ref versi di `CHANGELOG.md` (Keep a Changelog penuh) — opsional, tak fungsional.
+- Batch fix berikutnya (tertua dulu): 4 Tinggi — (1) save-volatil toast palsu, (2) status-vs-toggle beda definisi, (3) pairing tanpa lockout/ekspirasi, (4) 400-chat ikut auth-block 30 mnt.
+- Refine patch sendiri: `/smsconfirm` skew jangan wipe (tahan saja); `AdminReceiver` + `refreshInstance()`.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +174,13 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #182 (2026-10-15 10:05 UTC) — selesai
+- Permintaan: audit menyeluruh segar (baca-saja, tanpa patch).
+- Metode: 3 subagen (regresi patch kemarin / alur perintah / lifecycle) + verifikasi mandiri 16 titik via `sed`/`rg` langsung ke kode. CI dicek: `v1.6.225–227` success, tanpa merah.
+- Hasil: 4 Tinggi + 12 Sedang + 9 Rendah terverifikasi; 11 gugur (TextChunk hati-hati ternyata; double-start serial-main; listener dedup set/map; watchdog periodik 15 mnt; stop() one-shot benar; dll).
+- Temuan terberat = regresi patch sendiri: gate `isConfigured` volatile bikin rantai UX palsu (toast saved + status OK vs toggle/revive tolak diam-diam).
+- Status terakhir: laporan diserahkan, menunggu perintah batch fix.
 
 ## Sesi #181 (2026-10-15 09:52 UTC) — selesai
 - Permintaan: "lanjut" = batch Rendah (4 item, terakhir dari audit 40 klaim).
