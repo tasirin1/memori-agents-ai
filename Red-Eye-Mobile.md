@@ -323,3 +323,11 @@
 - Validasi: brace/paren 0/0, secret nihil, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `c834bdd` + bump `versionCode` 265/`1.6.238` (commit `dc27776`) + tag `v1.6.238`, push main + tag.
 - Status terakhir: `v1.6.238` rilis, menunggu hasil CI. Sisa audit #191: 1 Tinggi + 6 Sedang antre.
+
+## Sesi #195 (2026-10-15 13:20 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (temuan Tinggi terakhir audit #191).
+- Perbaikan: `SendMessageWorker.kt:33` — `catch (_: Throwable)` dipersempit jadi `catch (e: Exception)`; jaring 60 dtk + `success()` kini hanya untuk exception transien, `Error` fatal (OOM/`StackOverflow`/linkage) diteruskan ke WorkManager (backoff eksponensial 10 dtk terkonfigurasi + terlihat di diagnostik, tak disamarkan sukses). `finally onSendRunFinished()` lestari untuk semua jalur. Alternatif ditolak: bebankan semua ID antre ke budget 20x menghukum pesan tak bersalah (drop senyap).
+- Batas jujur: loop 60 dtk untuk `Exception` dipertahankan sengaja (ketersediaan; tiap iterasi murah, sembuh-sendiri saat update); yang dibuang hanya penyamaran racun fatal.
+- Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `80aa621` + bump `versionCode` 266/`1.6.239` (commit `346d55b`) + tag `v1.6.239`, push main + tag.
+- Status terakhir: `v1.6.239` rilis, menunggu hasil CI. Sisa audit #191: 6 Sedang (+ CrashReporter Tinggi-parsial) antre.
