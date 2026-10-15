@@ -7,13 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 02:57 UTC = sesi #176)
+## Status terakhir (2026-10-15 09:32 UTC = sesi #177)
 
-- `v1.6.222` rilis (commit `806cf80`, `versionCode` 249): `verifikasi-path` digabung jadi job pertama `build.yml`, berkas lama dihapus. Push main + tag sukses, menunggu hasil CI (struktur workflow baru).
+- `v1.6.223` rilis (commit `dd1c1fa`, `versionCode` 250): batch Kritikal audit — `isConfigured` syarat terenkripsi + hapus antrean `commit()` luar main-thread. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.222` (workflow gabungan baru).
+- Pantau CI `v1.6.223`.
+- Sisa audit 2026-10-15: batch Tinggi (7 item) + Sedang/Rendah — kerjakan 1 batch per sesi.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -173,6 +174,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #177 (2026-10-15 09:32 UTC) — selesai
+- Permintaan: audit menyeluruh lalu "perbaiki semua"; disepakati batch Kritikal dulu (1 area/sesi, cegah commit raksasa merah seperti v1.6.207/210/220).
+- Audit (3 subagen + verifikasi mandiri): 40 klaim, 20 terverifikasi FAKTA (2 Kritikal, 7 Tinggi, 7 Sedang, 4 Rendah). Koreksi jujur: klaim "removeMessages non-force" BASI (kode kini `force=true`); "batch-clear duplikat" GUGUR (`salvageBatch` aman); `gradlew` non-exec hanya artefak checkout lokal.
+- Perbaikan (2): `isConfigured` syarat `storageEncrypted` (volatil = terlihat belum tersimpan, monitoring tak jalan diam-diam); `persistLocked` force pakai `commit()` di luar main-thread (pola `flushSync`), duplikat pasca-crash menyempit.
+- Validasi: brace/paren 0/0 (2 file), secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `f04f1bb` + bump `versionCode` 250/`1.6.223` (commit `dd1c1fa`) + tag `v1.6.223`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.223` rilis, menunggu hasil CI.
 
 ## Sesi #176 (2026-10-15 02:57 UTC) — selesai
 - Permintaan: sederhanakan workflows biar tak jalan beberapa.
