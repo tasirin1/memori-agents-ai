@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 09:32 UTC = sesi #177)
+## Status terakhir (2026-10-15 09:40 UTC = sesi #178)
 
-- `v1.6.223` rilis (commit `dd1c1fa`, `versionCode` 250): batch Kritikal audit — `isConfigured` syarat terenkripsi + hapus antrean `commit()` luar main-thread. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.224` rilis (commit `a9ef9fd`, `versionCode` 251): batch Tinggi — default interval XML, kunci audio 4 titik, prompt notif, pindai tree di CI. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.223`.
-- Sisa audit 2026-10-15: batch Tinggi (7 item) + Sedang/Rendah — kerjakan 1 batch per sesi.
+- Pantau CI `v1.6.224`.
+- Sisa audit: 2 Tinggi tercecer (log-guard, consent-reuse — by-design sebagian, antre verifikasi device) + 7 Sedang + 4 Rendah — 1 batch per sesi.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +174,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #178 (2026-10-15 09:40 UTC) — selesai
+- Permintaan: "lanjut" = batch Tinggi audit.
+- Verifikasi dulu, patch kemudian: 3 dari 7 GUGUR dengan bukti — `projection.stop()` pola one-shot benar + gagal terlihat owner (pesan "grant lagi"); poller ganda tak pernah konkuren (`if (!isRunning)` + backoff 60/300 dtk sudah ada); `builder.sh` disentuh = langgar `AGENTS.md §3` (banner legacy sudah ada).
+- Perbaikan (4): XML buang `android:text="5"/"1"` (default CI tampil); audio CAS-dulu-cek-kemudian di `/ring` `/record` `/recordvideo` `/hilang` (via skrip python baris, skrip dibuang seusai; 1 revert insiden salah model tertangani); `toggleMonitoring` tawarkan `POST_NOTIFICATIONS` non-blokir; `cek-cepat.sh` cek-5 pindai tracked tree saat staged kosong (0 false positive di tree nyata).
+- Validasi: brace/paren 0/0 (2 file), XML OK, secret bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
+- Rilis: commit `2612f79` + bump `versionCode` 251/`1.6.224` (commit `a9ef9fd`) + tag `v1.6.224`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.224` rilis, menunggu hasil CI.
 
 ## Sesi #177 (2026-10-15 09:32 UTC) — selesai
 - Permintaan: audit menyeluruh lalu "perbaiki semua"; disepakati batch Kritikal dulu (1 area/sesi, cegah commit raksasa merah seperti v1.6.207/210/220).
