@@ -1268,3 +1268,11 @@
 - Validasi: brace/paren 0/0 (4 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `96c7f3f` + bump `versionCode` 239/`1.6.212` + tag `v1.6.212`, push main + tag.
 - Status terakhir: `v1.6.212` rilis, menunggu hasil CI.
+
+## Sesi #167 (2026-10-15 00:52 UTC) — selesai
+- Permintaan: audit menyeluruh (tanpa patch) lalu perbaiki.
+- Audit (2 subagen + verifikasi mandiri): counter double-inc BENAR (bug sendiri); boot-retry unbounded BENAR; callback jawab-ganda BENAR; replay-crash BENAR; 5xx-tanpa-backoff BENAR; squeeze-IO BENAR; watch-mentah BENAR; wake-400 BENAR; reset-kurang BENAR. Gugur/by-design: pairing, username-offline, admin-row (ada), ringAge (ada), STORED_MASK, smsJob-cancel, OTP-flood, owner-terdepak, exact-mubazir (murah), format-ketat, smsconfirm-parsial, trail-cap (ada), sparkline (aman), short (aman).
+- Perbaikan (9): counter decrement-gagal; retry cap 5; dedup-dulu; pre-claim mutating; backoff 5xx 60dtk; squeeze background; escape hit; wake reset 3x; reset +15 kunci identitas.
+- Validasi: brace/paren 0/0 (5 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `84cd9ff` + bump `versionCode` 240/`1.6.213` + tag `v1.6.213`, push main + tag.
+- Status terakhir: `v1.6.213` rilis, menunggu hasil CI.
