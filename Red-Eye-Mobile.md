@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 11:04 UTC = sesi #189)
+## Status terakhir (2026-10-15 11:23 UTC = sesi #190)
 
-- `v1.6.234` rilis (commit `96fdeac`, `versionCode` 261): replay purba buang-diam. CI `v1.6.232` + `v1.6.233` HIJAU (cek manual). Audit segar TUNTAS. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.235` rilis (commit `922b1ae`, `versionCode` 262): media+persist (413, generasi shot, hash, cap audio, race). Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.234`.
-- Sisa Rendah = catatan by-design terarsip di laporan sesi (unescape, watchdog, reminder, confirm-hilang, forceReset-stres, rowSpan).
+- Pantau CI `v1.6.235`.
+- Sisa audit #3: boot/watchdog (mati-volatil, FGS-stale, taskremoved, doze, wake-loss, executor, directboot, replace-notice, markHandled, watchdog-yatim, revive) + data (volatile-restore, korup, credstate-wipe, upgrade-clobber) + media (cross-guard, orphan) — verifikasi mayoritas sudah, putuskan batch.
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
@@ -175,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #190 (2026-10-15 11:23 UTC) — selesai
+- Permintaan: "lanjut" = batch media+persist (audit #3).
+- Perbaikan (7): 413→DROPPED 3 pipa (skrip sisip else-if, indent lestari); watchdog-shot increment generasi; hash hanya saat SENT; cap audio selaras foto; reset kursor Sync; wake-lock konsisten; `clearQueue` buang `flushSync` ekor (tulis-lomba).
+- Adjudikasi: prune-tua (mekanisme terbalik: dropLast = tertua; hanya skew), D8-counter (tak ada overwrite di tryRestore — klaim gugur), D7-filterFresh (bias konservatif disengaja), D6-korup (batas forensik, tanpa patch).
+- Validasi: brace/paren 0/0 (4 file), dupe nihil, LOLOS, exit 0, tanpa Gradle lokal.
+- Rilis: commit `4390dfd` + bump `versionCode` 262/`1.6.235` (commit `922b1ae`) + tag `v1.6.235`, push main + tag.
+- Status terakhir: `v1.6.235` rilis, menunggu hasil CI.
 
 ## Sesi #189 (2026-10-15 11:04 UTC) — selesai
 - Permintaan: "lanjut" = sisa Rendah.
