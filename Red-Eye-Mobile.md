@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 10:42 UTC = sesi #187)
+## Status terakhir (2026-10-15 10:47 UTC = sesi #188)
 
-- `v1.6.232` rilis (commit `c19c42b`, `versionCode` 259): rentang-tegas 5 perintah + cap digit history. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.233` rilis (commit `dd829b8`, `versionCode` 260): cancel job lama sebelum overwrite ring/record. Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.232`.
-- Sisa audit segar: 4 Sedang + 9 Rendah — 1 batch per sesi.
+- Pantau CI `v1.6.233`.
+- Sisa audit segar: 9 Rendah (mayoritas catatan/by-design; sapu sekali bila perlu).
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
@@ -175,6 +175,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #188 (2026-10-15 10:47 UTC) — selesai
+- Permintaan: "lanjut" = sisa Sedang job-lifecycle.
+- Perbaikan (1): 4 titik `ringJob`/`recordJob` cancel-dulu via skrip baris (indent ikut; job selesai = no-op).
+- Adjudikasi (3 gugur): `commit()` Sync (sekali-aksi + tulis mungil, daya-tahan menang); drop-counts (tanpa pemanggil main-thread + jarang); KEEP-restart (retry 5x + pemicu banyak).
+- Validasi: brace/paren 0/0, diff bersih, LOLOS, exit 0, tanpa Gradle lokal.
+- Rilis: commit `6ea6c55` + bump `versionCode` 260/`1.6.233` (commit `dd829b8`) + tag `v1.6.233`, push main + tag.
+- Status terakhir: `v1.6.233` rilis, menunggu hasil CI.
 
 ## Sesi #187 (2026-10-15 10:42 UTC) — selesai
 - Permintaan: "lanjut" = batch input-perintah Sedang.
