@@ -1332,3 +1332,11 @@
 - Validasi: brace/paren 0/0 (4 file), XML OK, secret hanya regex, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `be20495` + bump `versionCode` 247/`1.6.220` + tag `v1.6.220`, push main + tag.
 - Status terakhir: `v1.6.220` rilis, menunggu hasil CI.
+
+## Sesi #175 (2026-10-15 02:35 UTC) — selesai
+- Permintaan: build gagal (v1.6.220).
+- Akar via CI log: `Conflicting overloads` — helper `hasSmsPermission`/`hasCallLogPermission` ganda (sudah ada di file, ditambah lagi sesi #174). Cek kurung lokal tak tangkap duplikat definisi.
+- Perbaikan: buang 1 pasang duplikat (14 baris).
+- Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
+- Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
+- Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
