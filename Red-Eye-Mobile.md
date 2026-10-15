@@ -1252,3 +1252,11 @@
 - Validasi: brace/paren 0/0 (10 file), XML OK, secret hanya regex, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal.
 - Rilis: commit `70e088c` + bump `versionCode` 237/`1.6.210` + tag `v1.6.210`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.210` rilis, menunggu hasil CI.
+
+## Sesi #165 (2026-10-15 00:14 UTC) — selesai
+- Permintaan: build gagal (user kira sejak v1.6.201).
+- Fakta via `gh run view --log-failed`: v1.6.210 gagal kompilasi Kotlin — `capturing` (milik CameraService, bukan service) + `markHandled` companion tanpa `context` (7 call site). v1.6.201–1.6.209 lain juga merah, tapi errornya beda-beda per versi (v1.6.207: finally-scope + delivered).
+- Perbaikan: buang baris `capturing`; `markHandled(context, at)` + 7 caller.
+- Verifikasi: CI `v1.6.211` HIJAU (main + tag, confirmed via `gh run list`).
+- Rilis: commit `12441ea` + bump `versionCode` 238/`1.6.211` + tag `v1.6.211`; GitHub Release terbit oleh workflow.
+- Status terakhir: `v1.6.211` HIJAU, APK tersedia di Releases.
