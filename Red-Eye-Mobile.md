@@ -7,14 +7,14 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 09:42 UTC = sesi #179)
+## Status terakhir (2026-10-15 09:47 UTC = sesi #180)
 
-- `v1.6.225` rilis (commit `875c12c`, `versionCode` 252): sisa Tinggi — guard log release 8 titik + consent basi auto-hapus. Push main + tag sukses, menunggu hasil CI.
+- `v1.6.226` rilis (commit `388e69c`, `versionCode` 253): batch Sedang (2 patch + 5 gugur berbukti). Push main + tag sukses, menunggu hasil CI.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.225`.
-- Sisa audit: 7 Sedang + 4 Rendah — 1 batch per sesi.
+- Pantau CI `v1.6.226`.
+- Sisa audit: 4 Rendah (manifest exported, grid kalkulator, format changelog, docs trigger) + 1 keterbatasan `/history` (>2000 baris/tahun, sudah diungkap di balasan).
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -174,6 +174,14 @@
 - Pelajaran: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru.
 - Rilis: commit `869021e` + bump `versionCode` 248/`1.6.221` + tag `v1.6.221`, push main + tag.
 - Status terakhir: `v1.6.221` rilis, menunggu hasil CI.
+
+## Sesi #180 (2026-10-15 09:47 UTC) — selesai
+- Permintaan: "lanjut" = batch Sedang (7 item).
+- Verifikasi dulu: 5 GUGUR berbukti — scheduler REPLACE (worker `finally` decrement + antrean sumber kebenaran + self-heal 10 mnt); cache net 20 dtk (pemanggil jarang + self-koreksi); pair-code di status (idempoten + perlu tampil untuk pairing; service juga generate on-demand); `clearCredentials` (semua penulis cache cocok 4 pola, tanpa penulis lain); `/history` terpotong (balasan sudah jujur "roughly last 12 months"; geser angka = palsu, plumbing parsial = scope lain — catat batas).
+- Perbaikan (2): `/smsconfirm` guard jam-mundur/maju; `serviceScope.cancel()` sebelum `super.onDestroy()`.
+- Validasi: brace/paren 0/0, secret bersih, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `6c3f188` + bump `versionCode` 253/`1.6.226` (commit `388e69c`) + tag `v1.6.226`, push main + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.226` rilis, menunggu hasil CI.
 
 ## Sesi #179 (2026-10-15 09:42 UTC) — selesai
 - Permintaan: "lanjut" = 2 Tinggi tercecer (log-guard + consent-reuse).
