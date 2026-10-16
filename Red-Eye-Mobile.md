@@ -7,15 +7,16 @@
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-15 11:23 UTC = sesi #190)
+## Status terakhir (2026-10-16 23:50 UTC = sesi #228)
 
-- `v1.6.235` rilis (commit `922b1ae`, `versionCode` 262): media+persist (413, generasi shot, hash, cap audio, race). Push main + tag sukses, menunggu hasil CI.
+- `v1.6.276` rilis (commit `d0610f2`, `versionCode` 303): fix flag `recordBusy` pada `/recordvideo` (watchdog video hidup lagi) + prune foto sesudah flush + rapikan CHANGELOG (hapus `[Unreleased]` ganda, isi ulang seksi `[1.6.274]`/`[1.6.275]` yang hilang). Push main + tag sukses, CI `main` & tag dua-duanya `success`, GitHub Release `v1.6.276` terbit dengan `redeye-v1.6.276-debug.apk` + `redeye-v1.6.276-release.apk`.
 
 ## Tugas terbuka
 
-- Pantau CI `v1.6.235`.
-- Sisa audit #3: boot/watchdog (mati-volatil, FGS-stale, taskremoved, doze, wake-loss, executor, directboot, replace-notice, markHandled, watchdog-yatim, revive) + data (volatile-restore, korup, credstate-wipe, upgrade-clobber) + media (cross-guard, orphan) — verifikasi mayoritas sudah, putuskan batch.
-- Verifier: peringatan `.split(` vs Regex prekompil = false-positive (tahap-2 pakai pola sama sejak lama).
+- Tak ada CI yang perlu dipantau (semua `success`).
+- Kronologi memori bolong: sesi untuk `v1.6.273`/`v1.6.274`/`v1.6.275` tidak tercatat di memori (baru dicatat ulang di seksi CHANGELOG oleh sesi #228).
+- Catatan berulang: `NotificationForwarderService.lastWakePollAt` tak pernah diisi + helper `addWakePingIds`/`clearWakePingIds`/`setWakeUpdateIdSync`/`wakeUpdateId` mati (sejak poll getUpdates di forwarder dihapus) — kode mati tanpa efek perilaku, belum dibersihkan.
+- Verifier: peringatan `.split(` vs Regex prekompil = false-positive.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 
 ## Cara pakai file ini
@@ -637,3 +638,15 @@
 - Permintaan: "rilis" → `[Unreleased]` jadi `1.6.272`/`299`.
 - Validasi: bersih + LOLOS + exit 0. Push main + tag sukses; build + Release oleh workflow.
 - Status terakhir: `v1.6.272` rilis, menunggu hasil CI.
+
+## Sesi #228 (2026-10-16 23:50 UTC) — selesai
+- Permintaan: "cek seluruh area secara menyeluruh pelan pelan teliti dan telaten temukan bug" (lanjutan audit pass-3).
+- Konteks: `v1.6.273`/`274`/`275` terjadi sebelum sesi ini tapi tak tercatat di memori; `v1.6.274` build CI-nya GAGAL (karena mass `.apply()`→`.commit()`), sudah dibatalkan di `v1.6.275` via merge `-s ours`.
+- Temuan + fix (`MonitoringService.kt`):
+  1. `/recordvideo` melepas flag `recordBusy` seketika — `recordAndSendVideo()` non-suspend (cuma daftar callback), jadi `try { … } finally { recordBusy.set(false) }` di `serviceScope.launch` mengosongkan flag tepat saat rekaman baru mulai. Akibatnya penjaga `/recordvideo` ganda + `/ring`/`/hilang` bocor, DAN watchdog video (`delay(seconds*1000+120_000)` → `recordBusy.compareAndSet(true,false)` → `forceReset()` + lepas WakeLock) tak pernah jalan karena CAS selalu gagal. Fix: buang `try/finally`, panggil `recordAndSendVideo(seconds)` langsung (semua jalur internalnya sudah `recordBusy.set(false)`).
+  2. `flushPendingPhotos` memanggil `prunePhotoCache()` di dalam `try` saat `photoFlushBusy` masih `true`; `prunePhotoCache` early-return kalau flag aktif → prune selalu no-op. Fix: pindah ke `finally` setelah `photoFlushBusy.set(false)`, pola sama dengan `flushPendingVideos`/`flushPendingAudio`.
+- Temuan diverifikasi GUGUR: `activeVideoFile` (MonitoringService) baru diisi di `onVideoTaken` sehingga `flushPendingVideos` tak melewati file yang sedang direkam — ada penjaga `now - lastModified < 10_000L` yang melindungi file in-progress; risiko rendah, tidak diubah. `isKnownContact` fail-open saat izin kontak hilang = desain lama, tidak diubah.
+- Temuan dokumentasi: `CHANGELOG.md` punya DUA seksi `## [Unreleased]` (satu duplikat isi `[1.6.273]`) dan seksi `[1.6.274]`/`[1.6.275]` hilang → dirapikan: `[1.6.276]` baru, `[1.6.275]` diisi (termasuk bullet build-fix `.apply()`), `[1.6.274]` dicatat sebagai build gagal, duplikat dibuang.
+- Validasi: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit `d0610f2`, bump `versionCode` 303/`1.6.276`, push `origin main` + tag `v1.6.276`. CI: run `main` 38982878320 `success`, run tag 38982904269 `success`. GitHub Release `v1.6.276` terbit (2 APK).
+- Status terakhir: `v1.6.276` rilis & terverifikasi; pohon kerja bersih.
