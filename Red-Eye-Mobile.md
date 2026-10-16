@@ -522,3 +522,12 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 292/`1.6.265` + tag `v1.6.265`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.265` rilis, menunggu hasil CI.
+
+## Sesi #210 (2026-10-16 14:30 UTC) — selesai
+- Permintaan: maraton (sisa Rendah).
+- Verifikasi: paging repo 4x500 GUGUR (partisi ketat + guard non-progress + log; bound = proteksi baterai sadar); Test-error BENAR.
+- Perbaikan (`SetupActivity:testConnection`): pisah cabang `setup_bad_token` vs `setup_bad_chat` cermin `saveSettings`. String sudah ada.
+- Verifier: peringatan `.matches(` = false-positive baru (TOKEN_REGEX prekompil companion, bukan kompilasi per panggil) — catat sejajar false-positive `.split(`.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 293/`1.6.266` + tag `v1.6.266`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.266` rilis, menunggu hasil CI.
