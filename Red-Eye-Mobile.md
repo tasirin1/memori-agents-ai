@@ -450,3 +450,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 283/`1.6.256` + tag `v1.6.256`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.256` rilis, menunggu hasil CI.
+
+## Sesi #201 (2026-10-16 12:50 UTC) — selesai
+- Permintaan: "lanjut" → WakeLock rekaman/bunyi (nol acquire di repo, FAKTA via grep).
+- Perbaikan: helper `acquireOpWakeLock`/`releaseOpWakeLock` (PARTIAL, non-refcount, acquire-batas-waktu); ring+audio acquire usai guard + release di finally; video acquire usai guard + release di 3 titik callback/catch (watchdog = backstop timeout yang bertepatan). Manifest +`WAKE_LOCK` (normal, auto-grant) + 1 baris README (tuntutan verifier).
+- Jujur: manfaat utama = presisi durasi + kirim susulan tak tertunda Doze; FGS sudah menekan risiko mati-proses. Backstop timeout lindungi bocor (teardown tanpa ref lock, watchdog video).
+- Validasi: `git diff --check` bersih, brace/paren 0/0, manifest XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 284/`1.6.257` + tag `v1.6.257`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.257` rilis, menunggu hasil CI.
