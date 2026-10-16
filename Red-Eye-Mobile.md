@@ -379,3 +379,11 @@
 - Validasi: `git diff --check` bersih, secret hanya konstanta key, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit `52d172f` + bump `versionCode` 274/`1.6.247` + tag `v1.6.247`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.247` rilis, menunggu hasil CI.
+
+## Sesi #192 (2026-10-16 11:15 UTC) — selesai
+- Permintaan: "lanjut" → temuan tertunda berikutnya (offset-400 polling mati).
+- Akar: riwayat 379e04a (reset ke 0 → replay) vs 8b5d53f/v1.6.245 (keep offset → mati selamanya bila offset memang rusak). Pola eskalasi sudah ada di wake-loop (`NotificationForwarderService.kt:663-688`, reset setelah 3x).
+- Perbaikan (`MonitoringService.kt`): field `offsetFailCount`; 400-offset ke-1/2 backoff 30 dtk tanpa reset, ke-3 beruntun `setLastUpdateIdSync(0L)` + reset counter; counter nol tiap poll sukses. Replay pasca-resync dijinakkan guard kedaluwarsa 300 dtk/900 dtk yang sudah ada.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, secret hanya konstanta, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit `6810d75` + bump `versionCode` 275/`1.6.248` + tag `v1.6.248`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.248` rilis, menunggu hasil CI.
