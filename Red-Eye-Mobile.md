@@ -619,3 +619,9 @@
 - Validasi: `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Rilis: commit `f8dfe4d`, push main + tag `v1.6.271` sukses; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.271` rilis, menunggu hasil CI.
+
+## Sesi #225 (2026-10-16 16:50 UTC) — selesai
+- Laporan: masih ungu (tema Setup: primer/sekunder ungu-teal, satu-satunya pemakai).
+- Perubahan: `themes.xml` primer `#2196F3`, varian `#1976D2`, sekunder `#FF9800`, varian `#EF6C00` (status bar ikut varian otomatis). Satu file, literal hex.
+- Validasi: XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
+- Push main sukses; build via GitHub Actions.
