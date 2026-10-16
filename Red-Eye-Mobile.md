@@ -458,3 +458,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, manifest XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 284/`1.6.257` + tag `v1.6.257`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.257` rilis, menunggu hasil CI.
+
+## Sesi #202 (2026-10-16 13:05 UTC) — selesai
+- Permintaan: "lanjut sampai selesai" (maraton; sesi ini #202).
+- Verifikasi: lokasi-tanpa-background GUGUR (FGS-location aktif → grant background tak wajib; `ensureForegroundTypes` dipanggil sebelum tiap fetch). Lanjut: geofence-hanya-patroli BENAR.
+- Perbaikan: `checkGeofence(lat,lon,accuracy)` di 3 situs lokasi segar (`/location:1749`, `/darurat:2293`, `/hilang:2386`); state-machine hanya notif saat berubah; situs curfew disengaja tak disentuh (logika fence sendiri). 3 baris.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 285/`1.6.258` + tag `v1.6.258`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.258` rilis, menunggu hasil CI.
