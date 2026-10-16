@@ -394,3 +394,12 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 276/`1.6.249` + tag `v1.6.249`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.249` rilis, menunggu hasil CI.
+
+## Sesi #194 (2026-10-16 11:35 UTC) — selesai
+- Permintaan: "lanjut" → Tinggi tertua (restartAllLoops cancel-tanpa-join → 409 + blackout 5 mnt).
+- Analisis: join-sebelum-relaunch DITOLAK sadar — `/restart` jalan di dalam commandJob yang ia cancel sendiri; fungsi kini nir-suspensi sehingga selamat; jadikan suspend+join = CancellationException di titik suspensi pertama → relaunch tak pernah jalan (regresi fatal, tak bisa verifikasi lokal tanpa SDK). Pilih patch aman: 409 ≤60 dtk pasca-restart = konflik-sendiri (60 dtk, tanpa notif palsu); eksternal tetap 300 dtk + notif.
+- Perbaikan (`MonitoringService.kt:409-branch`): `selfConflict ||= now-lastLoopRestartAt < 60s`. 3 baris.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 277/`1.6.250` + tag `v1.6.250`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Tugas terbuka: eliminasi balapan 409 seutuhnya (join + relaunch-detach) ditunda — butuh kompilasi/uji CI, jangan tanpa SDK lokal.
+- Status terakhir: `v1.6.250` rilis, menunggu hasil CI.
