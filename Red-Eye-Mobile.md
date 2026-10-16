@@ -434,3 +434,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 281/`1.6.254` + tag `v1.6.254`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.254` rilis, menunggu hasil CI.
+
+## Sesi #199 (2026-10-16 12:25 UTC) — selesai
+- Permintaan: "lanjut" → REPLACE bunuh rantai worker → duplikat kirim.
+- Verifikasi: REPLACE (scheduleMessageSendNext) cancel worker jalan; `sentIds` hanya flush tiap 5 + akhir-run → ≤4 pesan terkirim-tapi-belum-flush dikirim ulang run berikut (duplikat user-visible). `removeMessages` blocking non-suspend → aman di handler cancel. Cancel pasca-loop benign (failed/rejected tak pernah terkirim).
+- Perbaikan (`SendMessageWorker.kt` catch cancel loop utama): flush `sentIds` bila > flushedSent, lalu rethrow. Cermin preseden `sendChunked:444-459`. 7 baris, tanpa reindent.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 282/`1.6.255` + tag `v1.6.255`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.255` rilis, menunggu hasil CI.
