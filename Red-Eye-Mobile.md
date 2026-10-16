@@ -347,3 +347,11 @@
 - Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `b2eb5c2` + bump `versionCode` 268/`1.6.241` (commit `8b087d1`) + tag `v1.6.241`, push main + tag.
 - Status terakhir: `v1.6.241` rilis, menunggu hasil CI. Sisa audit #191: 5 Sedang antre.
+
+## Sesi #198 (2026-10-16 00:00 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (tulis-tahan-mati, tertua antre Sedang audit #191).
+- Perbaikan (`MessageQueue.kt`, 3 baris): `addMessage`/`addMessages` kini `persistLocked(force=true)` (lewati debounce 2 dtk); `persistLocked` `commit()` sinkron kapan pun di luar main-thread (semula hanya bila `force`), `apply()` tetap di main-thread (anti-jank). Preseden: `removeMessages` memang sudah `force=true`.
+- Adjudikasi: jendela sisa = tulis-dari-main + mati-sebelum-`apply` mengalir (<100 ms, diterima demi ANR); semua pemanggil ramai (service/worker) sudah luar-main sehingga tahan-mati penuh.
+- Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih + dikaji penuh, tanpa Gradle lokal.
+- Rilis: commit `00da605` + bump `versionCode` 269/`1.6.242` (commit `b38609e`) + tag `v1.6.242`, push main + tag.
+- Status terakhir: `v1.6.242` rilis, menunggu hasil CI. Sisa audit #191: 4 Sedang antre.
