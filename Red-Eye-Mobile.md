@@ -591,3 +591,13 @@
 
 ## Sesi #219 (2026-10-16 15:50 UTC) — selesai
 - Laporan: versi terbaru tak rilis pasca-hapus trigger. Verifikasi: SALAH PAHAM — run tag v1.6.268 in_progress (build lama, bukan gagal); trigger tag utuh. Owner paham, tutup tanpa patch.
+
+## Sesi #221 (2026-10-16 16:10 UTC) — selesai
+- Permintaan: audit menyeluruh putaran-2 (5 subagen) + tindak lanjut.
+- Hasil audit-2: 8 patch (2 rilis) + sisanya GUGUR/wontfix berdokumentasi:
+  v1.6.269 (service-core): wakelock-watchdog release; notif-409 hanya sunyi saat restart-sendiri (poller liar tetap dinotif); transisi geofence gate akurasi; clear staging berguard-ID (2 situs).
+  v1.6.270 (forwarder+UI+docs): teks onDestroy jujur; backup pakai nilai UI-valid (resolveStored + regex/range, fallback prefs); hapus onSupportNavigateUp yatim (+bekas-hapusan.txt); README tanpa klaim PR.
+- GUGUR penting: SMS-duplikat-vs-revert (race sempit pra-eksisten, revert rugikan darurat); BAK-stale (lag ≤1 op, self-heal); binder-commit (ANR tak terbukti); PIN-4 (model ancaman file-milik-sendiri; ubah min rusak backup lama); staging-TOCTOU (sempit + ternotifikasi); restore-tanpa-validasi (Save validasi ulang); backoff-= (softening v1.6.251); offset-reset/tradeoff lama (age-guard).
+- Verifier: `.matches(` = false-positive (TOKEN_REGEX prekompil); patuhi `bekas-hapusan.txt` untuk metode dihapus.
+- Validasi tiap rilis: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Status terakhir: v1.6.269 + v1.6.270 rilis (push main + tag sukses); build + GitHub Release oleh workflow.
