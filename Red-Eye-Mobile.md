@@ -506,3 +506,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 290/`1.6.263` + tag `v1.6.263`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.263` rilis, menunggu hasil CI.
+
+## Sesi #208 (2026-10-16 14:10 UTC) — selesai
+- Permintaan: maraton (temuan blob-korup wipe total).
+- Verifikasi BENAR: parse-gagal → remove KEY_QUEUE → seluruh unsent hilang.
+- Perbaikan (`MessageQueue.kt`): rotasi `KEY_QUEUE_BAK` tiap baca-sukses-berubah; korup → fallback backup + heal tulis-balik + prune kedaluwarsa tetap jalan; `clearQueue` hapus bak di 2 situs (cegah resurrect). Satu file, ~25 baris.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 291/`1.6.264` + tag `v1.6.264`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.264` rilis, menunggu hasil CI.
