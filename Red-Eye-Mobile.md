@@ -545,3 +545,10 @@
 - CI: tag v1.6.255–v1.6.265 SEMUA success; run `main` tersalip cancelled (concurrency, wajar); v1.6.266/v1.6.267 antri (belum gagal).
 - Tutup sisa: fetch-parallel = race tercepat-menang (bukan NETWORK-first) + bound 15 dtk → GUGUR; cache-120 = tradeoff latensi/akurasidisain + jemput sudah di-gate → GUGUR; prune 7-hari + cap-100 = retensi terbatas + counter jujur → GUGUR; volatile-fallback ada kabar ke user → termitigasi.
 - Status terakhir: audit ~50 temuan TUNTAS (21 patch rilis v1.6.247–v1.6.267 + sisanya GUGUR/wontfix berdokumentasi). Pantau CI v1.6.266/v1.6.267.
+
+## Sesi #213 (2026-10-16 15:00 UTC) — selesai
+- Permintaan: sederhanakan workflow (user pilih: buang trigger PR).
+- Perubahan (`.github/workflows/build.yml`): hapus blok `pull_request`; tersisa `push` (main + tag v*, paths-ignore md/LICENSE), `workflow_dispatch`. Tanpa bump/tag (isi APK tak berubah; push ini sendiri memicu run CI verifikasi).
+- CHANGELOG: entri `[Unreleased]`/`Removed` (aturan repo).
+- Validasi: `git diff --check` bersih, YAML trigger cek manual (tanpa parser), `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Status terakhir: push main terkirim, menunggu run CI verifikasi.
