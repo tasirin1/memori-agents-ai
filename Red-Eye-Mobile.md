@@ -552,3 +552,12 @@
 - CHANGELOG: entri `[Unreleased]`/`Removed` (aturan repo).
 - Validasi: `git diff --check` bersih, YAML trigger cek manual (tanpa parser), `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Status terakhir: push main terkirim, menunggu run CI verifikasi.
+
+## Aturan sesi (2026-10-16, dari owner)
+- Mode perbaiki = maraton: lanjutkan terus berulang sampai temuan habis.
+- Tiap putaran cek antrian CI (`gh run list`); bila ada gagal build → fokus perbaiki itu dulu, lalu lanjut ke temuan lain.
+
+## Sesi #214 (2026-10-16 15:10 UTC) — selesai
+- Permintaan: aturan maraton baru. Cek antrian: SEMUA hijau (tag .255–.267 success, run PR-removal main success, sisanya cancelled-wajar). Nihil gagal build.
+- Sweep regresi 21 patch maraton: nihil temuan baru (catat sisa sadar: videoLock bocor terbatas-timeout di jalur watchdog/teardown; notif-overflow commit di binder-thread saat burst; keduanya bounded).
+- Status terakhir: temuan habis + CI hijau. Siaga.
