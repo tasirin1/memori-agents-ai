@@ -442,3 +442,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 282/`1.6.255` + tag `v1.6.255`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.255` rilis, menunggu hasil CI.
+
+## Sesi #200 (2026-10-16 12:35 UTC) — selesai
+- Permintaan: "lanjut" → 3 verifikasi GUGUR (outstandingSends: counter seimbang via finally+clamp+reset-proses, skip-enqueue tak hilangkan pesan; watchdog-isRunning: flag hanya true pasca-FGS, semua jalur mati clear/false, early-return tetap jadwalkan watchdog; persist-window: semua mutasi pakai force=true sinkron).
+- Perbaikan (`/hilang` vs recordBusy): bukan split-flag (satu mic = satu flag benar; /stop tak bebaskan rekaman → darurat tanpa jalan keluar). `/hilang` kini lewati bunyi saat merekam, lokasi + foto tetap jalan. Foto aman (capturePhoto tanpa mic; vs video sibuk → gagal graceful via catch).
+- Preemption (cancel rekaman demi darurat) DITOLAK sadar: keamanan cancel CameraService tak terverifikasi tanpa SDK + risiko bukti hilang.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 283/`1.6.256` + tag `v1.6.256`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.256` rilis, menunggu hasil CI.
