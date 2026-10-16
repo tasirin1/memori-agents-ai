@@ -482,3 +482,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 287/`1.6.260` + tag `v1.6.260`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.260` rilis, menunggu hasil CI.
+
+## Sesi #205 (2026-10-16 13:40 UTC) — selesai
+- Permintaan: maraton (sisa audit).
+- Verifikasi GUGUR (bukti): requestCode SMS (action unik nano+UUID per kirim + smsBusy serial + stride 7919 → tabrakan antar-kirim mustahil); onDestroy-flush (commit KB-an, satu-satunya cara jamin persist; ANR butuh 5 dtk — tak terbukti); restart-storm (jalur restart TAK panggil setMyCommands/schedule — klaim basi; sisa churn ringan + softening v1.6.250; restart-selektif berisiko stuck-ganda, ditolak).
+- Perbaikan trail_24: cap-24-titik → prune-24-jam + cap darurat 300 + jaga 1 titik bila semua basi. `/jejak` sesuai klaim.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 288/`1.6.261` + tag `v1.6.261`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.261` rilis, menunggu hasil CI.
