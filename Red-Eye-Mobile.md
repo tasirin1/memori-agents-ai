@@ -355,3 +355,11 @@
 - Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih + dikaji penuh, tanpa Gradle lokal.
 - Rilis: commit `00da605` + bump `versionCode` 269/`1.6.242` (commit `b38609e`) + tag `v1.6.242`, push main + tag.
 - Status terakhir: `v1.6.242` rilis, menunggu hasil CI. Sisa audit #191: 4 Sedang antre.
+
+## Sesi #199 (2026-10-16 00:10 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis.
+- Adjudikasi dulu (2 gugur terverifikasi): scheduler REPLACE vs counter GUGUR (ulang #180: antrean FIFO + `finally` + self-heal 10 mnt; REPLACE tak mengubah urutan); fuzzy LIKE + fallback LIMIT GUGUR (limit 2 lapis + cap klien selalu + maks ~2100 baris kecil di `Dispatchers.IO` — `serviceScope` IO, `commandJob` di atasnya; tanpa ANR/OOM; fuzzy bernilai untuk pesan lama).
+- Perbaikan (`MonitoringService.teardownJobs`, 2 baris dibuang): `commandBackoffUntil`/`mediaBackoffUntil` tak lagi dinolkan — stempel absolut kedaluwarsa sendiri; restart/`/restart`/FGS-timeout tak memancing 429 berulang. Sisa 2 kemunculan = deklarasi awal (benar).
+- Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `e1a40bc` + bump `versionCode` 270/`1.6.243` (commit `a11e7ce`) + tag `v1.6.243`, push main + tag.
+- Status terakhir: `v1.6.243` rilis, menunggu hasil CI. Sisa audit #191: 3 Sedang antre (`stopSelf`, `updateStatus`, QUICKBOOT) + catatan Rendah.
