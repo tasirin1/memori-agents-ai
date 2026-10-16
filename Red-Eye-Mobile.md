@@ -632,3 +632,8 @@
 - Verifier: `.Utility tanpa acuan` = false-positive (dipakai btnClear); catat pola ini.
 - Validasi: semua XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
 - Push main sukses; build via GitHub Actions.
+
+## Sesi #227 (2026-10-16 17:10 UTC) — selesai
+- Permintaan: "rilis" → `[Unreleased]` jadi `1.6.272`/`299`.
+- Validasi: bersih + LOLOS + exit 0. Push main + tag sukses; build + Release oleh workflow.
+- Status terakhir: `v1.6.272` rilis, menunggu hasil CI.
