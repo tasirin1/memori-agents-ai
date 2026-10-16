@@ -363,3 +363,11 @@
 - Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `e1a40bc` + bump `versionCode` 270/`1.6.243` (commit `a11e7ce`) + tag `v1.6.243`, push main + tag.
 - Status terakhir: `v1.6.243` rilis, menunggu hasil CI. Sisa audit #191: 3 Sedang antre (`stopSelf`, `updateStatus`, QUICKBOOT) + catatan Rendah.
+
+## Sesi #200 (2026-10-16 00:20 UTC) — selesai
+- Permintaan: "lanjut" = 1 langkah logis (`stopSelf`, antre Sedang audit #191).
+- Perbaikan (`MonitoringService.onStartCommand`, 1 kata): `stopSelf()` → `stopSelfResult(startId)` di blok `runCritical` async — stop basi tak membunuh start susulan; `startId` Int aman di-capture lambda `() -> Unit`.
+- Catatan: push sempat timeout jaringan sekali; verifikasi via `ls-remote` (remote = `be7d7c1`) sebelum lanjut rilis.
+- Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
+- Rilis: commit `be7d7c1` + bump `versionCode` 271/`1.6.244` (commit `67d88c6`) + tag `v1.6.244`, push main + tag.
+- Status terakhir: `v1.6.244` rilis, menunggu hasil CI. Sisa audit #191: 2 Sedang (`updateStatus`, QUICKBOOT) + catatan Rendah.
