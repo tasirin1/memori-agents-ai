@@ -613,3 +613,9 @@
 - Perubahan: padding 20→12, display 28→18/56→44sp, margin tombol 6→4dp, huruf 26→22sp (= 34→30); `values-in/strings.xml` LENGKAP (paritas repo; app=Kalkulator, notif=Kalkulator, Setup Indonesia penuh). Autosize display 24-56 aman.
 - Validasi: 3 XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS (tegur paritas sebelum lengkap), `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
 - Push main sukses; build via GitHub Actions.
+
+## Sesi #224 (2026-10-16 16:40 UTC) — selesai
+- Permintaan: "rilis" → `[Unreleased]` (UI kalkulator/Setup, values-in, workflow tanpa PR) jadi `1.6.271`/`versionCode` 298; seksi Changed digabung rapi.
+- Validasi: `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Rilis: commit `f8dfe4d`, push main + tag `v1.6.271` sukses; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.271` rilis, menunggu hasil CI.
