@@ -371,3 +371,11 @@
 - Validasi: brace/paren 0/0, LOLOS, exit 0, diff bersih, tanpa Gradle lokal.
 - Rilis: commit `be7d7c1` + bump `versionCode` 271/`1.6.244` (commit `67d88c6`) + tag `v1.6.244`, push main + tag.
 - Status terakhir: `v1.6.244` rilis, menunggu hasil CI. Sisa audit #191: 2 Sedang (`updateStatus`, QUICKBOOT) + catatan Rendah.
+
+## Sesi #191 (2026-10-16 11:05 UTC) — selesai
+- Permintaan: audit menyeluruh (5 subagen paralel) lalu "perbaiki" → user pilih Worker Rejected.
+- Audit: 40+ temuan (4 Kritikal, 13 Tinggi, 17 Sedang, 12 Rendah/Info), sampel kritikal diverifikasi manual di kode. Daftar penuh di chat sesi ini.
+- Perbaikan: `SendMessageWorker.kt:143-144` — cabang `Rejected` salah masuk `failedIds` (retry transient `60s<<retry`, tahan jendela 20 pesan); kini masuk `rejectedIds` (jalur drop + `sendDropNotice` yang sudah ada tapi tak pernah terisi). Satu baris, tanpa komentar.
+- Validasi: `git diff --check` bersih, secret hanya konstanta key, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit `52d172f` + bump `versionCode` 274/`1.6.247` + tag `v1.6.247`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.247` rilis, menunggu hasil CI.
