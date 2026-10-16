@@ -474,3 +474,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 286/`1.6.259` + tag `v1.6.259`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.259` rilis, menunggu hasil CI.
+
+## Sesi #204 (2026-10-16 13:30 UTC) — selesai
+- Permintaan: maraton (temuan found=true palsu).
+- Verifikasi BENAR: `found=true` saat halaman tak-kosong, walau kirim gagal → `idleDataCycles=0` → retry ketat saat outage. Satu pemanggil (`:608`).
+- Perbaikan: `found=true` pindah ke dalam cabang chunk-terkirim (SMS + call); gagal = false → interval adaptif memanjang. 2 baris pindah.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 287/`1.6.260` + tag `v1.6.260`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.260` rilis, menunggu hasil CI.
