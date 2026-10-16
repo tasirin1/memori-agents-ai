@@ -387,3 +387,10 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, secret hanya konstanta, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit `6810d75` + bump `versionCode` 275/`1.6.248` + tag `v1.6.248`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.248` rilis, menunggu hasil CI.
+
+## Sesi #193 (2026-10-16 11:25 UTC) — selesai
+- Permintaan: "lanjut" → temuan cursor pre-persist DIVERIFIKASI GUGUR (bukan bug): pre-persist + finally = desain at-most-once yang koheren; skenario pemicu (kedaluwarsa/auth) adalah guard sengaja + kabari user ("kirim lagi"); `handleTelegramCommand:1495-1507` tangkap Exception internal sehingga "handler melempar" hanya CancellationException (cancel loop, offset per-update tetap konsisten). Hapus pre-persist justru regresi eksekusi-ganda saat crash. Lanjut ke Kritikal berikut: /jemput.
+- Perbaikan /jemput (`MonitoringService.kt:759,3785,3800`): `checkGeofence` terima `accuracyM` (satu call-site, default -1 jaga kompat); disarm + notif hanya bila `accuracy <= jemput`; fix kasar menunda (tetap armed), bukan palsu + disarm permanen. Geofence masuk/keluar umum sengaja tak di-gate (scope temuan lain).
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 276/`1.6.249` + tag `v1.6.249`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.249` rilis, menunggu hasil CI.
