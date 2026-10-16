@@ -539,3 +539,9 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 294/`1.6.267` + tag `v1.6.267`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.267` rilis, menunggu hasil CI.
+
+## Sesi #212 (2026-10-16 14:50 UTC) — selesai (MARATON SELESAI)
+- Permintaan: "lanjut sampai selesai" → sapu akhir + verifikasi CI.
+- CI: tag v1.6.255–v1.6.265 SEMUA success; run `main` tersalip cancelled (concurrency, wajar); v1.6.266/v1.6.267 antri (belum gagal).
+- Tutup sisa: fetch-parallel = race tercepat-menang (bukan NETWORK-first) + bound 15 dtk → GUGUR; cache-120 = tradeoff latensi/akurasidisain + jemput sudah di-gate → GUGUR; prune 7-hari + cap-100 = retensi terbatas + counter jujur → GUGUR; volatile-fallback ada kabar ke user → termitigasi.
+- Status terakhir: audit ~50 temuan TUNTAS (21 patch rilis v1.6.247–v1.6.267 + sisanya GUGUR/wontfix berdokumentasi). Pantau CI v1.6.266/v1.6.267.
