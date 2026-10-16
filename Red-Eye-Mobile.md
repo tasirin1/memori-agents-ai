@@ -427,3 +427,10 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 280/`1.6.253` + tag `v1.6.253`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.253` rilis, menunggu hasil CI.
+
+## Sesi #198 (2026-10-16 12:15 UTC) — selesai
+- Permintaan: "lanjut" → initialSync>500 DIVERIFIKASI GUGUR (bukan bug): cursor SMS/call maju per-chunk terkirim (`:2776,2807-2813`) → tiap restart progres 500, bukan resend; `initialSyncRunning` cegah balap incremental; backlog habis → path kosong `:2732` set done=true. Konvergen, sembuh sendiri. Lanjut ke temuan berikut: cooldown SMS palsu.
+- Perbaikan: cabang gagal-total `sendSmsPending` (okCount==0) tak lagi `setLastSmsSendAtSync` — pesan "try again" selama ini kontradiktif dengan blokir 60 dtk. Parsial/terkirim tetap cap (cegah duplikat part). 1 baris dibuang.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 281/`1.6.254` + tag `v1.6.254`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.254` rilis, menunggu hasil CI.
