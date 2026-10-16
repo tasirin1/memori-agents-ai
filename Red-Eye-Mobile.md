@@ -561,3 +561,8 @@
 - Permintaan: aturan maraton baru. Cek antrian: SEMUA hijau (tag .255–.267 success, run PR-removal main success, sisanya cancelled-wajar). Nihil gagal build.
 - Sweep regresi 21 patch maraton: nihil temuan baru (catat sisa sadar: videoLock bocor terbatas-timeout di jalur watchdog/teardown; notif-overflow commit di binder-thread saat burst; keduanya bounded).
 - Status terakhir: temuan habis + CI hijau. Siaga.
+
+## Sesi #215 (2026-10-16 15:15 UTC) — selesai
+- Permintaan: tulis aturan maraton ke `AGENTS.md` (§5, 1 baris) + commit + push (docs-only, tanpa bump/tag per §8).
+- Validasi: `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
+- Status terakhir: aturan aktif; push `0d99990` memicu run CI (pantau bila merah).
