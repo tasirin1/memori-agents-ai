@@ -466,3 +466,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 285/`1.6.258` + tag `v1.6.258`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.258` rilis, menunggu hasil CI.
+
+## Sesi #203 (2026-10-16 13:20 UTC) — selesai
+- Permintaan: maraton "sampai selesai" (temuan burst-overflow notif).
+- Verifikasi: `noteDroppedNotification` + counter persisten + flush agregat SUDAH ada tapi hanya dipakai jalur 400 (`:1283`); jalur `recordOverflow` (`:289,:351`) bisu. Bound 64 = backpressure sah, yang hilang = akuntansi jujur.
+- Perbaikan: `recordOverflow` panggil `noteDroppedNotification()` (debounce 30 dtk, satu notif agregat); teks flush jadi "(rejected/overflow)" agar tak menyesatkan. 2 titik.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 286/`1.6.259` + tag `v1.6.259`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.259` rilis, menunggu hasil CI.
