@@ -580,3 +580,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`/Changed.
 - Push main sukses; build via GitHub Actions.
 - Status terakhir: menunggu run CI.
+
+## Sesi #218 (2026-10-16 15:40 UTC) — selesai
+- Permintaan: backup/restore setingan (user pilih: file PIN, bukan plaintext/internal).
+- Implementasi: `utils/SettingsBackup.kt` baru (AES-GCM-256, PBKDF2-HmacSHA256 100k, salt 16B + IV 12B, magic `REDEYE1:`, JSON via org.json bawaan, FQN tanpa import baru); Setup +2 tombol +2 launcher (CreateDocument/OpenDocument) + dialog PIN (sekali/konfirmasi) + export IO-thread/launcher-main; restore HANYA isi form → Save verifikasi seperti biasa (offline-path ada). Tanpa dependensi baru, tanpa izin baru.
+- Keamanan: token tak pernah plaintext di file; PIN salah → AEAD tag gagal → toast; PIN min 4.
+- Validasi: `git diff --check` bersih, brace/paren 0/0 (2 file), 2 XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal. README +2 baris.
+- Rilis: commit + bump `versionCode` 295/`1.6.268` + tag `v1.6.268`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.268` rilis, menunggu hasil CI.
