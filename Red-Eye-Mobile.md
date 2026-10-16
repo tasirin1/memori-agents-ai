@@ -498,3 +498,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 289/`1.6.262` + tag `v1.6.262`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.262` rilis, menunggu hasil CI.
+
+## Sesi #207 (2026-10-16 14:00 UTC) — selesai
+- Permintaan: maraton (temuan staging-race + markHandled).
+- Verifikasi: staging-race BENAR (read-check-clear non-atomik + single-slot); markHandled(0L) GUGUR (retry-by-design; efek-samping throttled/idempoten satu-satu: notice 1 jam, consent sekali, tryStart idempoten).
+- Perbaikan: `smsPendingLock` + `synchronized` di `writeSmsPendingSync`/`clearSmsPendingIf`/`touchSmsPendingSync` (ikut pola lock file ini; synchronized reentrant = aman).
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 290/`1.6.263` + tag `v1.6.263`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.263` rilis, menunggu hasil CI.
