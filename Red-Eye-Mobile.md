@@ -514,3 +514,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 291/`1.6.264` + tag `v1.6.264`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.264` rilis, menunggu hasil CI.
+
+## Sesi #209 (2026-10-16 14:20 UTC) — selesai
+- Permintaan: maraton (temuan orientasi video).
+- Verifikasi BENAR: blok konfigurasi MediaRecorder tanpa `setOrientationHint`; rumus `getJpegOrientation` (sensor + rotasi DisplayManager + depan/belakang) berlaku sama untuk video.
+- Perbaikan (`CameraService.kt`): `setOrientationHint(...)` setelah `setVideoSize`, sebelum `prepare()` (syarat API), dalam try/catch gaya sekitar.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 292/`1.6.265` + tag `v1.6.265`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.265` rilis, menunggu hasil CI.
