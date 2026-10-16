@@ -573,3 +573,10 @@
 - Validasi: 2 XML OK, nol referensi sisa, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`/Changed (UI, tanpa bump — ikut rilis berikutnya).
 - Push main sukses (commit `a6cf5eb`); build via GitHub Actions.
 - Status terakhir: menunggu run CI; versi rilis terakhir tetap v1.6.267.
+
+## Sesi #217 (2026-10-16 15:25 UTC) — selesai
+- Permintaan: hapus top bar di halaman kalkulator juga.
+- Verifikasi: layout kalkulator bersih (display + history saja); yang tampil = ActionBar sistem dari tema (label app). Patch: `supportActionBar?.hide()` di onCreate, cermin Setup.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`/Changed.
+- Push main sukses; build via GitHub Actions.
+- Status terakhir: menunggu run CI.
