@@ -625,3 +625,10 @@
 - Perubahan: `themes.xml` primer `#2196F3`, varian `#1976D2`, sekunder `#FF9800`, varian `#EF6C00` (status bar ikut varian otomatis). Satu file, literal hex.
 - Validasi: XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
 - Push main sukses; build via GitHub Actions.
+
+## Sesi #226 (2026-10-16 17:00 UTC) — selesai
+- Permintaan: tiru kalkulator iOS (referensi PNG Apple CDN).
+- Perubahan (resource saja): bg/display hitam, angka `#333333` putih, C abu-terang `#A5A5A5` teks hitam (style+drawable Utility baru), operator + `=` oranye `#FF9F0A`, radius 100dp (lingkaran/stadion; `=` tetap span-3 karena tanpa tombol baru = tanpa logika baru), display tanpa kartu (bg+stroke hitam). Day+night sama.
+- Verifier: `.Utility tanpa acuan` = false-positive (dipakai btnClear); catat pola ini.
+- Validasi: semua XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
+- Push main sukses; build via GitHub Actions.
