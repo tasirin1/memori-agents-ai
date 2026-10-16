@@ -403,3 +403,11 @@
 - Rilis: commit + bump `versionCode` 277/`1.6.250` + tag `v1.6.250`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Tugas terbuka: eliminasi balapan 409 seutuhnya (join + relaunch-detach) ditunda — butuh kompilasi/uji CI, jangan tanpa SDK lokal.
 - Status terakhir: `v1.6.250` rilis, menunggu hasil CI.
+
+## Sesi #195 (2026-10-16 11:42 UTC) — selesai
+- Permintaan: "lanjut" → Tinggi berikut (polling abaikan flood-wait global).
+- Verifikasi: `isPollBlocked` hanya gate auth 401/403; 429 global (`rateLimitedUntil`) tak dicek di entry `pollTelegramCommands` → getUpdates jalan tiap 10-30 dtk selama antrean ditahan, perpanjang flood-wait.
+- Perbaikan (`MonitoringService.kt` entry poll): bila `rateLimitedRemainMs()>0`, majukan `commandBackoffUntil` (maxOf, jaga backoff lama) + return false. Loop tidur per 60 dtk, tanpa traffic.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 278/`1.6.251` + tag `v1.6.251`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.251` rilis, menunggu hasil CI.
