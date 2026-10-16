@@ -588,3 +588,6 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0 (2 file), 2 XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal. README +2 baris.
 - Rilis: commit + bump `versionCode` 295/`1.6.268` + tag `v1.6.268`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.268` rilis, menunggu hasil CI.
+
+## Sesi #219 (2026-10-16 15:50 UTC) — selesai
+- Laporan: versi terbaru tak rilis pasca-hapus trigger. Verifikasi: SALAH PAHAM — run tag v1.6.268 in_progress (build lama, bukan gagal); trigger tag utuh. Owner paham, tutup tanpa patch.
