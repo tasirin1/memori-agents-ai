@@ -490,3 +490,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 288/`1.6.261` + tag `v1.6.261`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.261` rilis, menunggu hasil CI.
+
+## Sesi #206 (2026-10-16 13:50 UTC) — selesai
+- Permintaan: maraton (temuan recordvideo-180 vs 48MB).
+- Verifikasi BENAR: 2 Mbps + AAC ≈ 266 KB/dtk → 180 dtk ≈ 48 MB pas di bibir + VBR/overhead → gagal setelah 3 menit sia-sia. Cek pasca-rekam tetap sebagai backstop.
+- Perbaikan: estimasi 300 KB/dtk (margin) di handler `/recordvideo`; melebihi 48 MB → tolak + saran ≤167 dtk. 1 cabang.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 289/`1.6.262` + tag `v1.6.262`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.262` rilis, menunggu hasil CI.
