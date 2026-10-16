@@ -411,3 +411,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 278/`1.6.251` + tag `v1.6.251`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.251` rilis, menunggu hasil CI.
+
+## Sesi #196 (2026-10-16 11:55 UTC) — selesai
+- Permintaan: "lanjut" → Tinggi (antrean menumpuk saat auth diblokir).
+- Verifikasi (klaim data-hilang GUGUR sebagian): cursor SMS/call tak maju saat blocked (`checkAndSendNewData:2854` early-return), patrol gate (`:736`), evict prioritas-dulu (`MessageQueue:196-198`), flush pasca-perbaikan ada (revive → start → `scheduleMessageSend:587` + reschedule worker +30 mnt). Antrean penuh butuh 100+ pesan/30 mnt tanpa produsen patrol/data — isi terbuang = noise regenerable + counter jujur.
+- Perbaikan (sisa real: schedule churn): cabang auth-blocked `sendFitted` + `sendToTelegram` tetap `addMessage`, tanpa `scheduleMessageSend` (worker pasti early-return). Flush dijamin 3 pemicu independen pasca-blokir.
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 279/`1.6.252` + tag `v1.6.252`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.252` rilis, menunggu hasil CI.
