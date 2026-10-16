@@ -566,3 +566,10 @@
 - Permintaan: tulis aturan maraton ke `AGENTS.md` (§5, 1 baris) + commit + push (docs-only, tanpa bump/tag per §8).
 - Validasi: `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0.
 - Status terakhir: aturan aktif; push `0d99990` memicu run CI (pantau bila merah).
+
+## Sesi #216 (2026-10-16 15:20 UTC) — selesai
+- Permintaan: hapus top bar + judul Setup (user pilih: keduanya).
+- Perubahan: `supportActionBar?.hide()` ganti set-title + Up; hapus TextView `setup_title` di layout; hapus string yatim. Tombol Back HP tetap jalan (Up override tinggal mati tak dipakai).
+- Validasi: 2 XML OK, nol referensi sisa, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`/Changed (UI, tanpa bump — ikut rilis berikutnya).
+- Push main sukses (commit `a6cf5eb`); build via GitHub Actions.
+- Status terakhir: menunggu run CI; versi rilis terakhir tetap v1.6.267.
