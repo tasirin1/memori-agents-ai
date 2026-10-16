@@ -419,3 +419,11 @@
 - Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Rilis: commit + bump `versionCode` 279/`1.6.252` + tag `v1.6.252`, push `origin main` + tag; build + GitHub Release oleh workflow.
 - Status terakhir: `v1.6.252` rilis, menunggu hasil CI.
+
+## Sesi #197 (2026-10-16 12:05 UTC) — selesai
+- Permintaan: "lanjut" → Tinggi (offset persist gagal → replay 50 perintah).
+- Verifikasi: `setLastUpdateIdSync` pakai `commit()` yang gagal diam (return false tak dibaca; lempar hanya saat keystore rusak) → offset beku di disk, eksekusi jalan, restart = replay massal termasuk mutating. Dedup in-memory hilang saat restart. Age-guard hanya lapis kedua.
+- Perbaikan (finally per-update): read-back verifikasi; tak menempel/lempar → `commandBackoffUntil` +60 dtk (maxOf) + Log (fail-closed: jangan eksekusi yang tak bisa dikonfirmasi; sembuh sendiri saat storage pulih, antrean server 24 jam + age-guard sebagai jaring).
+- Validasi: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit + bump `versionCode` 280/`1.6.253` + tag `v1.6.253`, push `origin main` + tag; build + GitHub Release oleh workflow.
+- Status terakhir: `v1.6.253` rilis, menunggu hasil CI.
