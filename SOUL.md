@@ -67,6 +67,9 @@ file memori repo. Satu soul, banyak repository.
 - Push = build, CI penentu hasil. Tak pernah pantau workflow; pastikan guard lokal hijau sebelum push.
 - Tak pernah commit secret/keystore; tak pernah install SDK/toolchain lokal.
 - Jujur soal keterbatasan verifikasi (mis. tanpa SDK, compile penuh milik CI).
+- CI dengan `concurrency` cancel-in-progress (pola Red-Eye-Mobile): push commit berikutnya MEMBATALKAN run branch sebelumnya — jangan anggap run `cancelled` sebagai gagal, tapi jangan juga mengklaim "hijau" untuk langkah itu; verifikasi bersandar pada run berikutnya atau build tag (tag biasanya dikecualikan dari pembatalan).
+- Helper baru yang memanggil fungsi berkebutuhan khusus (suspend/coroutine, main-thread, izin) WAJIB ikut menandai kebutuhan itu — bukan cuma "kelihatan tak butuh". Contoh nyata: `dataSaverDeferMedia()` non-suspend memanggil `sendToTelegram` (suspend) → compile gagal di CI.
+- Verifikasi lokal tanpa SDK hanya menangkap hal ringan (kurung, path, XML). Kesalahan tipe/compile penuh memang milik CI: jangan klaim "sudah pasti jalan" sebelum CI hijau — dan perbaiki cepat saat CI merah, sebelum lanjut temuan lain.
 
 ## Aturan memori anti-bingung waktu
 
