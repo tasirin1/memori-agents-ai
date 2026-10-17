@@ -1,33 +1,31 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (20 sesi terakhir). Arsip lama: `archive/Red-Eye-Mobile-arsip.md` (Sesi #2–#156, baca hanya bila perlu forensik).
+> Memori aktif (20 sesi terakhir). Arsip lama: `archive/Red-Eye-Mobile-arsip.md` (Sesi #2–#217 + #218–#219, baca hanya bila perlu forensik).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-17 10:05 UTC = sesi #238)
+## Status terakhir (2026-10-17 10:58 UTC = sesi #239)
 
-- Sesi #238: maraton perbaikan temuan audit (A1–A22 + B/C/D) dengan aturan "satu kelompok perbaikan = satu rilis": `versionCode` 328→335, `versionName` 1.6.301→1.6.308. Kelompok: R1 lokasi, R2 penyimpanan, R3 bersih-bersih kode mati, R4 koreksi fitur, R5 thread/ANR, R6 pengerasan, R7 efisiensi & kerapian, R8 perbaikan build.
-- `v1.6.301` (328, kode `b4a520a` / rilis `50b9063`) — A1 lokasi: `fetchLocation` memakai `bestFix` (kumpulkan hasil semua provider, GPS dulu, berhenti saat akurasi ≤ `LOCATION_GOOD_ACCURACY_M` = 50 m, lalu pilih akurasi terkecil; daftar lokasi cache pun dibandingkan akurasinya) — dulu hasil pertama yang menang sehingga taksiran jaringan yang meleset ratusan meter sering dipakai.
-- `v1.6.302` (329, `b91ac0e`/`1cf938e`) — A21 penyimpanan: `upgradeToPersistent` memeriksa hasil `commit()` (dulu hasil penulisan diabaikan sehingga bisa salah menandai "terenkripsi"); `commitGuarded` (main thread → `apply()`) untuk penanda yang ditulis dari UI/notifikasi; pesan gagal simpan kredensial diperjelas (`setup_save_no_storage`, menyebut keystore tak tersedia). **A2 dibatalkan sebagai temuan**: fallback `MemoryPrefs` senyap sudah dijaga `saveCredentials` (`if (!storageEncrypted) return false`).
-- `v1.6.303` (330, `30d78a6`/`0335b91`) — R3: A3 atomik drop `MessageQueue` dipindah sebelum `init` (dulu pemuatan penghitung drop selalu gagal-diam → angka drop di laporan selalu 0); hapus kode mati sisa fitur "wake poll" (`wakeUpdateId`, `wakeBackoffUntil`, `wakeOffsetFail`, `wakePingRate`, `lastWakePollAt` + klausa 409 yang selalu salah, `lastSendOkAt`, `setWakeUpdateIdSync`, `touchSmsPendingSync`, `addWakePingIds`), baris ganda `CrashReporter`, blok debug `MainActivity`, warna `purple_*`/`teal_*` (+ `values-night/colors.xml` yang identik); urutan CHANGELOG dirapikan; `tools/bekas-hapusan.txt` +3 nama.
-- `v1.6.304` (331, `58786fe`/`c92d682`) — R4: A4 `/jemput` jujur ("tersimpan tapi TIDAK aktif" bila geofence `/home` mati), A5 klaim "sepi adaptif" hanya bila perentangan benar berlaku, A6 sampel lokasi >80 m tak dipakai sebagai pembanding `/kendara` (+catatan bila interval >30 menit), A13 ambang baterai `>` 15% (dulu tepat 15% terlewat), A14 `/layar` membedakan izin / gagal baca / kosong.
-- `v1.6.305` (332) — R5 thread/ANR: A8 timeout rekaman video pindah ke `backgroundHandler` (dulu di thread utama → risiko ANR), A9 penanda `shotBusy` dibersihkan saat tangkap layar dibatalkan sistem, A10 penanda lintas-thread di `MonitoringService` dijadikan `@Volatile`.
-- `v1.6.306` (333, `b8e4677`/`7b4b9b4`) — R6 pengerasan: A17 `BootRestartWorker` → `Result.retry()` (backoff WorkManager yang sudah disiapkan dulu tak pernah berlaku karena mengaku sukses), A18 `isPollBlocked` mendelegasikan `isAuthBlocked`, A12 label galat 400 diperjelas (7 pesan media + agregat pesan teks), A15 Android 11+ langsung arahkan ke Pengaturan untuk izin lokasi latar, A16 izin `POST_NOTIFICATIONS` dikecualikan dari gate "buka Pengaturan".
-- `v1.6.307` (334, `a1bc04f`/`2fa6c2f`) — R7: B2 `idleDataCycles` di-clamp 8 (dulu bisa naik ke 100 tanpa guna), D6 `/uptime` pakai `serviceStartElapsed` (`elapsedRealtime`, tahan perubahan jam), D3 indentasi `CameraService.forceReset` + `BootReceiver.markHandled`, C4 hapus `PhoneNumbers.matches`/`matchesNormalized`.
-- **CI gagal-dulu-lalu-fix (maraton §5)**: run tag `v1.6.305`/`v1.6.306`/`v1.6.307` gagal semua karena **`@Volatile` ganda** di `MonitoringService.kt:70` (`This annotation is not repeatable`). Fix commit `5e53caf` + penjaga baru di `scripts/cek-cepat.sh` (anotasi ganda berturut-turut pada berkas Kotlin/Java) → `v1.6.308` (335, commit rilis `323e92c`) `success`, Release berisi `redeye-v1.6.308-debug.apk` + `-release.apk`. Tag `v1.6.305`–`v1.6.307` dibiarkan (riwayat tak ditulis ulang; masing-masing punya seksi CHANGELOG sendiri dan perubahannya terbit di `v1.6.308`) — ketiganya **TANPA Release**.
-- Temuan yang **SENGAJA tidak diubah**: **A11** (`QUICKBOOT` di `BootReceiver`) — jalur bangun sudah dijaga `isMonitoringEnabled` + `isConfigured` + consent sehingga broadcast palsu tak berbahaya, dan menghapusnya justru bisa mematikan autostart OEM; **A19** (fallback tanda tangan debug) — tak relevan karena secret keystore ada dan `assertReleaseKeystore` sudah mewajibkan keystore pada build rilis.
-- Validasi tiap langkah: XML parse OK, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0 (kini + penjaga anotasi ganda), `rg "BOT_TOKEN|CHAT_ID"` hanya konstanta/regex; TANPA Gradle lokal. Run `main` sering `cancelled` (concurrency cancel-in-progress) → verifikasi hijau bersandar pada run **tag** (dikecualikan dari concurrency).
-- Verifikasi rilis: `gh release list` → `v1.6.301`–`v1.6.304` + `v1.6.308` terbit (masing-masing 2 APK); `v1.6.305`–`v1.6.307` hanya tag tanpa Release. Pohon app repo bersih di `323e92c`.
+- Sesi #239: lanjutan maraton audit (temuan R8) + tuntaskan **D4 konsistensi bahasa pesan Telegram** ke Indonesia penuh (owner pilih "Semua ke Indonesia"), tetap "satu kelompok perbaikan = satu rilis": `versionCode` 336→341, `versionName` 1.6.309→1.6.314. **Tiap run tag `success` + GitHub Release terbit (2 APK)**.
+- `v1.6.309` (336, kode `6df2d01` / rilis `16a07cf`) — **B4** cache `getSystemService` di `MonitoringService`: 22 panggilan → deklarasi properti `by lazy` (thread-safe, tak bergantung urutan `onCreate`); 11 titik tersisa (termasuk dua jalur jarang: `NotificationManager`, `SmsManager` — sengaja tak diubah); nama field bersufiks `Svc` bila bentrok variabel lokal (mis. `locationManagerSvc`).
+- `v1.6.310` (337, `779992b`/`2788679`) — **B1/B3 + D1/D2**: keputusan "hemat kuota" di-memo 15 detik (`dataSaverCheckedAtElapsed`/`dataSaverDeferResult`, konstanta `DATA_SAVER_CHECK_WINDOW_MS = 15_000L`) agar scan berkas/kuota tak diulang tiap putaran; `pendingMediaCount()` dihitung sekali dan mengecualikan rekaman aktif (`activeAudioFile`). Ambang laporan hemat kuota tetap maksimal 1× per 6 jam (memo hanya menunda keputusan, bukan pesan).
+- `v1.6.311` (338, `fe0855f`/`877fb0d`) — **B5** `flushSync()` di `MessageQueue` hanya menulis bila `persistDirty` (pemanggil selalu menulis via `addMessage`/`removeMessages` `force=true`, jadi penulisan ulang itu ganda).
+- `v1.6.312` (339, `a57bf0e`/`3130752`) — **D4 tahap 1 (media)**: pesan foto, tangkap layar, video, rekaman suara, berdering, batas antrean berkas, petunjuk blokir kamera → Indonesia (68 baris teks, nol logika).
+- `v1.6.313` (340, `8058810`/`eacf597`) — **D4 tahap 2 (izin & perintah)**: pesan izin/Setup (kamera, mikrofon, SMS, kontak, notifikasi), `/lock`, `/flush`, pembersihan antrean, `/sms` + konfirmasi, `/notif`, laporan pesan ditolak Telegram (400), pesan video tertunda (53 penggantian).
+- `v1.6.314` (341, `89de346`/`ba6797b`) — **D4 tahap 3 (sisanya, 90+77 penggantian)**: alasan kegagalan kamera/rekaman (`CameraService`), laporan status/ringkas/ping, riwayat SMS & panggilan, pesan awal pemantauan, lencana keyboard inline (menu), `/patrol`, `/night`, `/syncinterval`, `/contacts`, `/history`, `/pause`, `/record`, pesan patroli/malam, peringatan admin perangkat, kartu Status di Setup, label penerusan notifikasi (Notifikasi/Apl/Judul/Isi), laporan antrean pesan dibuang, bahan pesan upgrade supergrup.
+- **Kehati-hatian D4 tahap 3**: `isCameraPolicyError` tetap mengenali token `CAMERA_DISABLED` (dipakai klasifikasi blokir kamera) walau teksnya kini Indonesia; kode alasan internal (`"photo backlog full"`, `"camera permission missing"`) tetap Inggris sebagai kunci klasifikasi, diterjemahkan hanya saat tampil via pemetaan baru di `sanitizedCameraError`; `"screen capture revoked"` diganti di titik panggil. Alasan `trace:` sengaja dibiarkan (tak dikonsumsi siapa pun — `onTrace` default no-op di `MonitoringService`). String `NetworkUtils` (pesan galat API Telegram) & pencocokan teks notifikasi (`missed call`) TIDAK diterjemahkan karena dipakai untuk klasifikasi.
+- Validasi tiap langkah: XML parse OK, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, saldo kurung/kurawal Kotlin 0/0 (pemeriksa tokenizer state-machine, karena penghitung kasar bingung oleh kutip-terescape), `rg "BOT_TOKEN|CHAT_ID"` hanya konstanta/regex; TANPA Gradle lokal. Verifikasi hijau bersandar pada run **tag** (run `main` selalu `cancelled` karena `concurrency`; muncul "Bypassed rule violations ... Required status check build is expected").
+- Verifikasi rilis: `gh release list` → `v1.6.309`–`v1.6.314` semua terbit (2 APK masing-masing, `-debug` + `-release`); enam run tag berturut-turut `success`. Pohon app repo bersih di `ba6797b`.
 
 ## Tugas terbuka
 
 - Tak ada CI yang perlu dipantau (tag terakhir `v1.6.308` `success`).
 - Uji perangkat nyata (sesi #238, fitur #237): (a) pasang/hapus aplikasi di HP anak → kabar "📦/🗑️"; (b) tekan "Nonaktifkan admin" (tanpa menyelesaikan konfirmasi) → "🚨 Ada percobaan mematikan Device Admin" + foto/lokasi; (c) aktifkan "Screen time access" lalu `/layar`; (d) bawa HP ≥30 km/jam lalu `/kendara`; (e) `/hematdata on`, matikan Wi-Fi, buat media tertahan, sambung Wi-Fi → terkirim otomatis.
 - Uji perangkat nyata (sesi #234–#236): jalankan `/cekmati` (atau tombol "Tes anti-mati") untuk membuktikan anti-mati + angka detik pemulihan; diamkan >90 menit dengan antrean menumpuk untuk pemulihan "jalur bisu" (atau langsung `/sembuh`); cek sumber blokir kamera (pesan `v1.6.291` menyebutkannya); deep link autostart tiap merek; `/alive` + `/heartbeat`.
-- Temuan audit yang **belum dikerjakan** (kandidat sesi berikutnya): **B1/B3** cache hasil scan berkas (`pendingMediaCount`, `flushPending*`) + sorting, **B4** cache `getSystemService`, **B5** pola penulisan antrean, **D1/D2** dedupe flush/send, **D4** konsistensi bahasa pesan (EN/ID campur).
+- Temuan audit **R8 SUDAH TUNTAS** (sesi #239): B1/B3 (memo hemat kuota 15 dtk), B4 (cache `getSystemService`), B5 (`flushSync` hemat tulis), D1/D2 (hitung media sekali + kecualikan rekaman aktif), D4 (pesan Telegram → Indonesia, 3 tahap). Tak ada temuan audit tersisa dari daftar A–D.
 - Pemikiran lanjutan yang bisa ditawarkan: notifikasi "percobaan uninstall" berulang (hitung percobaan cabut admin), ringkasan mingguan screen-time, `NetworkCallback` agar media terkirim segera saat Wi-Fi tersambung (kini menunggu putaran loop), opsi "tahan foto saat berkendara".
 - `heartbeat` sengaja default MATI (`0`) agar tak spam; owner menyalakan via `/heartbeat <1-48>`.
 - Batas scope: sesi #233 (7 file/5 rilis), #234 (4 langkah/4 rilis, 8 file), #235 (4 file/1 rilis), #237 (5 rilis), #238 (maraton audit: 8 rilis/1 sesi) melampaui saran SOUL "1 area/sesi" karena AGENTS.md §5 (maraton) + permintaan owner.
@@ -35,7 +33,7 @@
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
 - Pelajaran baru (sesi #238): `verifikasi-path.py` + `cek-cepat.sh` BUKAN kompiler — galat anotasi/kompilasi hanya tertangkap CI; sekarang anotasi ganda berturut-turut dijaga `cek-cepat.sh`.
 - Pelajaran lama: `sed` busybox TIDAK mendukung alamat `0,/regex/` (diam-diam no-op, exit 0) — jangan pakai untuk memindahkan judul seksi `[Unreleased]` di CHANGELOG; pakai tool edit.
-- Arsip memori: sesi #157–#217 dipindahkan ke `archive/Red-Eye-Mobile-arsip.md` pada sesi #238; file aktif kini memuat 20 sesi (#218–#238) — tugas perapian arsip SELESAI.
+- Arsip memori: sesi #157–#217 diarsipkan sesi #238; sesi #218–#219 diarsipkan sesi #239; file aktif memuat 20 sesi (#220–#239).
 - Anomali arsip (dibiarkan): sesi #191–#200 tercatat DUA KALI (timestamp beda, 2026-10-15 vs 2026-10-16) karena penomoran sesi pernah kembar; jangan renumber ulang, cukup sadari saat forensik.
 
 ## Cara pakai file ini
@@ -43,16 +41,13 @@
 - Awal sesi: baca file ini saja (jangan baca arsip kecuali perlu).
 - Akhir sesi: tambah `## Sesi #N+1 — YYYY-MM-DD HH:MM UTC — selesai` (stempel `date -u`), update "Status terakhir", commit + push. Bila sesi > 20, pindahkan sesi tertua ke arsip.
 
-## Sesi #218 (2026-10-16 15:40 UTC) — selesai
-- Permintaan: backup/restore setingan (user pilih: file PIN, bukan plaintext/internal).
-- Implementasi: `utils/SettingsBackup.kt` baru (AES-GCM-256, PBKDF2-HmacSHA256 100k, salt 16B + IV 12B, magic `REDEYE1:`, JSON via org.json bawaan, FQN tanpa import baru); Setup +2 tombol +2 launcher (CreateDocument/OpenDocument) + dialog PIN (sekali/konfirmasi) + export IO-thread/launcher-main; restore HANYA isi form → Save verifikasi seperti biasa (offline-path ada). Tanpa dependensi baru, tanpa izin baru.
-- Keamanan: token tak pernah plaintext di file; PIN salah → AEAD tag gagal → toast; PIN min 4.
-- Validasi: `git diff --check` bersih, brace/paren 0/0 (2 file), 2 XML OK, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal. README +2 baris.
-- Rilis: commit + bump `versionCode` 295/`1.6.268` + tag `v1.6.268`, push `origin main` + tag; build + GitHub Release oleh workflow.
-- Status terakhir: `v1.6.268` rilis, menunggu hasil CI.
-
-## Sesi #219 (2026-10-16 15:50 UTC) — selesai
-- Laporan: versi terbaru tak rilis pasca-hapus trigger. Verifikasi: SALAH PAHAM — run tag v1.6.268 in_progress (build lama, bukan gagal); trigger tag utuh. Owner paham, tutup tanpa patch.
+## Sesi #239 (2026-10-17 10:58 UTC) — selesai
+- Permintaan: "lanjutkan" maraton perbaikan temuan audit (sisa R8: B1/B3, B4, B5, D1/D2, D4) — aturan AGENTS.md §8: tiap kelompok perbaikan langsung commit + rilis.
+- Hasil 6 rilis (semua run tag `success` + Release terbit): `v1.6.309` B4 cache `getSystemService` (`by lazy`); `v1.6.310` B1/B3+D1/D2 memo hemat kuota 15 dtk + hitung media sekali; `v1.6.311` B5 `flushSync` hanya tulis bila `persistDirty`; `v1.6.312`–`v1.6.314` D4 tahap 1–3 pesan Telegram → Indonesia penuh. `versionCode` 336→341, `versionName` 1.6.309→1.6.314.
+- Keputusan owner: D4 "Semua ke Indonesia" dikerjakan bertahap 3 rilis (media → izin/perintah → sisanya) agar tiap diff kecil. Pesan sistem/`values` (strings.xml) TIDAK disentuh (sudah ada lokalisasi `values-in`).
+- Pelajaran baru: penghitung kurung/kurawal "kasar" (strip regex string) sering salah karena kutip-terescape menggeser pasangan kutip → pakai tokenizer state-machine (menangani kutip-terescape, komentar baris/blok, string tiga-kutip) untuk membandingkan saldo kode HEAD vs KINI. Skrip penggantian massal WAJIB menulis hanya setelah SEMUA hitungan pola cocok (assert count) — bila gagal di tengah, berkas terlanjur tertulis sebagian; pemulihannya `git checkout --` lalu ulang.
+- Jebakan nyata: berkas Kotlin memakai CAMPURAN escape dan emoji literal (mis. escape patroli vs emoji literal bulan, mata, rumah, ponsel, grafik, balon kata, telepon, jam, bel, tanda plus-minus) — pola penggantian harus dicek dulu ke isi berkas via `repr` baris, jangan menebak bentuk escape.
+- Status terakhir: semua rilis terverifikasi; app repo bersih di `ba6797b`.
 
 ## Sesi #221 (2026-10-16 16:10 UTC) — selesai
 - Permintaan: audit menyeluruh putaran-2 (5 subagen) + tindak lanjut.
