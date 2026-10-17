@@ -2300,3 +2300,10 @@
 - Perubahan (resource saja, nol logika): bg navy `#101D29`, display `#37474F`, angka `#607D8B` teks putih, fungsi `#FF9800`, samadengan hijau solid `#4CAF50` (ganti gradien oranye); day+night disamakan (branded, stealth konsisten); override teks C dihapus + warna yatim `calc_accent_text` dibuang (nol referensi).
 - Validasi: 5 XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]` (tanpa bump — ikut rilis berikut).
 - Push main sukses; build via GitHub Actions.
+
+## Sesi #223 (2026-10-16 16:30 UTC) — selesai
+- Permintaan: padatkan kalkulator + nama app ikut bahasa HP.
+- Perubahan: padding 20→12, display 28→18/56→44sp, margin tombol 6→4dp, huruf 26→22sp (= 34→30); `values-in/strings.xml` LENGKAP (paritas repo; app=Kalkulator, notif=Kalkulator, Setup Indonesia penuh). Autosize display 24-56 aman.
+- Validasi: 3 XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS (tegur paritas sebelum lengkap), `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
+- Push main sukses; build via GitHub Actions.
+
