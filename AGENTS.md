@@ -13,6 +13,7 @@ Identitas agen: `SOUL.md`. Indeks status: `README.md`.
 2. Akhir sesi: tambah 1 seksi sesi baru + update "Status terakhir", jalankan `python3 scripts/check_memory.py`, lalu commit + push.
 3. Stempel waktu: `YYYY-MM-DD HH:MM UTC` via `date -u`. DILARANG kata relatif tanpa stempel (kemarin, tadi, pagi/sore/malam).
 4. Bahasa: Indonesia di memori. Gaya commit: `memory: <nama-repo> - <ringkasan>`.
+5. Aturan kerja lintas repo — **mode perbaiki = maraton** + **audit sub-agen paralel dengan verifikasi mandiri** — ada di `SOUL.md` (seksi "Aturan maraton perbaikan & sub-agen"); salinannya di `AGENTS.md` tiap repo. Baca sebelum kerja perbaikan/audit.
 
 ## File memori aktif (baca salah satu saja)
 

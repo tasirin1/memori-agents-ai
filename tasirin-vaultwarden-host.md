@@ -7,9 +7,12 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-15 03:20 UTC = sesi #70 + lanjutan workflow)
+## Status terakhir (2026-10-17 12:31 UTC = sesi #71)
 
-- Workflow `verifikasi-patch.yml` digabung jadi job pertama `build-apk.yml` + `build-binary.yml` (commit `a2f3b35`, push `origin main` sukses). Sesi #70 (2026-10-13): audit Android 14+ bersih, tanpa temuan.
+- Sesi #71: aturan maraton perbaikan + audit sub-agen ditulis ke `AGENTS.md` repo ini (aturan 17–18) atas permintaan owner; tetap terikat aturan #13 (langsung push) & #14 (dilarang memantau build). Versi kanonik di `SOUL.md` memori agen.
+- Commit docs-only `744ffd0` (push `origin main`, tanpa bump versi/tag — `versionCode` epoch-otomatis, commit `*.md` dilewati CI).
+- Guard: `python3 tools/verifikasi-patch.py` LOLOS (1 berkas) + `bash scripts/cek-cepat.sh` exit 0 + `git diff --check` bersih.
+- Sebelumnya (sesi #70 + lanjutan, 2026-10-15 03:20 UTC): workflow `verifikasi-patch.yml` digabung jadi job pertama `build-apk.yml` + `build-binary.yml` (`a2f3b35`).
 
 ## Tugas terbuka
 
@@ -58,3 +61,9 @@
 - Perubahan: `verifikasi-patch.yml` digabung jadi job pertama di `build-apk.yml` DAN `build-binary.yml` (`needs` + delete berkas); daftar struktur di AGENTS.md diselaraskan. Tanpa bump versi/tag (versionCode epoch-otomatis, preseden chore langsung push).
 - Validasi: YAML valid kedua berkas, `tools/verifikasi-patch.py` LOLOS, `scripts/cek-cepat.sh` exit 0, `git diff --check` bersih.
 - Commit `a2f3b35`, push `origin main` sukses.
+
+## Sesi #71 — 2026-10-17 12:31 UTC (aturan maraton + sub-agen ditulis ke AGENTS.md, selesai)
+- Permintaan owner: "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai".
+- Perubahan (`744ffd0`, push `origin main`, docs-only tanpa bump/tag): `AGENTS.md` +aturan 17 (**mode perbaiki = maraton** — kerjakan temuan audit sampai habis, satu temuan satu perbaikan akar, langsung commit + push `main` per aturan #13, tanpa memantau build per #14, build gagal didahulukan) +aturan 18 (**audit menyeluruh = 2–5 sub-agen paralel per area + verifikasi mandiri** tiap klaim berat ke kode `rg`/`sed` sebelum masuk laporan/patch; temuan wajib `file:baris` + dampak + skenario pemicu + level bahaya).
+- Kanonik lintas repo: `SOUL.md` (memori agen) seksi "Aturan maraton perbaikan & sub-agen"; salinan di `AGENTS.md` Red-Eye-Mobile §5, netradar 14–15, tasirin-download-manager 21–22.
+- Validasi tanpa toolchain Android: `python3 tools/verifikasi-patch.py` LOLOS (1 berkas), `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih.

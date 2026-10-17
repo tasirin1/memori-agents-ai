@@ -1,18 +1,17 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (20 sesi terakhir). Arsip lama: `archive/Red-Eye-Mobile-arsip.md` (Sesi #2–#217 + #218–#219 + #221, baca hanya bila perlu forensik).
+> Memori aktif (20 sesi terakhir). Arsip lama: `archive/Red-Eye-Mobile-arsip.md` (Sesi #2–#217 + #218–#219 + #221–#222, baca hanya bila perlu forensik).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-17 12:16 UTC = sesi #241)
+## Status terakhir (2026-10-17 12:31 UTC = sesi #242)
 
-- Sesi #241 (lanjutan #240): owner melaporkan fitur sembunyikan ikon GAGAL ("icon nya ngga hilang btw saat aku pencet icon nya malah ke pengaturan"). Investigasi membuktikan itu **batasan platform Android 10+, bukan bug kode kita**, lalu owner memutuskan **menghapus lagi tombol sembunyikan ikon**. Fitur `v1.6.315` di-revert penuh (`git revert 37e6822`) → commit `cfdce80`, rilis `v1.6.316` (`versionCode` 343) run tag `success` (3m26s) + Release 2 APK terbit.
-- Akar masalah (kode AOSP `LauncherAppsService.getLauncherActivities()`): sejak Android 10, bila app **minta izin** DAN masih punya activity launcher yang **default-aktif di manifest** (`hasDefaultEnableLauncherActivity()` memakai `MATCH_DISABLED_COMPONENTS` lalu membaca `activityInfo.enabled` = nilai MANIFEST, TIDAK ikut berubah saat runtime di-`DISABLED` — tegas di mirror Robolectric: "Android don't override the enabled field of component with the actual value"), sistem menyuntikkan entri "hidden app" sintetis (`android.app.AppDetailsActivity`) → ikon tetap tampil dan diklik membuka **Info Aplikasi/Setelan**. API resmi untuk mematikannya (`PackageManager.setSyntheticAppDetailsActivityEnabled`) berstatus `@hide @SystemApi` + `CHANGE_COMPONENT_ENABLED_STATE` → tak bisa dipakai app pihak ketiga. Jadi "ikon benar-benar hilang" hanya bisa bila ikon tak ada sejak instal (alias `android:enabled="false"` + dibuka lewat tile) — owner memilih tidak memakai cara itu.
-- Yang dihapus di `v1.6.316`: `activity-alias` `.ui.Launcher` (filter LAUNCHER kembali ke `.ui.MainActivity`), `service/SetupTileService.kt`, pref `launcher_icon_hidden`, 6 string `setup_hide_icon*`/`setup_show_icon*`, tombol `setupHideIconButton`, metode `onHideIconPressed`/`applyLauncherIconHidden`/`syncLauncherIconState`/`launcherAlias` (keempatnya dicatat di `tools/bekas-hapusan.txt`), plus entri README (fitur + langkah 14 + catatan harian). Notifikasi pemantauan tetap seperti semula.
-- Verifikasi: manifest biner APK `v1.6.316` diperiksa dengan **parser AXML Python buatan sendiri** (tanpa SDK lokal — polanya: chunk 0x0003 → string pool 0x0001 → 0x0102/0x0103; atribut 20 byte `ns,name,raw,typed(size/res0/dataType,data)`, `dataType=(tv>>24)&0xFF`; offset atribut = `off+16+attributeStart`) → tak ada alias/tile dan filter LAUNCHER kembali di `MainActivity`; 4 XML parse OK; `verifikasi-path.py` LOLOS; `cek-cepat.sh` exit 0; run tag `success`.
+- Sesi #242: permintaan owner "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai" → aturan maraton (tadinya hanya `AGENTS.md` repo ini `§5`) + metode audit sub-agen kini **resmi lintas repo**: versi kanonik di `SOUL.md` (seksi "Aturan maraton perbaikan & sub-agen"), penunjuk di `AGENTS.md` memori, salinan di `AGENTS.md` 4 repo (repo ini §5, netradar aturan 14–15, tasirin-download-manager 21–22, tasirin-vaultwarden-host 17–18).
+- Commit docs-only (hanya `AGENTS.md`) → commit + push TANPA bump/tag (`§8` pengecualian docs-only): repo ini `edd0c4f`, netradar `0055476`, dlm `e51da4b`, vaultwarden `744ffd0`. Guard lokal hijau semua; satu-satunya merah = dlm `check_repo.py` [4/12] "admin konsisten" karena `PyYAML` tak ada di mesin ini (terbukti pra-ada via `git stash` — 11 langkah lain OK, termasuk "AGENTS.md completeness").
+- Sesi #241 (fitur sembunyikan ikon) sudah tuntas; detail teknisnya disimpan di entri `## Sesi #241` di bawah (akar masalah AOSP + pola parser AXML).
 
 ## Tugas terbuka
 
@@ -23,48 +22,19 @@
 - Uji perangkat nyata (sesi #240) untuk fitur sembunyikan ikon **dibatalkan di sesi #241** (fiturnya dihapus, lihat `v1.6.316`) — tak perlu diuji. Catatan: karena tile Quick Settings dilepas, tile "Calculator" yang pernah ditambahkan di panel notifikasi akan hilang sendiri; app masih terlihat di Setelan > Aplikasi (normal, bukan bug).
 - Pemikiran lanjutan yang bisa ditawarkan: notifikasi "percobaan uninstall" berulang (hitung percobaan cabut admin), ringkasan mingguan screen-time, `NetworkCallback` agar media terkirim segera saat Wi-Fi tersambung (kini menunggu putaran loop), opsi "tahan foto saat berkendara".
 - `heartbeat` sengaja default MATI (`0`) agar tak spam; owner menyalakan via `/heartbeat <1-48>`.
-- Batas scope: sesi #233 (7 file/5 rilis), #234 (4 langkah/4 rilis, 8 file), #235 (4 file/1 rilis), #237 (5 rilis), #238 (maraton audit: 8 rilis/1 sesi) melampaui saran SOUL "1 area/sesi" karena AGENTS.md §5 (maraton) + permintaan owner.
+- Batas scope: sesi #233 (7 file/5 rilis), #234 (4 langkah/4 rilis, 8 file), #235 (4 file/1 rilis), #237 (5 rilis), #238 (maraton audit: 8 rilis/1 sesi) melampaui saran SOUL "1 area/sesi" karena AGENTS.md §5 (maraton) + permintaan owner. Sejak sesi #242 aturan maraton + audit sub-agen resmi berlaku lintas repo (`SOUL.md` + `AGENTS.md` 4 repo), jadi pelampauan scope itu sah di semua repo.
 - Verifier: peringatan `.split(` vs Regex prekompil = false-positive.
 - Pola langganan: sebelum rilis, `rg -n "private fun <nama>"` untuk tiap fungsi baru (cegah overload ganda sesi #175).
+- Pelajaran baru (sesi #242): `check_memory.py` mewajibkan nomor sesi **NAIK** sesuai urutan di berkas (bukan terbaru-di-atas) — menaruh sesi baru di atas sesi lama = `[FAIL] nomor sesi tidak urut`. Taruh sesi baru di paling bawah (setelah sesi tertinggi), lalu arsipkan yang tertua dari atas.
 - Pelajaran baru (sesi #238): `verifikasi-path.py` + `cek-cepat.sh` BUKAN kompiler — galat anotasi/kompilasi hanya tertangkap CI; sekarang anotasi ganda berturut-turut dijaga `cek-cepat.sh`.
 - Pelajaran lama: `sed` busybox TIDAK mendukung alamat `0,/regex/` (diam-diam no-op, exit 0) — jangan pakai untuk memindahkan judul seksi `[Unreleased]` di CHANGELOG; pakai tool edit.
-- Arsip memori: sesi #157–#217 diarsipkan sesi #238; sesi #218–#219 diarsipkan sesi #239; sesi #221 diarsipkan sesi #241; file aktif memuat 20 sesi (#222–#241).
+- Arsip memori: sesi #157–#217 diarsipkan sesi #238; sesi #218–#219 diarsipkan sesi #239; sesi #221 diarsipkan sesi #241; sesi #222 diarsipkan sesi #242; file aktif memuat 20 sesi (#223–#242).
 - Anomali arsip (dibiarkan): sesi #191–#200 tercatat DUA KALI (timestamp beda, 2026-10-15 vs 2026-10-16) karena penomoran sesi pernah kembar; jangan renumber ulang, cukup sadari saat forensik.
 
 ## Cara pakai file ini
 
 - Awal sesi: baca file ini saja (jangan baca arsip kecuali perlu).
 - Akhir sesi: tambah `## Sesi #N+1 — YYYY-MM-DD HH:MM UTC — selesai` (stempel `date -u`), update "Status terakhir", commit + push. Bila sesi > 20, pindahkan sesi tertua ke arsip.
-
-## Sesi #241 (2026-10-17 12:16 UTC) — selesai
-- Keluhan owner: "icon nya ngga hilang btw saat aku pencet icon nya malah ke pengaturan" → investigasi lintas sumber (kode repo, manifest biner APK, kode AOSP, laporan Chucker API 35, isu Termux Pixel Launcher, artikel bedah `LauncherAppsService`).
-- Temuan: **bukan bug kode kita**. Sejak Android 10 `getLauncherActivities()` menyuntikkan entri "hidden app" sintetis (`android.app.AppDetailsActivity`, klik → Info Aplikasi/Setelan) bila app minta izin + masih punya activity launcher default-aktif di manifest; `activityInfo.enabled` tetap nilai manifest walau runtime di-DISABLED, dan `setSyntheticAppDetailsActivityEnabled` berstatus `@hide @SystemApi`. Jawaban owner atas opsi desain: **hapus lagi tombolnya**.
-- Tindakan: `git revert 37e6822` (konflik hanya di `CHANGELOG.md` karena commit rilis menyentuh baris yang sama → dirapikan manual: seksi `[1.6.315]` dipertahankan + entri `### Removed` baru), 4 metode dihapus didaftarkan di `tools/bekas-hapusan.txt`.
-- Rilis: commit `cfdce80` (revert) + `fab8c4b`/`v1.6.316` (`versionCode` 343); run tag `success` (3m26s), Release `redeye-v1.6.316-debug.apk` + `-release.apk`. APK diperiksa ulang: bersih dari alias/tile/pref/string; filter LAUNCHER kembali di `MainActivity`; app repo bersih di `fab8c4b`.
-- Pelajaran baru: (1) `git revert` commit fitur aman walau ada commit rilis sesudahnya selama baris yang sama tidak berubah (kalau berubah → konflik, selesaikan manual dan jangan hapus riwayat versi lama); (2) untuk memverifikasi manifest APK tanpa SDK lokal, tulis parser AXML Python kecil (struktur chunk + atribut 20 byte) — pola lengkap ada di bagian "Status terakhir"; (3) "sembunyikan ikon launcher" di Android 10+ bukan sekadar `setComponentEnabledSetting`; tanpa ikon-tak-ada-sejak-instal/`@SystemApi`/device-owner, entri Info Aplikasi akan selalu muncul.
-
-## Sesi #240 (2026-10-17 11:26 UTC) — selesai
-- Permintaan owner: tombol untuk menyembunyikan ikon dari launcher (melengkapi mode stealth kalkulator + kode `1234=`).
-- Rilis: `v1.6.315` (`versionCode` 342) — run tag `success`, Release terbit (2 APK).
-- Desain: launcher dipindah ke `activity-alias` `.ui.Launcher`; tombol Setup menonaktifkan/mengaktifkan alias (`DONT_KILL_APP`, app tetap terpasang & service tetap jalan); keadaan pref `launcher_icon_hidden` disinkron tiap `onResume`.
-- Pintu balik (pilihan owner): tile Quick Settings `SetupTileService` (label menyamar "Calculator") + notifikasi pemantauan. Kode dial ditolak karena tak andal di Android 11+.
-- Pengaman UX: dialog konfirmasi menjelaskan kedua jalan balik; toasts menegaskan; tombol berubah label "Tampilkan ikon launcher" saat tersembunyi.
-- Validasi: 4 XML OK, saldo kurung 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0; rilis terverifikasi via GitHub Actions.
-- Sisa uji (perlu HP asli): tambah tile di panel notifikasi (Edit tiles) → satu ketuk membuka Setup; sembunyikan ikon → cek ikon hilang dari layar utama & pemantauan tetap jalan; reboot → tile & notifikasi masih ada; tampilkan ikon lagi.
-
-## Sesi #239 (2026-10-17 10:58 UTC) — selesai
-- Permintaan: "lanjutkan" maraton perbaikan temuan audit (sisa R8: B1/B3, B4, B5, D1/D2, D4) — aturan AGENTS.md §8: tiap kelompok perbaikan langsung commit + rilis.
-- Hasil 6 rilis (semua run tag `success` + Release terbit): `v1.6.309` B4 cache `getSystemService` (`by lazy`); `v1.6.310` B1/B3+D1/D2 memo hemat kuota 15 dtk + hitung media sekali; `v1.6.311` B5 `flushSync` hanya tulis bila `persistDirty`; `v1.6.312`–`v1.6.314` D4 tahap 1–3 pesan Telegram → Indonesia penuh. `versionCode` 336→341, `versionName` 1.6.309→1.6.314.
-- Keputusan owner: D4 "Semua ke Indonesia" dikerjakan bertahap 3 rilis (media → izin/perintah → sisanya) agar tiap diff kecil. Pesan sistem/`values` (strings.xml) TIDAK disentuh (sudah ada lokalisasi `values-in`).
-- Pelajaran baru: penghitung kurung/kurawal "kasar" (strip regex string) sering salah karena kutip-terescape menggeser pasangan kutip → pakai tokenizer state-machine (menangani kutip-terescape, komentar baris/blok, string tiga-kutip) untuk membandingkan saldo kode HEAD vs KINI. Skrip penggantian massal WAJIB menulis hanya setelah SEMUA hitungan pola cocok (assert count) — bila gagal di tengah, berkas terlanjur tertulis sebagian; pemulihannya `git checkout --` lalu ulang.
-- Jebakan nyata: berkas Kotlin memakai CAMPURAN escape dan emoji literal (mis. escape patroli vs emoji literal bulan, mata, rumah, ponsel, grafik, balon kata, telepon, jam, bel, tanda plus-minus) — pola penggantian harus dicek dulu ke isi berkas via `repr` baris, jangan menebak bentuk escape.
-- Status terakhir: semua rilis terverifikasi; app repo bersih di `ba6797b`.
-
-## Sesi #222 (2026-10-16 16:20 UTC) — selesai
-- Permintaan: desain kalkulator ikuti logo.
-- Perubahan (resource saja, nol logika): bg navy `#101D29`, display `#37474F`, angka `#607D8B` teks putih, fungsi `#FF9800`, samadengan hijau solid `#4CAF50` (ganti gradien oranye); day+night disamakan (branded, stealth konsisten); override teks C dihapus + warna yatim `calc_accent_text` dibuang (nol referensi).
-- Validasi: 5 XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]` (tanpa bump — ikut rilis berikut).
-- Push main sukses; build via GitHub Actions.
 
 ## Sesi #223 (2026-10-16 16:30 UTC) — selesai
 - Permintaan: padatkan kalkulator + nama app ikut bahasa HP.
@@ -243,3 +213,37 @@
 - Validasi: XML parse OK; `python3 tools/verifikasi-path.py` LOLOS tiap langkah; `bash scripts/cek-cepat.sh` exit 0; `rg "BOT_TOKEN|CHAT_ID"` tanpa secret asli; TANPA Gradle lokal. Pelajaran CI: run `main` selalu kena `concurrency` cancel (dibatalkan push berikutnya) → bersandar pada run tag.
 - Rilis & CI: 8 Release terbit (`v1.6.301`–`v1.6.304`, `v1.6.308`), masing-masing 2 APK; tag `v1.6.305`–`v1.6.307` tanpa Release (build gagal); run tag terverifikasi `success`.
 - Memori: sesi #157–#217 dipindahkan ke `archive/Red-Eye-Mobile-arsip.md` (file aktif kini 20 sesi: #218–#238) — tugas perapian arsip yang lama tertunda akhirnya selesai.
+
+## Sesi #239 (2026-10-17 10:58 UTC) — selesai
+- Permintaan: "lanjutkan" maraton perbaikan temuan audit (sisa R8: B1/B3, B4, B5, D1/D2, D4) — aturan AGENTS.md §8: tiap kelompok perbaikan langsung commit + rilis.
+- Hasil 6 rilis (semua run tag `success` + Release terbit): `v1.6.309` B4 cache `getSystemService` (`by lazy`); `v1.6.310` B1/B3+D1/D2 memo hemat kuota 15 dtk + hitung media sekali; `v1.6.311` B5 `flushSync` hanya tulis bila `persistDirty`; `v1.6.312`–`v1.6.314` D4 tahap 1–3 pesan Telegram → Indonesia penuh. `versionCode` 336→341, `versionName` 1.6.309→1.6.314.
+- Keputusan owner: D4 "Semua ke Indonesia" dikerjakan bertahap 3 rilis (media → izin/perintah → sisanya) agar tiap diff kecil. Pesan sistem/`values` (strings.xml) TIDAK disentuh (sudah ada lokalisasi `values-in`).
+- Pelajaran baru: penghitung kurung/kurawal "kasar" (strip regex string) sering salah karena kutip-terescape menggeser pasangan kutip → pakai tokenizer state-machine (menangani kutip-terescape, komentar baris/blok, string tiga-kutip) untuk membandingkan saldo kode HEAD vs KINI. Skrip penggantian massal WAJIB menulis hanya setelah SEMUA hitungan pola cocok (assert count) — bila gagal di tengah, berkas terlanjur tertulis sebagian; pemulihannya `git checkout --` lalu ulang.
+- Jebakan nyata: berkas Kotlin memakai CAMPURAN escape dan emoji literal (mis. escape patroli vs emoji literal bulan, mata, rumah, ponsel, grafik, balon kata, telepon, jam, bel, tanda plus-minus) — pola penggantian harus dicek dulu ke isi berkas via `repr` baris, jangan menebak bentuk escape.
+- Status terakhir: semua rilis terverifikasi; app repo bersih di `ba6797b`.
+
+## Sesi #240 (2026-10-17 11:26 UTC) — selesai
+- Permintaan owner: tombol untuk menyembunyikan ikon dari launcher (melengkapi mode stealth kalkulator + kode `1234=`).
+- Rilis: `v1.6.315` (`versionCode` 342) — run tag `success`, Release terbit (2 APK).
+- Desain: launcher dipindah ke `activity-alias` `.ui.Launcher`; tombol Setup menonaktifkan/mengaktifkan alias (`DONT_KILL_APP`, app tetap terpasang & service tetap jalan); keadaan pref `launcher_icon_hidden` disinkron tiap `onResume`.
+- Pintu balik (pilihan owner): tile Quick Settings `SetupTileService` (label menyamar "Calculator") + notifikasi pemantauan. Kode dial ditolak karena tak andal di Android 11+.
+- Pengaman UX: dialog konfirmasi menjelaskan kedua jalan balik; toasts menegaskan; tombol berubah label "Tampilkan ikon launcher" saat tersembunyi.
+- Validasi: 4 XML OK, saldo kurung 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0; rilis terverifikasi via GitHub Actions.
+- Sisa uji (perlu HP asli): tambah tile di panel notifikasi (Edit tiles) → satu ketuk membuka Setup; sembunyikan ikon → cek ikon hilang dari layar utama & pemantauan tetap jalan; reboot → tile & notifikasi masih ada; tampilkan ikon lagi.
+
+## Sesi #241 (2026-10-17 12:16 UTC) — selesai
+- Keluhan owner: "icon nya ngga hilang btw saat aku pencet icon nya malah ke pengaturan" → investigasi lintas sumber (kode repo, manifest biner APK, kode AOSP, laporan Chucker API 35, isu Termux Pixel Launcher, artikel bedah `LauncherAppsService`).
+- Temuan: **bukan bug kode kita**. Sejak Android 10 `getLauncherActivities()` menyuntikkan entri "hidden app" sintetis (`android.app.AppDetailsActivity`, klik → Info Aplikasi/Setelan) bila app minta izin + masih punya activity launcher default-aktif di manifest; `activityInfo.enabled` tetap nilai manifest walau runtime di-DISABLED, dan `setSyntheticAppDetailsActivityEnabled` berstatus `@hide @SystemApi`. Jawaban owner atas opsi desain: **hapus lagi tombolnya**.
+- Tindakan: `git revert 37e6822` (konflik hanya di `CHANGELOG.md` karena commit rilis menyentuh baris yang sama → dirapikan manual: seksi `[1.6.315]` dipertahankan + entri `### Removed` baru), 4 metode dihapus didaftarkan di `tools/bekas-hapusan.txt`.
+- Rilis: commit `cfdce80` (revert) + `fab8c4b`/`v1.6.316` (`versionCode` 343); run tag `success` (3m26s), Release `redeye-v1.6.316-debug.apk` + `-release.apk`. APK diperiksa ulang: bersih dari alias/tile/pref/string; filter LAUNCHER kembali di `MainActivity`; app repo bersih di `fab8c4b`.
+- Pelajaran baru: (1) `git revert` commit fitur aman walau ada commit rilis sesudahnya selama baris yang sama tidak berubah (kalau berubah → konflik, selesaikan manual dan jangan hapus riwayat versi lama); (2) untuk memverifikasi manifest APK tanpa SDK lokal, tulis parser AXML Python kecil (pola di butir terakhir entri ini); (3) "sembunyikan ikon launcher" di Android 10+ bukan sekadar `setComponentEnabledSetting`; tanpa ikon-tak-ada-sejak-instal/`@SystemApi`/device-owner, entri Info Aplikasi akan selalu muncul.
+- Detail teknis akar masalah (AOSP): `LauncherAppsService.getLauncherActivities()` → `hasDefaultEnableLauncherActivity()` query `MATCH_DISABLED_COMPONENTS` lalu membaca `activityInfo.enabled` = nilai MANIFEST (runtime `DISABLED` tak mengubahnya; mirror Robolectric: "Android don't override the enabled field of component with the actual value") → entri sintetis `android.app.AppDetailsActivity` disuntikkan bila app minta izin + punya activity launcher default-aktif. `PackageManager.setSyntheticAppDetailsActivityEnabled` = `@hide @SystemApi` + izin `CHANGE_COMPONENT_ENABLED_STATE`. Satu-satunya jalan bersih: alias `android:enabled="false"` di manifest + dibuka lewat tile (owner menolak).
+- Pola parser AXML Python (cek manifest APK tanpa SDK): baca `AndroidManifest.xml` dari zip; string pool chunk `0x0001` (UTF-16: `n=uint16` lalu `n*2` byte; flag UTF-8 `0x100`: `n=uint8` + 1 byte sisip); start element `0x0102` (`off+16` = `ns,name`; `off+24` = `attrStart,attrSize,attrCount`; tiap atribut 20 byte `ns,name,raw,typedValue(uint32)`, `dataType=(tv>>24)&0xFF`, `data` = indeks string pool bila tipe `0x03`); end element `0x0103`; nama tag/atribut dibaca dari string pool.
+
+## Sesi #242 (2026-10-17 12:31 UTC) — selesai
+- Permintaan owner: "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai" → aturan yang tadinya cuma hidup di `AGENTS.md` repo ini `§5` (maraton) + kebiasaan audit sub-agen (dipakai sejak sesi #221) kini jadi aturan resmi lintas repo.
+- Yang ditulis: `SOUL.md` (kanonik: maraton, build-gagal-didahulukan, audit 2–5 sub-agen paralel + verifikasi mandiri, bentuk temuan wajib), `AGENTS.md` memori (aturan sesi no. 5 = penunjuk), dan `AGENTS.md` 4 repo: repo ini `§5` (+butir sub-agen), netradar aturan 14–15, tasirin-download-manager 21–22, tasirin-vaultwarden-host 17–18.
+- Commit docs-only (tanpa bump/tag): repo ini `edd0c4f`; netradar `0055476`; dlm `e51da4b`; vaultwarden `744ffd0` — semua ter-push.
+- Guard lokal: repo ini `verifikasi-path.py` LOLOS (1 berkas) + `cek-cepat.sh` exit 0; netradar `check_repo.py` "Repo guard passed"; vaultwarden `verifikasi-patch.py` LOLOS + `cek-cepat.sh` exit 0; dlm `check_repo.py` GAGAL HANYA di [4/12] "admin konsisten" (`PyYAML` tak tersedia; dibuktikan pra-ada: `git stash` lalu ulang tetap sama), 11 langkah lain OK.
+- Pemantauan CI tetap ikut aturan masing-masing repo (dlm aturan 19 & vaultwarden aturan 14 dilarang dipantau); docs-only juga di-skip `paths-ignore`.
+- Pelajaran: aturan yang "cuma ada di satu repo" rawan hilang saat ganti repo/device → angkat ke `SOUL.md` (kanonik) + salin ringkas ke `AGENTS.md` tiap repo; aturan repo yang melarang pantau CI tetap menang atas aturan umum maraton.

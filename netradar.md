@@ -23,9 +23,11 @@ tapi dulu dilabeli `"pagi/sore/malam/kemarin"` sehingga agen mengira aksi
 - Aturan main (ringkas dari `AGENTS.md`): build resmi HANYA via CI; semua Bahasa Indonesia; commit `type: deskripsi` (`feat`/`fix`/`refactor`/`test`/`perf`/`docs`); `versionName` tetap `"2.0"`, `versionCode` otomatis; guard changelog di CI (perubahan `app/src`, `scripts/`, `.github/workflows/`, `app/build.gradle.kts` wajib sertakan `CHANGELOG.md`); unit test logika murni tanpa Robolectric.
 - Workflow Build docs-only skip (`**.md`, `LICENSE`, `.gitignore`) — selaras repo Tasirin lain.
 
-## Status terakhir (2026-10-15 05:14 UTC = sesi #17)
+## Status terakhir (2026-10-17 12:31 UTC = sesi #18)
 
-- master HIJAU semua (Build run `38685110060` success + CodeQL hijau). Dependabot mati (`0cf5225`), PR terbuka 0, tag `v2.1.0` rilis, runner pin `ubuntu-24.04`.
+- Sesi #18: aturan maraton perbaikan + audit sub-agen ditulis ke `AGENTS.md` (aturan 14–15) atas permintaan owner; versi kanonik di `SOUL.md` memori agen. Commit docs-only `0055476` (push `master`, tanpa bump/tag).
+- Guard: `python3 scripts/check_repo.py` → "✅ Repo guard passed"; `git diff --check` bersih; tanpa SDK lokal.
+- Sebelumnya (sesi #17, 2026-10-15 05:14 UTC): master HIJAU semua (Build run `38685110060` success + CodeQL hijau). Dependabot mati (`0cf5225`), PR terbuka 0, tag `v2.1.0` rilis, runner pin `ubuntu-24.04`.
 
 ## Tugas terbuka
 
@@ -153,3 +155,10 @@ tapi dulu dilabeli `"pagi/sore/malam/kemarin"` sehingga agen mengira aksi
 - Fakta: kegagalan yang terlihat = 2 dispatch manual di branch dependabot yang sudah ditutup (ekspektasi, abaikan). Push master `0cf5225` tak memicu Build otomatis (sebab belum jelas — paths tak mengecualikannya); CodeQL-nya hijau.
 - Tindakan: picu `workflow_dispatch` Build di master → run `38685110060` success (kompilasi + test + lint + R8 + keystore).
 - Status terakhir: master HIJAU semua (Build + CodeQL).
+
+### Sesi #18 — 2026-10-17 12:31 UTC — selesai
+- Permintaan owner: "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai".
+- Perubahan (`0055476`, push `master`, docs-only tanpa bump/tag): `AGENTS.md` +aturan 14 (**mode perbaiki = maraton** — satu temuan satu perbaikan akar masalah, langsung commit + push `feat:`/`fix:` + CHANGELOG, tidak berhenti di tengah, build gagal didahulukan) +aturan 15 (**audit menyeluruh = 2–5 sub-agen paralel per area + verifikasi mandiri** tiap klaim berat ke kode via `rg`/`sed` sebelum masuk laporan/patch; temuan wajib `file:baris` + kenapa berbahaya + skenario pemicu + level bahaya).
+- Versi kanonik lintas repo: `SOUL.md` (memori agen) seksi "Aturan maraton perbaikan & sub-agen"; penunjuk di `AGENTS.md` memori agen.
+- Validasi: `python3 scripts/check_repo.py` ✅ "Repo guard passed"; `git diff --check` bersih; tanpa SDK lokal (aturan 1).
+- Status terakhir: aturan maraton + sub-agen resmi berlaku di repo ini.

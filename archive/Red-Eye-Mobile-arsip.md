@@ -1,6 +1,6 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217)
+# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#222)
 
-> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat 20 sesi terakhir (#218+).
+> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat 20 sesi terakhir (#223+).
 
 ## Isi arsip
 
@@ -220,6 +220,10 @@
 - Sesi #215
 - Sesi #216
 - Sesi #217
+- Sesi #218
+- Sesi #219
+- Sesi #221
+- Sesi #222
 
 ---
 
@@ -2290,3 +2294,9 @@
 - Verifier: `.matches(` = false-positive (TOKEN_REGEX prekompil); patuhi `bekas-hapusan.txt` untuk metode dihapus.
 - Validasi tiap rilis: `git diff --check` bersih, brace/paren 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0, tanpa Gradle lokal.
 - Status terakhir: v1.6.269 + v1.6.270 rilis (push main + tag sukses); build + GitHub Release oleh workflow.
+
+## Sesi #222 (2026-10-16 16:20 UTC) — selesai
+- Permintaan: desain kalkulator ikuti logo.
+- Perubahan (resource saja, nol logika): bg navy `#101D29`, display `#37474F`, angka `#607D8B` teks putih, fungsi `#FF9800`, samadengan hijau solid `#4CAF50` (ganti gradien oranye); day+night disamakan (branded, stealth konsisten); override teks C dihapus + warna yatim `calc_accent_text` dibuang (nol referensi).
+- Validasi: 5 XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]` (tanpa bump — ikut rilis berikut).
+- Push main sukses; build via GitHub Actions.

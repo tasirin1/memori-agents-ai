@@ -71,6 +71,36 @@ file memori repo. Satu soul, banyak repository.
 - Helper baru yang memanggil fungsi berkebutuhan khusus (suspend/coroutine, main-thread, izin) WAJIB ikut menandai kebutuhan itu — bukan cuma "kelihatan tak butuh". Contoh nyata: `dataSaverDeferMedia()` non-suspend memanggil `sendToTelegram` (suspend) → compile gagal di CI.
 - Verifikasi lokal tanpa SDK hanya menangkap hal ringan (kurung, path, XML). Kesalahan tipe/compile penuh memang milik CI: jangan klaim "sudah pasti jalan" sebelum CI hijau — dan perbaiki cepat saat CI merah, sebelum lanjut temuan lain.
 
+## Aturan maraton perbaikan & sub-agen (berlaku SEMUA repo)
+
+Dipasang 2026-10-17 atas permintaan owner ("terapkan aturan maraton perbaikan
+dan sub-agen ini ke semua repo yang dikelola memori ai"). Sebelumnya aturan
+maraton hanya hidup di `AGENTS.md` Red-Eye-Mobile `§5`; ini versi kanoniknya,
+dan tiap `AGENTS.md` repo memuat salinan ringkasnya.
+
+- **Mode perbaiki = maraton.** Perintah "perbaiki / fix / lanjutkan" atas temuan
+  audit dikerjakan sampai habis: satu temuan → satu perbaikan akar masalah →
+  langsung commit + push (dan rilis bila aturan rilis repo menuntut); jangan
+  berhenti di tengah, jangan menumpuk perubahan di working tree. Bila owner
+  menyuruh menyelesaikan seluruh temuan, maraton MENGALAHKAN saran umum
+  "maksimal 1 area per sesi" — yang belum tersentuh tetap dicatat sebagai tugas
+  terbuka di memori.
+- **Build gagal didahulukan.** Ada kabar build/CI gagal → perbaiki itu dulu
+  sebelum lanjut ke temuan berikutnya. Cara memantau mengikuti aturan repo:
+  Red-Eye-Mobile & NetRadar boleh dicek tiap putaran (`gh run list`);
+  `tasirin-download-manager` (aturan 19) dan `tasirin-vaultwarden-host`
+  (aturan 14) DILARANG dipantau — cukup tunggu kabar owner atau run berikutnya.
+- **Audit menyeluruh = sub-agen paralel + verifikasi mandiri.** Perintah
+  "audit / cek seluruh area / temukan bug" pada repo besar: pecah jadi 2–5
+  sub-agen paralel per area (tool `subagent`: `explore` untuk pemetaan cepat,
+  `general` untuk tugas multi-langkah), lalu VERIFIKASI SENDIRI tiap klaim
+  berat langsung ke kode (`rg`/`sed`) — klaim sub-agen BUKAN fakta sampai
+  terbukti; perilaku platform dikonfirmasi ke sumber resmi (AOSP/dokumen).
+- **Bentuk temuan wajib**: lokasi `file:baris`, kenapa berbahaya (dampak ke
+  user), skenario pemicu sesederhana mungkin, dan level bahaya
+  (Kritikal/Tinggi/Sedang/Rendah). Metode audit (jumlah sub-agen + cara
+  verifikasi) ditulis di entri memori sesi.
+
 ## Aturan memori anti-bingung waktu
 
 Insiden 2026-10-03: tujuh sesi dalam satu hari dilabeli "pagi/sore/malam/kemarin"

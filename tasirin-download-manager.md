@@ -28,9 +28,11 @@
 - 1 fix: `HttpControlServer.ipv4Addresses()` memuat semua interface apa adanya (VPN putus/P2P idle/IMS, link-local 169.254.x.x, hostAddress kosong jadi `http://:port/`, urutan acak bikin firstOrNull lotre) — kini skip interface mati (`isUp` fail-open), saring link-local, `mapNotNull` buang kosong, `distinct+sorted` deterministik. 4 pemanggil (Settings x3, MainActivity openRemote) ikut sembuh tanpa ubah signature.
 - Guard: `git diff --check` bersih, `verifikasi-path` LOLOS, `prepare_remote --check` OK, `security_audit --self-test` OK, `check_readme_sync` OK. Push main sukses tanpa pantau workflow (aturan 19).
 
-## Status terakhir (2026-10-13 07:15 UTC — sapuan Android 6+ jilid 27, bersih)
+## Status terakhir (2026-10-17 12:31 UTC — aturan maraton + sub-agen lintas repo)
 
-- HEAD `1837c2a` (Android 15 `onTimeout` + battery-exemption + READ_EXTERNAL_STORAGE API 29). Sapuan jilid 22–27: 5 bersih berturut-turut, tak ada temuan layak patch. Working tree bersih.
+- Permintaan owner: "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai" → `AGENTS.md` repo ini +aturan 21 (**mode perbaiki = maraton**, tetap patuh aturan 19: tanpa memantau workflow) +aturan 22 (**audit menyeluruh = 2–5 sub-agen paralel per area + verifikasi mandiri** tiap klaim berat ke kode sebelum masuk laporan/patch). Versi kanonik di `SOUL.md` memori agen.
+- Commit docs-only `e51da4b` (push `main`, tanpa build/release — `paths-ignore`); guard lokal `check_repo.py` 11/12 (hanya "admin konsisten" gagal karena modul `yaml` tak tersedia — pra-ada, dibuktikan dengan `git stash`), `git diff --check` bersih.
+- Sebelumnya (2026-10-13 07:15 UTC): HEAD `1837c2a` (Android 15 `onTimeout` + battery-exemption + `READ_EXTERNAL_STORAGE` API 29); sapuan jilid 22–27 bersih berturut-turut.
 
 ## Tugas terbuka
 
@@ -97,3 +99,9 @@
 - Perintah user: audit seluruh area untuk kinerja/stabilitas Android 6+. HEAD target `1837c2a`, working tree bersih.
 - Sapuan API compatibility ulang: helper minSdk paths/SDK guards, Crypto/KeyStore API 23 fallback, NetworkCallback API 24 fallback, NotificationChannel API 26 guard, MediaStore/RELATIVE_PATH API 29 guard, all-files API30, notification permission API33, PendingIntent immutable, FGS type permission, boot JobScheduler dan callback Android 15 `onTimeout`. Modern default methods (`removeIf`, `getOrDefault`) dilindungi core library desugaring. Tak ada temuan baru atau kode tak efisien yang cukup terbukti untuk dihapus.
 - Guard `check_repo.py` 11/12: semua guard termasuk remote, path, cek-cepat, smoke, readme, audit keamanan dan whitespace lolos; gagal hanya admin konsisten karena modul Python `yaml` tak tersedia. `git diff --check` bersih, working tree tetap bersih. Tidak menjalankan build/test/lint Android.
+
+## 2026-10-17 12:31 UTC — aturan maraton + sub-agen ditulis ke AGENTS.md (docs-only, push)
+- Permintaan owner: "terapkan aturan maraton perbaikan dan subagest ini ke semua repo yang di kelola memori ai".
+- Perubahan (`e51da4b`, push `main`, docs-only → `paths-ignore` jadi tanpa build/release): `AGENTS.md` +aturan 21 (**mode perbaiki = maraton** — kerjakan temuan audit sampai habis, satu temuan satu perbaikan akar, langsung commit + push, build gagal didahulukan; tetap patuh aturan 19 = tanpa memantau workflow) +aturan 22 (**audit menyeluruh = 2–5 sub-agen paralel per area + verifikasi mandiri** tiap klaim berat ke kode `rg`/`sed`; temuan wajib `file:baris` + dampak + skenario pemicu + level bahaya).
+- Kanonik lintas repo: `SOUL.md` (memori agen) seksi "Aturan maraton perbaikan & sub-agen"; salinan juga di `AGENTS.md` Red-Eye-Mobile §5, netradar 14–15, tasirin-vaultwarden-host 17–18.
+- Guard: `check_repo.py` 11/12 — "AGENTS.md completeness" OK, gagal hanya "admin konsisten" karena modul Python `yaml` tak tersedia (pra-ada: diuji ulang dengan perubahan di-`stash`, tetap sama). `git diff --check` bersih.
