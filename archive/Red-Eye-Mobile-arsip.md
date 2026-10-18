@@ -235,6 +235,7 @@
 - Sesi #231
 - Sesi #232
 - Sesi #233
+- Sesi #234
 
 ---
 
@@ -2415,3 +2416,25 @@
 - Validasi tiap rilis: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, XML `minidom` OK (string yang diubah), cek kurung berimbang file Kotlin, tanpa Gradle lokal (build via GitHub Actions).
 - Status terakhir: `v1.6.282`–`v1.6.286` rilis & terverifikasi; SEMUA temuan audit #232 tuntas (1 gugur); pohon kerja app repo bersih; `versionCode` 313.
 
+
+## Sesi #234 (2026-10-17 06:00 UTC) — selesai
+- Permintaan owner: "buat dia lebih cerdas dan anti mati otomatis" → owner memilih SEMUA 4 opsi yang ditawarkan. Konteks masuk: HEAD `03a4fe6` (v1.6.286), CI hijau, pohon bersih. Recon awal via 2 subagen (peta mekanisme restart/keep-alive + celahnya): tak ada `AlarmManager`/`JobScheduler` sama sekali, jalur hidup-cepat tercepat cuma watchdog WorkManager 15 menit, loop 25 detik mati bersama proses, tak ada laporan "service mati", `onBind` null, notifikasi FGS tanpa `IMMEDIATE`.
+- Langkah 1 → `v1.6.287` (`versionCode` 314) — inti anti-mati:
+  - File baru `utils/Liveness.kt` + `receiver/LivenessReceiver.kt` (terdaftar di manifest, `exported="false"`, tanpa intent-filter): `AlarmManager.setAndAllowWhileIdle` tiap ~10 menit (inexact, TANPA izin `SCHEDULE_EXACT_ALARM` agar tak menambah izin mencolok). Saat alarm berbunyi: kalau `MonitoringService.isRunning` cuma pasang alarm berikutnya; kalau tidak tapi monitoring masih aktif → `startForegroundService`, gagal → jatuh ke `MessageScheduler.scheduleBootRestart`. Receiver SENGAJA tidak menandai alive (kalau menandai, celah kematian terhapus sebelum dilaporkan).
+  - `PreferencesManager` +`lastAliveAt`/`livenessKills`/`livenessReportAt`; `Liveness.noteServiceStart` mengirim pesan Telegram otomatis ("♻️ Monitoring hidup lagi. Sebelumnya berhenti sekitar pukul HH:mm (±X menit).") bila celah ≥15 menit, maks 1×/6 jam; `noteStopped` saat monitoring benar-benar dimatikan.
+  - Notifikasi FGS +`setForegroundServiceBehavior(FOREGROUND_SERVICE_IMMEDIATE)` di 3 builder `MonitoringService` + `BootRestartWorker` (promosi FGS langsung, tidak menunggu ~10 dtk). Alarm dipasang di `startMonitoring`, `onTaskRemoved`, `onDestroy`, `handleFgsTimeout`, `BootReceiver`, `BootRestartWorker`, `SetupActivity`; dibatalkan saat stop/`clearCredentials`.
+  - Commit `d6e15f6` + rilis `f65bfa1`; CI main 39006339786 `success`; tag `v1.6.287`. Release 2 APK.
+- Langkah 2 → `v1.6.288` (`versionCode` 315) — wizard autostart OEM:
+  - File baru `utils/AutoStart.kt`: peta komponen autostart per merek (Xiaomi/Redmi/Poco, Oppo/Realme, Vivo/iQOO, Huawei/Honor, Samsung, OnePlus, Asus, Meizu, Letv, Nokia) dicoba berurutan, fallback halaman Info Aplikasi; `manufacturerLabel()`, `canDrawOverlays()`, `openOverlaySettings()`. Tombol `setupAntiKillButton` + dialog wizard (langkah + status baterai/overlay hidup) yang otomatis muncul sekali setelah monitoring dinyalakan bila belum lengkap. Izin `SYSTEM_ALERT_WINDOW` ditambahkan (opsional; membantu start FGS dari latar di Android 12+). String baru di `values` + `values-in`; README diperbarui; verifier memunculkan peringatan izin baru (tercatat README).
+  - Commit `bb5e3c7` + rilis `7fcd619`; CI `success`; tag `v1.6.288`. Release 2 APK.
+- Langkah 3 → `v1.6.289` (`versionCode` 316) — heartbeat & deteksi mati:
+  - `/alive` (status, uptime, denyut terakhir, jumlah pemulihan, watchdog, tipe FGS yang BENAR-BENAR aktif lewat `fgsTypesText`, baterai), `/heartbeat <1-48|0>` (default mati; stempel `heartbeat_at`; dikirim dari loop monitoring via `maybeSendHeartbeat`), baris `Liveness` di status Setup. Ditambahkan ke `KNOWN_COMMANDS`/`SENSITIVE_COMMANDS`/`MUTATING_COMMANDS` + `/help` + tabel perintah README.
+  - Commit `b4c3eab` + rilis `edec8f5`; CI main 39007206336 `success`; tag `v1.6.289`. Release 2 APK.
+- Langkah 4 → `v1.6.290` (`versionCode` 317) — pengerasan lain:
+  - `NotificationForwarderService`: rebind NLS backoff bertingkat (30 dtk → 2 → 5 → 15 → 30 menit, maks 5 percobaan, direset di `onListenerConnected`, dibatalkan di `onDestroy`) dan `requestRebind` kini dipanggil di MAIN THREAD (Handler main looper) — sebelumnya 1 percobaan dari `scope` IO (bisa `CalledFromWrongThreadException`). Field `lastRebindAt`/`rebindRetryScheduled` dihapus.
+  - `MonitoringService`: `onTrimMemory`/`onLowMemory` — saat memori kritis `messageQueue.flushSync()` (antrean ke disk) + pasang jam liveness lebih dulu. `BootReceiver`: pemicu ulang `USER_PRESENT` + `PACKAGE_RESTARTED` (guard `schemeSpecificPart == packageName`, hanya paket sendiri) + pesan boot dibuat umum ("Monitoring coba jalan lagi…").
+  - Commit `3f01433` + rilis `91a6ba1`; CI main 39007583340 `success`; tag `v1.6.290`. Release 2 APK.
+- Sasaran TERPENUHI: bukan cuma jalur lambat 15 menit WorkManager, kini ada jam bangun 10 menit yang tetap berbunyi saat Doze (inexact, tanpa izin khusus), laporan Telegram otomatis saat service hidup lagi setelah dibunuh, wizard autostart + izin tampil-di-atas untuk Android 12+, `/alive` + `/heartbeat` + indikator Setup, rebind NLS berjenjang, dan penyelamatan antrean saat memori kritis.
+- Pelajaran baru: (1) `NotificationListenerService.requestRebind` WAJIB main thread; (2) `setAndAllowWhileIdle` cukup untuk watchdog liveness tanpa `SCHEDULE_EXACT_ALARM` (penting untuk app stealth — `setAlarmClock`/`setExact*` memunculkan izin/ikon); (3) receiver liveness tak boleh menandai alive sebelum service melaporkan celah; (4) `PendingIntent.getBroadcast(..., FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)` + receiver `exported="false"` cukup untuk alarm internal; (5) `startForegroundService` dari `BroadcastReceiver` alarm masih bisa ditolak (Android 12+) → wajib ada fallback worker, dan izin "battery exemption"/`SYSTEM_ALERT_WINDOW` menaikkan peluang berhasil.
+- Validasi tiap rilis: `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, XML manifest/layout/strings `minidom` OK, kurung berimbang file Kotlin yang diubah, `git status` bersih, tanpa Gradle lokal (build + Release via GitHub Actions).
+- Status terakhir: `v1.6.287`–`v1.6.290` rilis & terverifikasi; pohon kerja bersih; `versionCode` 317 / `versionName` 1.6.290; 4 opsi owner tuntas.
