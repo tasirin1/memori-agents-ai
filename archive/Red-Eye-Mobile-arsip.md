@@ -1,6 +1,6 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#229)
+# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#232)
 
-> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#230+).
+> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#233+).
 
 ## Isi arsip
 
@@ -231,6 +231,9 @@
 - Sesi #227
 - Sesi #228
 - Sesi #229
+- Sesi #230
+- Sesi #231
+- Sesi #232
 
 ---
 
@@ -2364,3 +2367,36 @@
 - Temuan diverifikasi GUGUR (tak diubah): `.sent` suffix di `prunePhotoCache/pruneVideoCache/pruneAudioCache` tak pernah dibuat (file dihapus setelah sukses) = kode mati, bukan bug; `allowed` variabel mati di `CrashReporter.flushPending`; `registerReceiver` sudah pakai `ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED)`; `PBKDF2` satu-satunya algoritma API-26+ yang dipakai tanpa penjaga (tidak ada `java.time`/`java.util.Base64`/`String.join`).
 - Validasi tiap rilis: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, cek kurung berimbang untuk file Kotlin yang diubah, tanpa Gradle lokal (build diverifikasi via GitHub Actions).
 - Status terakhir: `v1.6.277` + `v1.6.278` rilis & terverifikasi (Release 2 APK masing-masing); pohon kerja bersih; menunggu keputusan soal temuan Android 15 (#3/#4).
+
+## Sesi #230 (2026-10-17 00:50 UTC) — selesai
+- Lanjutan audit maraton; keputusan pemilik diminta via pertanyaan: (A) migrasi FGS ke `specialUse` API 34+, (B) sesi screenshot persisten berbatas waktu.
+- Fix → `v1.6.279` (`versionCode 306`) — Android 15+/targetSdk 35 foreground service:
+  - Masalah: tipe `dataSync` dibatasi 6 jam/24 jam (setelah itu memulai lagi dilarang sampai app dibuka), dan `BOOT_COMPLETED` tak boleh meluncurkan FGS tipe `dataSync|camera|microphone|mediaProjection`; dulu `startForegroundImmediate()` gagal total → service hidup tanpa foreground → `RemoteServiceException` ("did not then call Service.startForeground()") tiap boot.
+  - Manifest: izin `FOREGROUND_SERVICE_SPECIAL_USE`; `MonitoringService` `foregroundServiceType="dataSync|specialUse|camera|location|microphone|mediaProjection"` + `<property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE">`; `SystemForegroundService` `dataSync|specialUse`.
+  - `baseForegroundType()` (specialUse di API 34+, dataSync di bawahnya) dipakai `computeForegroundTypes()` & fallback `startForeground` (bukan tipe manifest lagi) supaya tetap boleh dari boot; `startForegroundImmediate()` mengembalikan Boolean, gagal → `stopSelf()` + jadwal boot-restart/watchdog; `onCreate`/`onStartCommand` bail saat false. `BootRestartWorker.fgsType()` idem. README dicatat.
+  - Commit `43845e2` + rilis `3ed03a2`; CI main 38987224273 & tag 38987255881 `success`; Release `v1.6.279` (2 APK).
+- Fix → `v1.6.280` (`versionCode 307`) — `/screenshot` Android 14+:
+  - Masalah: token izin `MediaProjection` sekali pakai → percobaan kedua `SecurityException` lalu izin dicabut; praktis hanya 1 screenshot per grant.
+  - Fix: sesi disimpan (field `shotProjection`/`shotDisplay`/`shotReader`/`shotTokenUri`/`shotWidth`/`shotHeight`/`shotReleaseJob` + `shotSessionLock` + `shotStopCallback`): `ensureShotSession()` pakai ulang sesi bila uri+ukuran sama (orientasi berubah → sesi dibuat ulang), `takeScreenshotFrame()` buang 1 frame basi lalu tunggu frame baru (20×100 ms), `releaseShotSession()` melepas semuanya; auto-release `SHOT_SESSION_IDLE_MS` (10 menit) setelah capture terakhir, plus dilepas di `onDestroy`, saat izin kosong, saat `SecurityException`, dan di `MediaProjection.onStop`.
+  - Commit `a87a3a9` + rilis `f36c5d4`; CI main 38987841233 & tag 38987875574 `success`; Release `v1.6.280` (2 APK). Pohon bersih.
+- Temuan yang TETAP tidak diubah (sengaja): `.sent` filter di prune cache = kode mati; `checkCurfew` untuk jam < 12:00 = ambiguitas desain; `sendFitted` mid-chunk cancel race = benign.
+- Validasi tiap rilis: `git diff --check`, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, XML manifest `minidom` OK, kurung berimbang; build hanya via GitHub Actions (tanpa Gradle lokal).
+
+## Sesi #231 (2026-10-17 01:42 UTC) — selesai
+- Permintaan: lanjutkan audit menyeluruh ("temukan bug"), mode perbaiki = maraton (tiap temuan langsung rilis). Konteks masuk: HEAD `f36c5d4` (v1.6.280), CI hijau, pohon bersih.
+- Fix → `v1.6.281` (`versionCode 308`): placeholder `<…>` literal di pesan Telegram `parseMode` HTML (bukan cuma bug kosmetik — pesan benar-benar ditolak Telegram):
+  - Akar masalah: Telegram menolak `<` mentah di HTML (`400 can't parse entities: Unsupported start tag`), sedangkan semua balasan "Cara pakai …", menu `/help`, dan `/notif` memakai placeholder `<…>` literal (43 pasang `\u003c`/`\u003e` = karakter `<`/`>` nyata di `MonitoringService.kt`, plus 3 literal `<` di baris 1822 `/notif <on|off|status>`, 2271 "Diabaikan (<3 huruf)", 2479 `/help`).
+  - Efek nyata: fallback teks-polos hanya jalan bila `Html.unescape(pesan) != pesan`, dan `tagStripRegex`-nya menuntut huruf tepat setelah `<` → placeholder berawalan huruf (mis. `<number>`, `<on|off>`) dihapus diam-diam oleh fallback (pesan sampai tapi jadi "Cara pakai: /sms" tanpa parameter), sedangkan placeholder berawalan non-huruf (`<0-60>`, `<5-180>`, `<1-1440>`, `<5-600>`, `<50-5000>`) membuat pesannya DROP total tanpa fallback + menaikkan counter "dropped".
+  - Fix: placeholder dikirim sebagai entitas `&lt;`/`&gt;` (didukung parser HTML Telegram, tampil utuh sebagai `<…>`; fallback plain tetap benar karena `Html.unescape` mengembalikannya ke `<`). Hanya `MonitoringService.kt` (41 baris). Commit `377d296` + rilis `18a1824`; tag `v1.6.281`; CI main 38991209932 & tag 38991226335 `success`; Release `v1.6.281` terbit (2 APK).
+- Diverifikasi GUGUR (tidak diubah): `sendPairHint` sudah `parseMode = null` (aman untuk `<`); `ownerLine` SetupActivity cuma teks UI lokal (tak pernah dikirim ke Telegram); `CrashReporter` meng-escape saat menyimpan → `/log` + flushPending aman (stack trace `<init>` sudah `&lt;init&gt;`); label app, nama kontak, kata `watch`, isi SMS, nomor panggilan semuanya `Html.escape`; paritas jumlah argumen `getString` (145 panggilan) cocok semua; tak ada `%` liar di string ber-argumen; tak ada fungsi privat mati; komponen manifest ada semua (`androidx.work.impl.foreground.SystemForegroundService` fully-qualified benar); key extra Intent konsisten (`of`/`part`); nama file SharedPreferences cocok dengan pengecualian backup (`secure_prefs`/`encrypted_queue`/`boot_meta`) + `allowBackup="false"`; `network_security_config` menolak cleartext; kode rahasia kalkulator `1234=` benar; `/stop` benar-benar menghentikan forwarder (`monitoringPaused` dicek di `forwardingAllowed()`).
+- Validasi rilis: `python3 tools/verifikasi-path.py` LOLOS (0 gagal), `bash scripts/cek-cepat.sh` exit 0, cek paritas tanda kutip pada diff, build hanya via GitHub Actions (tanpa Gradle lokal).
+- Status terakhir: `v1.6.281` rilis & terverifikasi (Release 2 APK); pohon kerja bersih; audit maraton masih berjalan (belum ada temuan baru yang terbuka).
+
+## Sesi #232 (2026-10-17 03:18 UTC) — selesai
+- Permintaan: "cek seluruh area secara menyeluruh pelan pelan teliti dan telaten temukan bug" = mode audit baca-saja (tanpa patch, `git status` bersih). Metode: 4 subagen (service / data-worker-network / UI-receiver-manifest / kamera-forwarder-setup) + verifikasi mandiri tiap klaim berat ke kode, lalu konfirmasi ke sumber AOSP.
+- Temuan KRITIKAL (FAKTA, belum diperbaiki): `/screenshot` mustahil berhasil. `SetupActivity.kt:178-179` menyimpan `res.data?.toUri(Intent.URI_INTENT_SCHEME)`; `Intent.toUri` hanya menyerialkan extra String/boolean/byte/char/double/float/int/long/short (terverifikasi di AOSP `Intent.toUriInner`), jadi token `MediaProjection` (extra `IBinder`) dibuang. `MediaProjectionManager.getMediaProjection(code, data)` (`MonitoringService.kt:4890-4895`) mengembalikan `null` bila `getIBinderExtra(EXTRA_MEDIA_PROJECTION)` null → `takeScreenshotFrame` null → balasan "Screenshot failed… grant again" (`:4771,4804`) walau Setup bilang "Screenshot: granted"; consent TIDAK dibersihkan (null bukan `SecurityException`). Perbaikan v1.6.278 (callback) + v1.6.280 (sesi persisten) jadi sia-sia. `BootReceiver.kt:144-152` sudah menghapus consent saat boot.
+- Temuan Tinggi: reuse token setelah sesi dilepas (idle 10 mnt / rotasi layar) memaksa `getMediaProjection` kedua → `SecurityException` → `clearScreenshotConsentSync()` hapus izin permanen (moot selama KRITIKAL belum diperbaiki; jadi riil bila #1 diperbaiki dengan pola sama).
+- Temuan Sedang: (a) fallback `startForeground` (`:344-355`) tak men-set `appliedFgsTypes` → `ensureForegroundTypes` (`:5069-5085`) retry tipe lengkap yang selalu ditolak; `computeForegroundTypes` selalu menyertakan `MEDIA_PROJECTION` karena consent selalu true; (b) `onCreate` bail saat gagal FGS (`:210-212`) meninggalkan lateinit (`smsRepository`/`callLogRepository`/`messageQueue`/`cameraService`) belum init, `onStartCommand` bisa lanjut; (c) Setup `Test` (`:751-755`) menaikkan `saveSeq` + `cancel()` `saveJob` → Save yang sedang verifikasi tak pernah menulis interval (Test hanya `saveTestIdentity` token+chat, `PreferencesManager.kt:871-883`); (d) backup dari API ≥26 tak bisa dipulihkan di API 24–25 (KDF SHA256 vs fallback SHA1, `SettingsBackup.kt:26,49-69`); (e) `CameraService.onOpened` (`:343-350`) menimpa `cameraDevice` tanpa guard → bila `cleanup()` sudah jalan (watchdog/forceReset) kamera baru tak pernah ditutup; (f) `NotificationForwarderService.flushBatch` (`:855-861`) mengambil item dari `batchBuf` lalu `forwardLocked`; bila scope dibatalkan di tengah, item itu hilang senyap (`salvageBatch` hanya `batchBuf`).
+- Temuan Rendah: `MessageQueue.persistDropCountsLocked` (`:174-179`) `commit()` sinkron tanpa guard main-thread dari dalam `lock` (bisa dari `BootReceiver.onReceive`); `MessageScheduler.scheduleMessageSend` (`:30-39`) `return true` tanpa enqueue saat kuota penuh → `/flush` lapor "scheduled" palsu (`MonitoringService:1904-1910`); `values/strings.xml:58` `setup_saved_offline` berbahasa Indonesia di default-Inggris; `MessageQueue.flushSync` (`:358-379`) menulis snapshot di luar `lock` (jendela clobber).
+- Validasi: `git status --short` bersih (nol patch), tanpa Gradle lokal; build hanya via GitHub Actions bila fix dijalankan.
+- Status terakhir: audit #232 selesai (1 Kritikal + 1 Tinggi + 6 Sedang + 4 Rendah), menunggu perintah batch fix (saran: KRITIKAL `/screenshot` dulu, butuh keputusan desain owner).
