@@ -236,6 +236,7 @@
 - Sesi #232
 - Sesi #233
 - Sesi #234
+- Sesi #235
 
 ---
 
@@ -2438,3 +2439,17 @@
 - Pelajaran baru: (1) `NotificationListenerService.requestRebind` WAJIB main thread; (2) `setAndAllowWhileIdle` cukup untuk watchdog liveness tanpa `SCHEDULE_EXACT_ALARM` (penting untuk app stealth — `setAlarmClock`/`setExact*` memunculkan izin/ikon); (3) receiver liveness tak boleh menandai alive sebelum service melaporkan celah; (4) `PendingIntent.getBroadcast(..., FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)` + receiver `exported="false"` cukup untuk alarm internal; (5) `startForegroundService` dari `BroadcastReceiver` alarm masih bisa ditolak (Android 12+) → wajib ada fallback worker, dan izin "battery exemption"/`SYSTEM_ALERT_WINDOW` menaikkan peluang berhasil.
 - Validasi tiap rilis: `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, XML manifest/layout/strings `minidom` OK, kurung berimbang file Kotlin yang diubah, `git status` bersih, tanpa Gradle lokal (build + Release via GitHub Actions).
 - Status terakhir: `v1.6.287`–`v1.6.290` rilis & terverifikasi; pohon kerja bersih; `versionCode` 317 / `versionName` 1.6.290; 4 opsi owner tuntas.
+
+## Sesi #235 (2026-10-17 06:29 UTC) — selesai
+- Permintaan owner: konfirmasi apakah pesan "⚠️ Photo capture failed: camera disabled by device policy (CAMERA_DISABLED) …" sudah "anti", terutama "saat lama aplikasi ngga di buka". Konteks masuk: HEAD `91a6ba1` (v1.6.290), CI hijau, pohon bersih.
+- Diagnosis (fakta kode): ini kelas berbeda dari anti-mati #234 — yang diblokir adalah AKSES KAMERA, bukan proses app, jadi jam liveness/autostart tak menyentuhnya. Pesan keluar dari dua jalur: (1) pra-cek `DevicePolicyManager.getCameraDisabled()` (`MonitoringService.kt:4643`), (2) kamera balas `ERROR_CAMERA_DISABLED` (`CameraService.kt:386` & `:677`). App sendiri TIDAK pernah memanggil `setCameraDisabled` (admin kita cuma `<force-lock/>` di `res/xml/device_admin.xml`), jadi penyebab selalu dari luar: admin lain / work profile / parental control lain / saklar privasi kamera merek. "App lama tak dibuka" bukan penyebabnya (kalau izin yang dicabut, pesannya "camera permission missing").
+- BUG yang ditemukan sambil itu: pesan lama menyuruh "or /resume to retry", padahal `/resume` hanya membatalkan jeda monitoring dan TIDAK menyentuh jeda foto → janji palsu. Juga: jeda 120 menit dipakai untuk semua kasus, padahal kalau tak ada admin yang memblokir, jeda itu salah kaprah.
+- Fix → `v1.6.291` (`versionCode` 318), owner memilih opsi "kerjakan semua":
+  - `PreferencesManager` +`KEY_PHOTO_PAUSE_SOURCE` (`photo_pause_source`: 0 none / 1 admin / 2 tak dikenal) + reset di `setMonitoringActive(true)`.
+  - `MonitoringService.cameraBlockingAdmins()` (enumerasi `getActiveAdmins()` + `getCameraDisabled(admin)` per admin) → `policyFailureHint(blockers)` menyebut PAKET admin penyebab; ada 3 varian pesan jujur: admin diketahui / policy bilang diblokir tapi admin tak bisa didaftar (work profile/device owner) / tak ada admin sama sekali (saklar privasi OEM).
+  - `autoPausePhotosOnPolicyBlock()` kini memilih sumber + lama jeda: admin → 120 menit, tak dikenal → 15 menit.
+  - Loop kamera (`startCameraLoop`) saat jeda-source-admin: cek status tiap 2 menit; masih diblokir → jeda diperpanjang TANPA percobaan kamera & tanpa notifikasi berulang; sudah bebas → `resumePhotosAfterPolicyLift()` (batalkan jeda + kabar "✅ Camera block lifted — automatic photos resumed.") lalu capture dalam 2 detik.
+  - `/resume` kini benar-benar membatalkan jeda foto otomatis (sesuai janji pesan) + pesan jawab menyebutkannya; `/pause` menandai sumber `NONE`; jalur video & `onError` memakai hint baru; pembersihan jeda kadaluarsa juga me-reset sumber.
+  - README: baris troubleshooting "camera disabled by device policy" + catatan `/resume` di tabel perintah.
+- Validasi: brace/paren/bracket 0/0, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih, tanpa Gradle lokal; CI main 39009654381 `success`; tag `v1.6.291` → Release 2 APK (`redeye-v1.6.291-debug.apk` + `-release.apk`); pohon bersih.
+- Catatan verifikasi nyata: belum bisa dipastikan sumber blokir di HP owner (admin lain vs saklar privasi merek vs device owner) — pesan `v1.6.291` sekarang akan menyebutkannya, jadi uji HP akan langsung memberi jawaban.

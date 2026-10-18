@@ -100,6 +100,20 @@ dan tiap `AGENTS.md` repo memuat salinan ringkasnya.
   user), skenario pemicu sesederhana mungkin, dan level bahaya
   (Kritikal/Tinggi/Sedang/Rendah). Metode audit (jumlah sub-agen + cara
   verifikasi) ditulis di entri memori sesi.
+- **Klaim sub-agen WAJIB diuji sebelum diperbaiki** — sudah terbukti salah
+  (sesi #255 Red-Eye-Mobile: 2 dari 60+ klaim, `app_name` "tak dirujuk" padahal
+  dipakai `manifestPlaceholders`, dan fallback `ContentQuery` "baca seluruh
+  tabel" padahal pemanggilnya berhenti di `limit`). Temuan yang klaimnya tak
+  terbukti ditulis sebagai "dibatalkan + bukti", bukan dipaksa jadi patch.
+- **Uji perkakas yang mengubah state (hook/config) hanya di workspace
+  terpisah.** Sesi #255: `git clone --local` gagal (dubious ownership) tetapi
+  rantai perintah lanjut → skrip hook berjalan di REPO NYATA dan mengubah
+  `core.hooksPath`. Wajib `cd <dir> || exit 1` + `git -c safe.directory=…`
+  untuk clone lokal, dan periksa `git status`/`git config --get core.hooksPath`
+  sesudahnya.
+- **Temuan yang bertentangan dengan aturan repo (mis. skrip legacy yang dilarang
+  disentuh) tidak dipaksa**: catat sebagai butuh keputusan owner + tunjukkan
+  gerbang/CI yang sudah membatasi risikonya.
 
 ## Aturan memori anti-bingung waktu
 
