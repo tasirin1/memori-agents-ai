@@ -2364,4 +2364,3 @@
 - Temuan diverifikasi GUGUR (tak diubah): `.sent` suffix di `prunePhotoCache/pruneVideoCache/pruneAudioCache` tak pernah dibuat (file dihapus setelah sukses) = kode mati, bukan bug; `allowed` variabel mati di `CrashReporter.flushPending`; `registerReceiver` sudah pakai `ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED)`; `PBKDF2` satu-satunya algoritma API-26+ yang dipakai tanpa penjaga (tidak ada `java.time`/`java.util.Base64`/`String.join`).
 - Validasi tiap rilis: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, cek kurung berimbang untuk file Kotlin yang diubah, tanpa Gradle lokal (build diverifikasi via GitHub Actions).
 - Status terakhir: `v1.6.277` + `v1.6.278` rilis & terverifikasi (Release 2 APK masing-masing); pohon kerja bersih; menunggu keputusan soal temuan Android 15 (#3/#4).
-
