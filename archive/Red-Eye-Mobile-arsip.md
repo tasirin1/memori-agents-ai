@@ -1,6 +1,6 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#222 + #226)
+# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#229)
 
-> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat 20 sesi terakhir (#227+).
+> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#230+).
 
 ## Isi arsip
 
@@ -224,6 +224,13 @@
 - Sesi #219
 - Sesi #221
 - Sesi #222
+- Sesi #223
+- Sesi #224
+- Sesi #225
+- Sesi #226
+- Sesi #227
+- Sesi #228
+- Sesi #229
 
 ---
 
@@ -2325,3 +2332,36 @@
 - Verifier: `.Utility tanpa acuan` = false-positive (dipakai btnClear); catat pola ini.
 - Validasi: semua XML OK, `git diff --check` bersih, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0. CHANGELOG `[Unreleased]`.
 - Push main sukses; build via GitHub Actions.
+
+## Sesi #227 (2026-10-16 17:10 UTC) — selesai
+- Permintaan: "rilis" → `[Unreleased]` jadi `1.6.272`/`299`.
+- Validasi: bersih + LOLOS + exit 0. Push main + tag sukses; build + Release oleh workflow.
+- Status terakhir: `v1.6.272` rilis, menunggu hasil CI.
+
+## Sesi #228 (2026-10-16 23:50 UTC) — selesai
+- Permintaan: "cek seluruh area secara menyeluruh pelan pelan teliti dan telaten temukan bug" (lanjutan audit pass-3).
+- Konteks: `v1.6.273`/`274`/`275` terjadi sebelum sesi ini tapi tak tercatat di memori; `v1.6.274` build CI-nya GAGAL (karena mass `.apply()`→`.commit()`), sudah dibatalkan di `v1.6.275` via merge `-s ours`.
+- Temuan + fix (`MonitoringService.kt`):
+  1. `/recordvideo` melepas flag `recordBusy` seketika — `recordAndSendVideo()` non-suspend (cuma daftar callback), jadi `try { … } finally { recordBusy.set(false) }` di `serviceScope.launch` mengosongkan flag tepat saat rekaman baru mulai. Akibatnya penjaga `/recordvideo` ganda + `/ring`/`/hilang` bocor, DAN watchdog video (`delay(seconds*1000+120_000)` → `recordBusy.compareAndSet(true,false)` → `forceReset()` + lepas WakeLock) tak pernah jalan karena CAS selalu gagal. Fix: buang `try/finally`, panggil `recordAndSendVideo(seconds)` langsung (semua jalur internalnya sudah `recordBusy.set(false)`).
+  2. `flushPendingPhotos` memanggil `prunePhotoCache()` di dalam `try` saat `photoFlushBusy` masih `true`; `prunePhotoCache` early-return kalau flag aktif → prune selalu no-op. Fix: pindah ke `finally` setelah `photoFlushBusy.set(false)`, pola sama dengan `flushPendingVideos`/`flushPendingAudio`.
+- Temuan diverifikasi GUGUR: `activeVideoFile` (MonitoringService) baru diisi di `onVideoTaken` sehingga `flushPendingVideos` tak melewati file yang sedang direkam — ada penjaga `now - lastModified < 10_000L` yang melindungi file in-progress; risiko rendah, tidak diubah. `isKnownContact` fail-open saat izin kontak hilang = desain lama, tidak diubah.
+- Temuan dokumentasi: `CHANGELOG.md` punya DUA seksi `## [Unreleased]` (satu duplikat isi `[1.6.273]`) dan seksi `[1.6.274]`/`[1.6.275]` hilang → dirapikan: `[1.6.276]` baru, `[1.6.275]` diisi (termasuk bullet build-fix `.apply()`), `[1.6.274]` dicatat sebagai build gagal, duplikat dibuang.
+- Validasi: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, tanpa Gradle lokal.
+- Rilis: commit `d0610f2`, bump `versionCode` 303/`1.6.276`, push `origin main` + tag `v1.6.276`. CI: run `main` 38982878320 `success`, run tag 38982904269 `success`. GitHub Release `v1.6.276` terbit (2 APK).
+- Status terakhir: `v1.6.276` rilis & terverifikasi; pohon kerja bersih.
+
+## Sesi #229 (2026-10-17 00:20 UTC) — selesai
+- Permintaan: lanjutkan audit menyeluruh ("temukan bug"), mode perbaiki = maraton (tiap temuan langsung rilis).
+- Konteks masuk: HEAD `d0610f2` (v1.6.276), CI hijau, pohon bersih.
+- Temuan + fix 1 → `v1.6.277` (`versionCode 304`):
+  1. `SettingsBackup` (backup/restore) GAGAL TOTAL di Android 7.0–7.1 (API 24–25): `SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")` baru ada sejak API 26 (minSdk repo = 24) → `NoSuchAlgorithmException` → export/import selalu toast gagal. Fix: `deriveKey(pin, salt, modern)` dengan fallback otomatis ke `PBKDF2WithHmacSHA1` bila SHA256 tak tersedia; `import` memakai `decrypt()` yang mencoba SHA256 dulu lalu SHA1 agar backup lama tetap bisa dipulihkan. Commit `bbfee32` + rilis `8f44593`; CI run main 38985577137-level semua `success`; Release `v1.6.277` terbit (2 APK).
+- Temuan + fix 2 → `v1.6.278` (`versionCode 305`):
+  2. `/screenshot` di Android 14+/targetSdk 34+: `MediaProjection.createVirtualDisplay()` melempar `IllegalStateException` bila belum ada `MediaProjection.Callback` terdaftar (syarat resmi Android 14) → screenshot TIDAK PERNAH berhasil di Android 14+. Fix di `MonitoringService.takeScreenshotFrame()`: daftarkan `object : MediaProjection.Callback()` (onStop melepas `VirtualDisplay`+`ImageReader`) via `registerCallback(cb, Handler(mainLooper))` SEBELUM `createVirtualDisplay`, dan `unregisterCallback` di `finally`. Commit `e276610` + rilis `e8e819b`; CI main 38985577137 `success`, tag 38985590920 `success`; Release `v1.6.278` terbit (2 APK).
+- TEMUAN BELUM DIPERBAIKI (butuh keputusan pemilik, aturan repo §4 melarang ubah perilaku `service/`/`receiver/`/`worker/` tanpa permintaan eksplisit) — Android 15+ (targetSdk 35):
+  3. Batas `dataSync` FGS 6 jam/24 jam: `onTimeout` SUDAH diimplementasikan (`handleFgsTimeout()` ~4367: teardown + scheduleBootRestart/Watchdog + stopSelf) jadi tak crash, TAPI setelah kuota 6 jam habis, memulai lagi FGS `dataSync` dilarang (`ForegroundServiceStartNotAllowedException`) sampai app dibuka user → monitoring bisa mati sisa hari. `computeForegroundTypes()` selalu memakai `DATA_SYNC` (4912).
+  4. `BOOT_COMPLETED` receiver dilarang meluncurkan FGS tipe `dataSync|camera|microphone|mediaProjection` (Android 15+, whitelist: location/connectedDevice/remoteMessaging/health/systemExempted/specialUse). `BootReceiver.tryStartService()` pakai `startForegroundService` → `startForegroundImmediate()` coba `DATA_SYNC|…` lalu fallback `startForeground()` (tipe manifest, tetap terlarang) → keduanya gagal → service berjalan tanpa foreground → sistem melempar `RemoteServiceException` (crash) ±5–10 dtk.
+  - Usulan (belum dikerjakan sampai user setuju): pada API ≥ 34 pakai `FOREGROUND_SERVICE_TYPE_SPECIAL_USE` (+ `FOREGROUND_SERVICE_SPECIAL_USE` permission + `<property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE">`) alih-alih `DATA_SYNC`, dan saat start dari boot hanya memakai tipe yang diizinkan (specialUse/location), lalu `startForegroundImmediate()` mengembalikan Boolean → `stopSelf()` (jangan tinggalkan service tanpa foreground) bila semua percobaan gagal. Risiko tinggi bila diubah buta (tak ada build/test lokal) → tunggu keputusan.
+- Temuan diverifikasi GUGUR (tak diubah): `.sent` suffix di `prunePhotoCache/pruneVideoCache/pruneAudioCache` tak pernah dibuat (file dihapus setelah sukses) = kode mati, bukan bug; `allowed` variabel mati di `CrashReporter.flushPending`; `registerReceiver` sudah pakai `ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED)`; `PBKDF2` satu-satunya algoritma API-26+ yang dipakai tanpa penjaga (tidak ada `java.time`/`java.util.Base64`/`String.join`).
+- Validasi tiap rilis: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, cek kurung berimbang untuk file Kotlin yang diubah, tanpa Gradle lokal (build diverifikasi via GitHub Actions).
+- Status terakhir: `v1.6.277` + `v1.6.278` rilis & terverifikasi (Release 2 APK masing-masing); pohon kerja bersih; menunggu keputusan soal temuan Android 15 (#3/#4).
+
