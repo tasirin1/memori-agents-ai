@@ -1,6 +1,6 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#232)
+# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#233)
 
-> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#233+).
+> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#234+).
 
 ## Isi arsip
 
@@ -234,6 +234,7 @@
 - Sesi #230
 - Sesi #231
 - Sesi #232
+- Sesi #233
 
 ---
 
@@ -2400,3 +2401,17 @@
 - Temuan Rendah: `MessageQueue.persistDropCountsLocked` (`:174-179`) `commit()` sinkron tanpa guard main-thread dari dalam `lock` (bisa dari `BootReceiver.onReceive`); `MessageScheduler.scheduleMessageSend` (`:30-39`) `return true` tanpa enqueue saat kuota penuh → `/flush` lapor "scheduled" palsu (`MonitoringService:1904-1910`); `values/strings.xml:58` `setup_saved_offline` berbahasa Indonesia di default-Inggris; `MessageQueue.flushSync` (`:358-379`) menulis snapshot di luar `lock` (jendela clobber).
 - Validasi: `git status --short` bersih (nol patch), tanpa Gradle lokal; build hanya via GitHub Actions bila fix dijalankan.
 - Status terakhir: audit #232 selesai (1 Kritikal + 1 Tinggi + 6 Sedang + 4 Rendah), menunggu perintah batch fix (saran: KRITIKAL `/screenshot` dulu, butuh keputusan desain owner).
+
+## Sesi #233 (2026-10-17 04:25 UTC) — selesai
+- Permintaan owner: "perbaiki" (mode fix maraton atas temuan audit #232), lalu "lanjut". Konteks masuk: HEAD `18a1824` (v1.6.281), CI hijau, pohon bersih.
+- Fix → `v1.6.282` (`versionCode` 309) — KRITIKAL + Tinggi `/screenshot`:
+  - Akar: token `MediaProjection` (extra `IBinder`) dibuang oleh `Intent.toUri`, jadi `getMediaProjection` selalu `null`; sekaligus token sekali pakai (reuse setelah sesi dilepas → `SecurityException` → izin dihapus permanen).
+  - Fix: file baru `utils/ScreenCapture.kt` (holder proses: `grant/request/current/adopt/revoke/granted`); `SetupActivity` menyimpan `Intent` asli in-memory (bukan URI) dan mencabut izin lama sebelum minta grant baru; `MonitoringService` mengambil `MediaProjection` SEKALI (`resolveShotProjection`), memakai ulang, melepas `VirtualDisplay`/`ImageReader` per pengambilan (`releaseShotSurface`), mencabut izin hanya saat sesi dihentikan sistem/service mati (`releaseShotSession`); `hasScreenshotConsent()` kini berbasis holder (status Setup jujur). Hapus `PreferencesManager.saveScreenshotConsentSync/clearScreenshotConsentSync/hasScreenshotConsent/screenshotResultCode/screenshotData` + pembersihan izin di `BootReceiver`. Commit `cb5df41` + rilis `0b6960f`; CI main 38999174485 & tag 38999186244 `success`.
+- Fix → `v1.6.283` (`versionCode` 310) — Sedang (a)+(b): `startForegroundImmediate()` fallback & `ensureForegroundTypes()` kini menulis `appliedFgsTypes` (+ fallback tipe dasar) dan `coreInitialized` mencegah `onStartCommand` memakai field `lateinit` saat init inti batal. Commit `350b03c`. Build tag pertama GAGAL kompilasi (`notification` di dalam `try` dipakai di `catch`) → diperbaiki commit `b628833`; tag `v1.6.283` dipindah paksa (`git push -f origin v1.6.283`, belum ada Release terbit) → CI 39000179470/39000191099 `success`. Catatan: `sed` busybox tak dukung `0,/regex/` → judul seksi changelog sempat tak pindah, diperbaiki di commit `5ae2460`.
+- Fix → `v1.6.284` (`versionCode` 311) — Sedang (c): tombol `Test` Setup membatalkan job `Save` tapi hanya menyimpan token+chat → interval hilang. Kini `Test` memvalidasi & menyimpan interval juga via `saveTestCredentials` (yang tadinya mati); `saveTestIdentity` dihapus + dicatat di `tools/bekas-hapusan.txt`. Commit `abc0374` + rilis `05725cc`; CI `success`.
+- Fix → `v1.6.285` (`versionCode` 312) — Sedang (d)+(e): (d) fallback PBKDF2-HMAC-SHA256 murni (`Mac` HmacSHA256, RFC 2898, kata sandi UTF-8) bila `SecretKeyFactory` tak punya algoritma itu → backup API 26+ bisa dipulihkan di API 24–25; divalidasi vs `hashlib.pbkdf2_hmac` (Python) untuk beberapa vektor termasuk multi-blok & non-ASCII. (e) `CameraService.onOpened` (foto & video) menutup kamera bila permintaan sudah selesai (`done`) → cegah kebocoran `CameraDevice` setelah `cleanup()`. Commit `e347bb8`/`55d2bcb` + rilis `bd27e9c`; CI `success`.
+- Fix → `v1.6.286` (`versionCode` 313) — Sedang (f) + Rendah (g)(i)(j): `flushBatch` mengembalikan item yang belum terkirim (+ potongan teks berjalan) ke depan `batchBuf` saat berhenti tak normal; `MessageQueue.flushSync` menulis snapshot DI DALAM `lock` (tutup jendela clobber, `commit()` saat di luar main thread); `persistDropCountsLocked` `apply()` di main thread; `values/strings.xml` `setup_saved_offline` jadi Inggris. Commit `2cb6b69` + rilis `03a4fe6`; CI 39002143484/39002155236 `success`; Release `v1.6.286` 2 APK.
+- Diverifikasi GUGUR (tidak diubah): (h) `MessageScheduler.scheduleMessageSend` `return true` saat kuota penuh — ≤3 job `SendMessageWorker` yang tertunda memang menguras antrean, ada self-heal 10 menit (`SEND_SKIP_SELF_HEAL_MS`), dan pesan tetap tersimpan; laporan `/flush` "scheduled" bukan palsu.
+- Validasi tiap rilis: `git diff --check` bersih, `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, XML `minidom` OK (string yang diubah), cek kurung berimbang file Kotlin, tanpa Gradle lokal (build via GitHub Actions).
+- Status terakhir: `v1.6.282`–`v1.6.286` rilis & terverifikasi; SEMUA temuan audit #232 tuntas (1 gugur); pohon kerja app repo bersih; `versionCode` 313.
+
