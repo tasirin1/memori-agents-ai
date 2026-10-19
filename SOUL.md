@@ -111,6 +111,14 @@ dan tiap `AGENTS.md` repo memuat salinan ringkasnya.
   dipakai `manifestPlaceholders`, dan fallback `ContentQuery` "baca seluruh
   tabel" padahal pemanggilnya berhenti di `limit`). Temuan yang klaimnya tak
   terbukti ditulis sebagai "dibatalkan + bukti", bukan dipaksa jadi patch.
+- **Audit ulang WAJIB menyertakan self-review patch sendiri** (`git diff <tag>..HEAD`):
+  perbaikan sesi sebelumnya sering ADA di CHANGELOG tapi TIDAK AKTIF karena salah
+  paham semantik API. Contoh nyata (Red-Eye-Mobile sesi #266): perbaikan v1.6.398
+  "daur ulang bitmap telat" memakai `withTimeoutOrNull`, padahal API itu tidak
+  membatalkan `CompletableDeferred` → `complete()` telat tetap `true` dan bitmap
+  tak pernah didaur ulang; dan menghapus `revoke()` sebelum dialog izin (v1.6.399)
+  memunculkan regresi baru (token izin BARU dibuang saat sesi lama berakhir).
+  Jadi: jangan percaya "sudah diperbaiki" dari commit/CHANGELOG — baca ulang kodenya.
 - **Uji perkakas yang mengubah state (hook/config) hanya di workspace
   terpisah.** Sesi #255: `git clone --local` gagal (dubious ownership) tetapi
   rantai perintah lanjut → skrip hook berjalan di REPO NYATA dan mengubah
