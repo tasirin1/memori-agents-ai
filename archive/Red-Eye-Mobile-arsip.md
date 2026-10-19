@@ -1,4 +1,4 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#237)
+# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#238)
 
 > Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#234+).
 
@@ -239,6 +239,7 @@
 - Sesi #235
 - Sesi #236
 - Sesi #237
+- Sesi #238
 
 ---
 
@@ -2478,3 +2479,19 @@
 - Pelajaran CI: `concurrency` + cancel-in-progress pada workflow `main` membuat run langkah sebelumnya DIBATALKAN saat commit langkah berikutnya di-push (run `39015841874` `cancelled`) — jadi verifikasi hijau per langkah harus bersandar pada run langkah berikutnya atau build tag; run tag tidak terpotong (dikecualikan).
 - Validasi: XML 4 berkas parse OK; `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` exit 0; `rg "BOT_TOKEN|CHAT_ID"` hanya konstanta/regex (tanpa secret asli); tanpa Gradle lokal. Rilis: tag `v1.6.296`–`v1.6.300` semua `success`, 5 GitHub Release berisi `redeye-vX-debug.apk` + `-release.apk`; pohon app repo bersih di `943399f`, `versionCode` 327 / `versionName` 1.6.300.
 - Sisa terbuka: uji nyata kelima fitur di HP (aplikasi baru/dihapus, percobaan cabut admin, `/layar`, `/kendara`, `/hematdata`), plus perapian arsip memori (file ini kini #157–#237, batas 20 belum dijalankan).
+
+## Sesi #238 (2026-10-17 10:05 UTC) — selesai
+- Permintaan owner: perbaiki seluruh temuan audit repo dalam mode maraton (§5 AGENTS.md), tiap perbaikan langsung commit + push `main` + rilis (§8), build diverifikasi via GitHub Actions. Konteks masuk: HEAD `943399f` v1.6.300, CI hijau, pohon bersih.
+- Temuan dikelompokkan menjadi rilis bertema (bukan satu temuan satu rilis) agar hemat tag: R1 lokasi (A1), R2 penyimpanan (A2/A21/A7), R3 bersih-bersih kode mati (A3/A20/C1–C5/A22), R4 koreksi fitur (A4/A5/A6/A13/A14), R5 thread/ANR (A8/A9/A10), R6 pengerasan (A12/A15/A16/A17/A18), R7 efisiensi & kerapian (B2/C4/D3/D6), R8 perbaikan build.
+- `v1.6.301` (328) — A1 `fetchLocation`/`bestFix`: kumpulkan hasil semua provider (GPS lebih dulu), berhenti saat ada fix ≤50 m, pilih akurasi terkecil; daftar cache juga dibandingkan akurasinya. Efek: `/location`, `/darurat`, `/hilang`, patroli, dan geofence tak lagi memakai taksiran jaringan yang meleset.
+- `v1.6.302` (329) — A21 `upgradeToPersistent` cek hasil `commit()`; `commitGuarded` (main thread → `apply()`) dipakai 5 setter `*Sync`; pesan `setup_save_no_storage` diperjelas. A2 ditutup sebagai bukan-bug (`saveCredentials` sudah menolak saat `!storageEncrypted`). A7 (setter memblokir UI) ikut beres lewat `commitGuarded`.
+- `v1.6.303` (330) — A3 urutan `MessageQueue`: deklarasi + pemuatan atomik drop dipindah SEBELUM blok `init`, sehingga penghitung drop benar-benar dimuat (dulu selalu 0). A20/C1–C5/A22: pembersihan kode mati (wake poll lengkap, baris ganda `CrashReporter`, blok debug `MainActivity`, warna `purple_*`/`teal_*`, `values-night/colors.xml` identik) + `tools/bekas-hapusan.txt` diperbarui.
+- `v1.6.304` (331) — A4/A5/A6/A13/A14 (lihat `CHANGELOG` [1.6.304]): kejujuran status `/jemput`, klaim "sepi adaptif" bersyarat, sampel buruk tak jadi pembanding `/kendara`, ambang baterai `>` 15%, `/layar` membedakan izin/gagal/kosong.
+- `v1.6.305` (332) — A8 timeout video di `backgroundHandler`, A9 `shotBusy` dibersihkan saat screenshot dibatalkan, A10 `@Volatile` untuk penanda lintas-thread.
+- `v1.6.306` (333) — A17 `Result.retry()`, A18 `isPollBlocked` delegasi, A12 label 400, A15 arahkan ke Pengaturan (Android 11+), A16 kecualikan `POST_NOTIFICATIONS`.
+- `v1.6.307` (334) — B2 `idleDataCycles` clamp 8, D6 `/uptime` pakai `elapsedRealtime`, D3 indentasi `forceReset`/`markHandled`, C4 hapus `PhoneNumbers.matches`/`matchesNormalized`.
+- **Galat build ditemukan & diperbaiki**: run tag `v1.6.305`–`v1.6.307` semuanya FAILED dengan `e: MonitoringService.kt:70:5 This annotation is not repeatable` (dua `@Volatile` berturut-turut — sisa penggabungan A10). Perbaikan commit `5e53caf` membuang anotasi ganda + menambah penjaga di `scripts/cek-cepat.sh` (blok pemeriksaan anotasi ganda berturut-turut) → `v1.6.308` (335, commit rilis `323e92c`) run tag `success` dan Release terbit (`redeye-v1.6.308-debug.apk` + `-release.apk`). Tag gagal TIDAK dihapus/ditulis ulang; dijelaskan di `CHANGELOG` [1.6.308].
+- Temuan yang sengaja TIDAK diubah: **A11** (`QUICKBOOT` — sudah dijaga `isMonitoringEnabled`+`isConfigured`+consent; menghapus berisiko mematikan autostart OEM) dan **A19** (fallback tanda tangan debug — tak relevan karena keystore + `assertReleaseKeystore` wajib di rilis).
+- Validasi: XML parse OK; `python3 tools/verifikasi-path.py` LOLOS tiap langkah; `bash scripts/cek-cepat.sh` exit 0; `rg "BOT_TOKEN|CHAT_ID"` tanpa secret asli; TANPA Gradle lokal. Pelajaran CI: run `main` selalu kena `concurrency` cancel (dibatalkan push berikutnya) → bersandar pada run tag.
+- Rilis & CI: 8 Release terbit (`v1.6.301`–`v1.6.304`, `v1.6.308`), masing-masing 2 APK; tag `v1.6.305`–`v1.6.307` tanpa Release (build gagal); run tag terverifikasi `success`.
+- Memori: sesi #157–#217 dipindahkan ke `archive/Red-Eye-Mobile-arsip.md` (file aktif kini 20 sesi: #218–#238) — tugas perapian arsip yang lama tertunda akhirnya selesai.
