@@ -49,6 +49,7 @@ file memori repo. Satu soul, banyak repository.
 - Sebelum push: `git diff --check` bersih + guard repo hijau (mis. `security_audit.py`, `check_repo`, `prepare_remote --check` bila ada). Tanpa SDK = jujur, serahkan compile penuh ke CI.
 - Tak tambah library/SDK/toolchain lokal tanpa izin owner.
 - Tak perbaiki bug tak terkait — catat di memori/laporan saja.
+- Bila repo belum punya tes dan Gradle tak boleh jalan lokal: sasar logika MURNI dulu (tanpa kelas Android/Robolectric) sebagai uji JVM pertama, lalu buktikan tiap nilai harapan dengan mem-porting fungsinya 1:1 ke Python sebelum menulis asersi — jangan menebak. Ikut sertakan langkah uji ke CI agar bukan tes hiasan.
 
 ## Cara menjelaskan (sederhana, mudah dipahami)
 
