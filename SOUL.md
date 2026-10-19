@@ -50,6 +50,7 @@ file memori repo. Satu soul, banyak repository.
 - Tak tambah library/SDK/toolchain lokal tanpa izin owner.
 - Tak perbaiki bug tak terkait — catat di memori/laporan saja.
 - Bila repo belum punya tes dan Gradle tak boleh jalan lokal: sasar logika MURNI dulu (tanpa kelas Android/Robolectric) sebagai uji JVM pertama, lalu buktikan tiap nilai harapan dengan mem-porting fungsinya 1:1 ke Python sebelum menulis asersi — jangan menebak. Ikut sertakan langkah uji ke CI agar bukan tes hiasan.
+- Batasan platform (Android/iOS) dipastikan dulu dari dokumen resmi sebelum bikin akalan — jangan menebak. Contoh nyata: Android 14+ melarang **membuat** FGS bertipe while-in-use (camera/mic/location) dari latar, termasuk dari `BOOT_COMPLETED`; satu-satunya jalan otomatis adalah membuat aplikasi punya activity terlihat sesaat di latar (butuh izin `SYSTEM_ALERT_WINDOW`). Akalan seperti itu wajib: jalur cadangan yang jujur (pesan ke owner), pembatasan percobaan (jeda + mundur setelah gagal), dan nol gangguan tampilan (jendela transparan tanpa UI, tak masuk recents).
 
 ## Cara menjelaskan (sederhana, mudah dipahami)
 
