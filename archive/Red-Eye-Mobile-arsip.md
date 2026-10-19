@@ -2503,3 +2503,12 @@
 - Pelajaran baru: penghitung kurung/kurawal "kasar" (strip regex string) sering salah karena kutip-terescape menggeser pasangan kutip → pakai tokenizer state-machine (menangani kutip-terescape, komentar baris/blok, string tiga-kutip) untuk membandingkan saldo kode HEAD vs KINI. Skrip penggantian massal WAJIB menulis hanya setelah SEMUA hitungan pola cocok (assert count) — bila gagal di tengah, berkas terlanjur tertulis sebagian; pemulihannya `git checkout --` lalu ulang.
 - Jebakan nyata: berkas Kotlin memakai CAMPURAN escape dan emoji literal (mis. escape patroli vs emoji literal bulan, mata, rumah, ponsel, grafik, balon kata, telepon, jam, bel, tanda plus-minus) — pola penggantian harus dicek dulu ke isi berkas via `repr` baris, jangan menebak bentuk escape.
 - Status terakhir: semua rilis terverifikasi; app repo bersih di `ba6797b`.
+
+## Sesi #240 (2026-10-17 11:26 UTC) — selesai
+- Permintaan owner: tombol untuk menyembunyikan ikon dari launcher (melengkapi mode stealth kalkulator + kode `1234=`).
+- Rilis: `v1.6.315` (`versionCode` 342) — run tag `success`, Release terbit (2 APK).
+- Desain: launcher dipindah ke `activity-alias` `.ui.Launcher`; tombol Setup menonaktifkan/mengaktifkan alias (`DONT_KILL_APP`, app tetap terpasang & service tetap jalan); keadaan pref `launcher_icon_hidden` disinkron tiap `onResume`.
+- Pintu balik (pilihan owner): tile Quick Settings `SetupTileService` (label menyamar "Calculator") + notifikasi pemantauan. Kode dial ditolak karena tak andal di Android 11+.
+- Pengaman UX: dialog konfirmasi menjelaskan kedua jalan balik; toasts menegaskan; tombol berubah label "Tampilkan ikon launcher" saat tersembunyi.
+- Validasi: 4 XML OK, saldo kurung 0/0, `verifikasi-path.py` LOLOS, `cek-cepat.sh` exit 0; rilis terverifikasi via GitHub Actions.
+- Sisa uji (perlu HP asli): tambah tile di panel notifikasi (Edit tiles) → satu ketuk membuka Setup; sembunyikan ikon → cek ikon hilang dari layar utama & pemantauan tetap jalan; reboot → tile & notifikasi masih ada; tampilkan ikon lagi.
