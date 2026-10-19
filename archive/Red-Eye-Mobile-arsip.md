@@ -2495,3 +2495,11 @@
 - Validasi: XML parse OK; `python3 tools/verifikasi-path.py` LOLOS tiap langkah; `bash scripts/cek-cepat.sh` exit 0; `rg "BOT_TOKEN|CHAT_ID"` tanpa secret asli; TANPA Gradle lokal. Pelajaran CI: run `main` selalu kena `concurrency` cancel (dibatalkan push berikutnya) → bersandar pada run tag.
 - Rilis & CI: 8 Release terbit (`v1.6.301`–`v1.6.304`, `v1.6.308`), masing-masing 2 APK; tag `v1.6.305`–`v1.6.307` tanpa Release (build gagal); run tag terverifikasi `success`.
 - Memori: sesi #157–#217 dipindahkan ke `archive/Red-Eye-Mobile-arsip.md` (file aktif kini 20 sesi: #218–#238) — tugas perapian arsip yang lama tertunda akhirnya selesai.
+
+## Sesi #239 (2026-10-17 10:58 UTC) — selesai
+- Permintaan: "lanjutkan" maraton perbaikan temuan audit (sisa R8: B1/B3, B4, B5, D1/D2, D4) — aturan AGENTS.md §8: tiap kelompok perbaikan langsung commit + rilis.
+- Hasil 6 rilis (semua run tag `success` + Release terbit): `v1.6.309` B4 cache `getSystemService` (`by lazy`); `v1.6.310` B1/B3+D1/D2 memo hemat kuota 15 dtk + hitung media sekali; `v1.6.311` B5 `flushSync` hanya tulis bila `persistDirty`; `v1.6.312`–`v1.6.314` D4 tahap 1–3 pesan Telegram → Indonesia penuh. `versionCode` 336→341, `versionName` 1.6.309→1.6.314.
+- Keputusan owner: D4 "Semua ke Indonesia" dikerjakan bertahap 3 rilis (media → izin/perintah → sisanya) agar tiap diff kecil. Pesan sistem/`values` (strings.xml) TIDAK disentuh (sudah ada lokalisasi `values-in`).
+- Pelajaran baru: penghitung kurung/kurawal "kasar" (strip regex string) sering salah karena kutip-terescape menggeser pasangan kutip → pakai tokenizer state-machine (menangani kutip-terescape, komentar baris/blok, string tiga-kutip) untuk membandingkan saldo kode HEAD vs KINI. Skrip penggantian massal WAJIB menulis hanya setelah SEMUA hitungan pola cocok (assert count) — bila gagal di tengah, berkas terlanjur tertulis sebagian; pemulihannya `git checkout --` lalu ulang.
+- Jebakan nyata: berkas Kotlin memakai CAMPURAN escape dan emoji literal (mis. escape patroli vs emoji literal bulan, mata, rumah, ponsel, grafik, balon kata, telepon, jam, bel, tanda plus-minus) — pola penggantian harus dicek dulu ke isi berkas via `repr` baris, jangan menebak bentuk escape.
+- Status terakhir: semua rilis terverifikasi; app repo bersih di `ba6797b`.
