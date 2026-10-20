@@ -328,3 +328,4 @@
 - Saat proses detach, `git ls-remote` sempat gagal `403 "Your repository is disabled"`; ±20 detik kemudian normal kembali (memang "briefly unavailable" menurut dokumen GitHub). Jangan panik/anggap repo diblokir.
 - Pasca-detach tetap utuh: tag `v1.6.402` (`1b44194`), GitHub Release + 2 APK, histori run Actions `main`/tag sukses, remote lokal hanya `origin` (URL tak berubah). Tidak ada issue/PR/star/fork turunan yang hilang (semuanya nol).
 - Tidak ada perubahan kode/workflow karena `build.yml` tak punya logika khusus fork. `LICENSE` MIT tetap memuat copyright asli.
+- Keputusan lisensi (2026-10-20): **tetap MIT** sesuai `LICENSE` sekarang (`Copyright (c) 2025 Akhatkulov`); tidak ada perubahan `LICENSE`/`README`. Opsi menambah baris copyright pemilik repo ditunda sampai nama/akun diberikan. GPL-3.0-or-later dan Apache-2.0 dibahas dan ditolak (tidak perlu).
