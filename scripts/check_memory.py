@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validator memori: nomor sesi naik, stempel absolut ada, Status == sesi tertinggi."""
+"""Validator memori: nomor sesi naik, stempel absolut ada, Status == sesi tertinggi, README sinkron."""
 import re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -47,5 +47,31 @@ for f in FILES:
         print(f"[WARN] {f}: kata relatif tanpa stempel? {sorted(hits)[:5]} (pastikan tiap kemunculan ditemani stempel UTC)")
     if len(txt.splitlines()) > 250 and f != "netradar.md":
         print(f"[WARN] {f}: {len(txt.splitlines())} baris > 250, pertimbangkan arsip")
+
+# --- konsistensi tabel status di README (indeks utama) ---
+readme = ROOT / "README.md"
+if not readme.exists():
+    print("[FAIL] README.md tidak ada"); ok = False
+else:
+    rows = {}
+    for line in readme.read_text().splitlines():
+        m = re.match(r"\|\s*`([^`]+\.md)`\s*\|", line)
+        if m:
+            rows[m.group(1)] = line
+    for f in FILES:
+        p = ROOT / f
+        if not p.exists():
+            continue
+        m = STATUS.search(p.read_text())
+        if not m:
+            continue
+        date, sesi = m.group(1), m.group(2)
+        row = rows.get(f)
+        if row is None:
+            print(f"[FAIL] README.md: baris {f} tidak ada di tabel status"); ok = False; continue
+        if date not in row:
+            print(f"[FAIL] README.md: {f} tanggal basi (memori {date})"); ok = False
+        if f"sesi #{sesi}" not in row:
+            print(f"[FAIL] README.md: {f} sesi basi (memori sesi #{sesi})"); ok = False
 print("LOLOS" if ok else "GAGAL")
 sys.exit(0 if ok else 1)
