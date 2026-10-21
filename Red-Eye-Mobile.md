@@ -598,3 +598,15 @@
 - **CI/rilis**: run `main` `39546159104` + tag `39546180039` sukses (unit test + Detekt + build + publish); Release `v1.6.426` memuat APK debug & release berversi.
 - **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (7 peringatan heuristik metode baru tanpa uji Android); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
 - **Uji perangkat belum**: izin Kontak ditolak/diberi; kontak >30 (navigasi halaman 1↔2 dan halaman terakhir); `/contacts 999` saat total halaman lebih kecil; pencarian nama dan nomor 4+ digit; tombol **📇 Semua kontak**; kontak tanpa nama/nomor; perubahan kontak saat halaman dibuka.
+
+## Sesi #292 (2026-10-21 05:05 UTC) — navigasi kontak berbasis tombol
+- **Permintaan owner**: memastikan fitur daftar kontak "semuanya berbasis tombol". Sebelumnya entri lewat tombol, tetapi navigasi halaman masih teks `/contacts N`.
+- **`v1.6.427`** (`versionCode` 454, patch `fbd1153`, rilis `7fd52ed`, tag `v1.6.427`):
+  - `showContactsPage()` mengirim inline keyboard `⬅️ Sebelumnya` / `Berikutnya ➡️` dengan callback `x:contacts <halaman>`; halaman pertama hanya tombol berikutnya, halaman terakhir hanya tombol sebelumnya, satu halaman tanpa tombol.
+  - Halaman di luar total menampilkan tombol `⬅️ Halaman <totalPages>` agar bisa langsung kembali.
+  - Teks `/contacts <halaman>` tetap diterima sebagai alternatif; pencarian nama/nomor tetap lewat tombol **👥 Cari kontak** + input teks karena nama tidak bisa dienumerasi tombol.
+  - `README.md` + `CHANGELOG.md` diperbarui.
+- **Catatan perilaku**: callback `x:contacts N` tergolong `SENSITIVE_COMMANDS`, jadi tunduk pada gerbang umur `MUTATING_MAX_AGE_SEC = 300` detik; tombol pada pesan daftar yang lebih lama dari 5 menit akan ditolak dengan "Menu kedaluwarsa". Ini konsisten dengan tombol sensitif lain, bukan bug.
+- **CI/rilis**: run tag `39547377959` sukses; run `main` `39547357148` menyusul sukses; Release `v1.6.427` memuat APK debug & release.
+- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (2 peringatan heuristik); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
+- **Uji perangkat belum**: tombol Sebelumnya/Berikutnya di halaman 1/tengah/terakhir, halaman di luar total, tombol pada pesan >5 menit, dan tombol "Semua kontak" dari menu setelah pesan menu diedit.
