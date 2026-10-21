@@ -7,12 +7,12 @@ Optimal untuk **OpenCode**: entrypoint `AGENTS.md` (auto-load), identitas `SOUL.
 
 | Memori aktif | Repo + branch | Status terakhir |
 |---|---|---|
-| `Red-Eye-Mobile.md` | `tasirin1/Red-Eye-Mobile` (`main`) | 2026-10-15 02:57 UTC = sesi #176 — `v1.6.222` (`806cf80`), menunggu CI |
-| `tasirin-download-manager.md` | `tasirin1/tasirin-download-manager` (`main`) | 2026-10-13 07:15 UTC — sapuan jilid 27 bersih, HEAD `1837c2a` |
-| `tasirin-vaultwarden-host.md` | `tasirin1/tasirin-vaultwarden-host` (`main`) | 2026-10-15 03:20 UTC = sesi #70 + lanjutan — workflow gabungan `a2f3b35` |
-| `netradar.md` | `tasirin1/netradar` (`master`) | 2026-10-15 05:14 UTC = sesi #17 — master HIJAU semua |
+| `Red-Eye-Mobile.md` | `tasirin1/Red-Eye-Mobile` (`main`) | 2026-10-21 14:20 UTC = sesi #298 — `v1.6.445` (`2d557f5`), 3 tag + Release sukses |
+| `tasirin-download-manager.md` | `tasirin1/tasirin-download-manager` (`main`) | 2026-10-17 12:31 UTC — aturan maraton + sub-agen di `AGENTS.md`; jilid 27 (2026-10-13) bersih |
+| `tasirin-vaultwarden-host.md` | `tasirin1/tasirin-vaultwarden-host` (`main`) | 2026-10-17 12:31 UTC = sesi #71 — aturan maraton + sub-agen |
+| `netradar.md` | `tasirin1/netradar` (`master`) | 2026-10-17 12:31 UTC = sesi #18 — master HIJAU, aturan maraton + sub-agen |
 
-Arsip dingin (jangan dibaca tiap sesi): `archive/` — Red-Eye #2–156, download-manager jilid lama, vaultwarden #1–66.
+Arsip dingin (jangan dibaca tiap sesi): `archive/` — Red-Eye #2–#288, download-manager jilid lama, vaultwarden #1–66.
 
 ## Soul
 

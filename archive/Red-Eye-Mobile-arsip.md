@@ -1,6 +1,6 @@
-# Arsip — Red Eye Mobile (Sesi #2–#217 + #218–#219 + #221–#238)
+# Arsip — Red Eye Mobile (Sesi #2–#288; daftar lengkap di "Isi arsip")
 
-> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi terakhir (#234+).
+> Arsip dingin. Jangan dibaca tiap sesi — hanya untuk forensik/regresi. File aktif (`Red-Eye-Mobile.md`) hanya memuat sesi aktif (#289–#298).
 
 ## Isi arsip
 
@@ -240,6 +240,56 @@
 - Sesi #236
 - Sesi #237
 - Sesi #238
+- Sesi #239
+- Sesi #240
+- Sesi #241
+- Sesi #242
+- Sesi #243
+- Sesi #244
+- Sesi #245
+- Sesi #246
+- Sesi #247
+- Sesi #248
+- Sesi #249
+- Sesi #250
+- Sesi #251
+- Sesi #252
+- Sesi #253
+- Sesi #254
+- Sesi #255
+- Sesi #256
+- Sesi #257
+- Sesi #258
+- Sesi #259
+- Sesi #260
+- Sesi #261
+- Sesi #262
+- Sesi #263
+- Sesi #264
+- Sesi #265
+- Sesi #266
+- Sesi #267
+- Sesi #268
+- Sesi #269
+- Sesi #270
+- Sesi #271
+- Sesi #272
+- Sesi #273
+- Sesi #274
+- Sesi #275
+- Sesi #276
+- Sesi #277
+- Sesi #278
+- Sesi #279
+- Sesi #280
+- Sesi #281
+- Sesi #282
+- Sesi #283
+- Sesi #284
+- Sesi #285
+- Sesi #286
+- Sesi #287
+- Sesi #288
 
 ---
 
@@ -2972,3 +3022,141 @@
 - **Docs**: README (fitur, tabel `/logout`, bagian login PIN), CHANGELOG `[1.6.407]`, Wiki commit `1df3986` (Home v1.6.407, Instalasi, Perintah, Fitur Cerdas). `PRIVACY.md` tidak berubah.
 - **Validasi**: `verifikasi-path.py` LOLOS (6 berkas, 9 peringatan heuristik), `cek-cepat.sh` 0, `git diff --check` bersih, XML tidak berubah; unit test + Detekt + build APK + publish Release sukses via GitHub Actions. Tanpa Gradle/emulator lokal.
 - **Uji perangkat belum**: logout dari command dan tombol, menu owner lama hilang, login ulang, callback setelah logout, laporan tetap ke Chat ID lama, dan login pertama saat PIN aktif + owner 0. Bila `deleteMyCommands` gagal, menu lama bisa tetap tampil di Telegram tetapi perintah tetap ditolak server.
+
+## Sesi #276 (2026-10-20 06:35 UTC) — audit menyeluruh read-only
+- **Permintaan owner**: cek seluruh area secara menyeluruh, temukan bug, kode tidak efisien, kode sampah, dan kode tidak rapi. Audit read-only; **tidak ada file app yang diubah**, tanpa commit/tag/rilis, tanpa Gradle/emulator lokal. CI terakhir `main` `39377992406` dan tag `v1.6.407` `39378012748` sukses.
+- **Metode**: 5 sub-agen paralel (MonitoringService; data/network/worker/repository; UI/service/receiver/resource; build/CI/keamanan; utils/test/dead code), lalu setiap klaim berat diverifikasi ulang dengan `rg`/`nl`/`git show`. Beberapa klaim sub-agen dibatalkan setelah verifikasi: restore `lastUpdateId` (ternyata `saveCredentials` menghapus `KEY_LAST_UPDATE_ID`), grup `senderId == chatId` (chat ID grup negatif), dan video watchdog saat upload (watchdog di-cancel di callback `onVideoTaken`).
+- **Kritikal**: token bot asli ditemukan di riwayat git publik (`137f87a^:app/build.gradle:19`) dan APK lama `v1.6.1` dibuat dengan secret `BOT_TOKEN`/`CHAT_ID` (workflow lama). Token harus segera di-revoke di BotFather; menghapus commit/APK lama tidak cukup. Token di pohon `v1.6.407` sudah bersih (hanya `SYNC_INTERVAL`).
+- **Tinggi**: workflow memberi `ANDROID_KEYSTORE_BASE64` + password keystore ke build `pull_request` (branch repo yang sama) dan `contents: write`; `ExistingWorkPolicy.REPLACE` dipanggil dari dalam `SendMessageWorker`; cursor SMS/panggilan maju walau pesan baru masuk antrean yang bisa evict (100/7 hari); notifikasi prioritas melewati limiter 10/2 menit dan dedupe; FGS diblokir Android 12+ tidak membatalkan `setMonitoringActive(true)`; tombol Tes Setup menyimpan kredensial tanpa PIN/pending restore; masking OTP tidak menangkap kode berpemisah/9 digit; lockout login global 20×/1 jam bisa dipakai DoS.
+- **Sedang**: sinkron awal parsial tetap menandai selesai; `MessageQueue` menulis ulang seluruh JSON + `commit()` tiap add; `isNetworkAvailable` tidak cek `VALIDATED`; rate-limit 429 hanya di memori; error 400 chat hilang disimpan sebagai kode yang tidak memblokir; `BootRestartWorker` early-return melewati flush crash report; `clearCredentials` tidak mengosongkan input interval; RingVolume >12 jam membuang state tanpa restore; RestoreCode menerima jendela sebelumnya; Liveness menandai laporan terkirim walau schedule gagal; `SettingsBackup` PIN 6 digit + PBKDF2 100k rentan brute force offline; query SMS `LIKE` full scan; `pendingInputCommand` tidak dibersihkan saat logout.
+- **Kerapian/sampah**: `builder.sh`/`builder.bat` kini hanya dead code setelah `exit`; `ringJob?.cancel()` tidak efektif karena CAS; duplikasi `hasBackgroundLocation`, `redactToken`, `buildFuzzy`, `takeLast(10)`, `flushPending*`, `durationText`; teks hardcoded Indonesia di samping resource Inggris; detekt hanya `NewLineAtEndOfFile`; `gradle-wrapper.jar` di-ignore sehingga `./gradlew` tak jalan; `mapping.txt` ikut artifact; filter secret `Regex|Pattern` bisa dilewati.
+- **Rekomendasi urutan**: (1) revoke token + bersihkan secret lama/APK rilis lama, (2) kunci CI PR (tanpa keystore/write, pakai environment), (3) benahi durable queue + cursor, (4) ganti `REPLACE` dari worker, (5) perbaiki FGS/PIN/OTP/lockout, (6) rapikan dead code dan gate detekt.
+- **Uji perangkat belum**: semua perbaikan belum diterapkan; audit tidak mengubah perilaku.
+
+## Sesi #277 (2026-10-20 07:03 UTC) — batch perbaikan keamanan & ketahanan
+- **Permintaan owner**: "lanjut" setelah audit #276. Batch pertama mengambil temuan Tinggi/Sedang yang aman tanpa desain ulang antrean. Commit perbaikan `bef7fca`; commit rilis `d58e1b5`; tag `v1.6.408` (`versionCode` 435). Run `main` `39383371888` dan tag `39383372355` sukses (unit test + Detekt + build + publish). Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.408 (assets `redeye-v1.6.408-debug.apk`, `redeye-v1.6.408-release.apk`). Pohon app bersih, tag di `HEAD`.
+- **CI**: izin global jadi `contents: read`; job build hanya `contents: read`; keystore hanya di-decode pada `main`/tag dan password keystore dikosongkan untuk PR; publish Release dipindah ke job `rilis` (hanya tag) dengan `contents: write` + `actions: read`, mengunduh artifact lewat `gh run download` lalu `softprops/action-gh-release`. PR tidak lagi memakai keystore rilis.
+- **Ketahanan**: `MessageScheduler.scheduleMessageSendNext` memakai `APPEND_OR_REPLACE` (bukan `REPLACE`) agar worker tidak membatalkan dirinya sendiri; FGS gagal start kini selalu mengembalikan `setMonitoringActive(false)` + membatalkan watchdog/liveness; `BootRestartWorker` mem-flush crash report sebelum early-return; `isNetworkAvailable` menambahkan `NET_CAPABILITY_VALIDATED`; respons 400 chat hilang kini ikut memblokir kirim/poll 30 menit.
+- **Notifikasi/PIN**: notifikasi prioritas tetap kena dedupe 10 detik dan limit 20/2 menit per aplikasi; kelebihan prioritas masuk antrean, bukan kirim langsung tanpa batas. Tombol **Tes** menyimpan PIN akses + owner restore tertunda dan memask PIN di form. Lockout global login jadi 50×/10 menit dan tidak menghapus lockout per-pengirim.
+- **Privasi**: `NotificationPrivacy` memask 4–12 digit termasuk pemisah spasi/titik/strip; 13+ digit dibiarkan. Unit test diperbarui (10 digit, kode berpemisah, 9 digit, 13 digit). README diperbarui untuk masking dan lockout.
+- **Kerapian**: `clearCredentials` mereset input interval sync/kamera; `tools/bekas-hapusan.txt` mencatat `isFgsStartBlocked` dan nama tes lama.
+- **Validasi**: `verifikasi-path.py` LOLOS (12 berkas, 4 peringatan heuristik), `cek-cepat.sh` 0, XML valid, `git diff --check` bersih. Tanpa Gradle/emulator lokal.
+- **Tersisa**: token bot lama masih harus di-revoke di BotFather dan APK/secret lama dibersihkan (tindakan owner); durable queue + cursor SMS/panggilan belum diubah; temuan Sedang lain (MessageQueue commit per add, 429 memory-only, RingVolume, RestoreCode, Liveness, backup PIN, SMS LIKE, `pendingInputCommand`, dead code) belum disentuh. `mapping.txt` masih ikut artifact; warning Node 20 dari `actions/cache` muncul di CI.
+- **Uji perangkat belum**: FGS gagal start, Tes dengan PIN/restore, OTP berpemisah/9 digit, prioritas saat spam, lockout 50×, 400 chat hilang, dan CI PR tanpa keystore.
+
+## Sesi #278 (2026-10-20 08:11 UTC) — kalkulator Material 3 Expressive
+- **Permintaan owner**: menempelkan prompt desain kalkulator Android 16 bergaya **Material 3 Expressive** (layar gelap, tombol pil pastel, operasi biru/oranye, `=` teal, bayangan lembut). Diklarifikasi lewat `question`: owner memilih **terapkan ke kalkulator Red-Eye-Mobile**, bukan sekadar spesifikasi/prompt gambar.
+- **Implementasi UI**: `activity_calculator.xml` dirombak menjadi kartu layar gelap + grid 5×4; tombol `AC`, `±`, `%`, `÷`, angka cream, operasi biru/oranye, `0` lebar 2 kolom, dan `=` teal. `colors.xml` + `themes.xml` memakai palet warm pastel/earthy; drawable baru `calc_btn_accent.xml` dan `calc_btn_op_orange.xml`; `calc_display_bg.xml` radius 32dp; status bar/navigation bar kalkulator disetel cream dengan ikon gelap.
+- **Perilaku**: kode rahasia `1234=` tetap sama. Ditambah `toggleSign()` (`±`, termasuk entri negatif via `-`/`-0`) dan `percent()` (`%`; dengan operator memakai `basis × nilai / 100`, tanpa operator `nilai / 100`). `CalculatorFormat` memformat pemisah ribuan, minus Unicode, notasi ilmiah, dan riwayat; `CalculatorFormatTest` menguji format. Aturan maksimal 12 digit, pembulatan desimal, dan mulai entri baru setelah `=` dipertahankan.
+- **Rilis `v1.6.409`** (`versionCode` 436). Commit fitur `fb7158b`; commit rilis `4383315`; tag `v1.6.409`. Run `main` pra-rilis `39387032845` sukses; run `main` rilis `39390688065` sukses; run tag `39390724819` sukses (unit test + Detekt + build + publish). Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.409 (assets `redeye-v1.6.409-debug.apk`, `redeye-v1.6.409-release.apk`). Pohon app bersih, tag di `HEAD`.
+- **Dokumentasi**: `CHANGELOG.md` seksi `[1.6.409]`; `README.md` catatan kalkulator menyebut `±`/`%` dan pemisah ribuan.
+- **Validasi**: semua XML yang diubah lolos `xml.dom.minidom`; `python3 tools/verifikasi-path.py` LOLOS dengan peringatan heuristik (metode UI baru tanpa uji, `.split(' ')` masih dideteksi pola boros, dan style baru ber-titik dilaporkan tanpa acuan karena keterbatasan skrip); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih. Tanpa Gradle/emulator lokal; compile/test/build diverifikasi GitHub Actions.
+- **Catatan**: warning Node 20 dari `actions/cache` dan `mapping.txt` di artifact masih ada. Temuan #277 (durable queue/cursor, MessageQueue commit per add, 429 memory-only, RingVolume, RestoreCode, Liveness, backup PIN, SMS LIKE, `pendingInputCommand`, dead code) belum disentuh.
+- **Uji perangkat belum**: tampilan baru di layar kecil/landscape, `±`/`%` dengan operator dan hasil, pemisah ribuan untuk angka 12 digit, kode `1234=` setelah tombol baru, serta status bar Android 15/16.
+
+## Sesi #279 (2026-10-20 08:32 UTC) — penyempurnaan kalkulator & rilis 1.6.410
+- **Permintaan owner**: prompt desain kalkulator Android 16 Material 3 Expressive yang lebih final: latar krem hangat `#F7F4EB`, kartu layar charcoal hampir hitam, angka cream, tombol utilitas `AC`/`±`/`%` dan titik peach/terracotta, semua operasi `÷`/`×`/`−`/`+` biru pastel, serta `=` hijau-teal tua memanjang vertikal. Melanjutkan implementasi sesi #278, bukan sekadar mockup.
+- **Perubahan UI**: `activity_calculator.xml` grid jadi 6 baris; `0` (2 kolom), titik, dan `=` masing-masing `rowSpan=2` dengan `rowWeight=0.8` agar `=` membentuk pil vertikal dan grid tetap penuh; titik memakai style Utility peach + `textSize=28sp`; semua operasi memakai `OperationBlue`; style/drawable/warna oranye dihapus. `colors.xml` memakai `#F7F4EB`, layar `#25221E`, operasi `#6F9FC6`, aksen teal `#1F4E5F`; `themes.xml` tinggal satu style operasi.
+- **Perilaku**: `lastExpression` tidak lagi menambahkan `=` setelah hasil, sehingga riwayat tampil sebagai ekspresi samar `15,800 + 450` seperti mockup; `CalculatorFormatTest` disesuaikan. Kode rahasia `1234=`, aturan 12 digit, pembulatan, `±`, `%`, dan mulai entri baru setelah `=` tetap.
+- **Rilis `v1.6.410`** (`versionCode` 437). Commit fitur `bd0c541`; run `main` `39392665550` sukses (unit test + Detekt + build). Commit rilis `d8a7f4f`; run `main` `39393421122` dan run tag `39393452305` sukses (unit test + Detekt + build + publish). Tag `v1.6.410` di `HEAD`. Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.410 dengan `redeye-v1.6.410-debug.apk` + `redeye-v1.6.410-release.apk`. Pohon app bersih.
+- **Validasi**: XML layout/colors/themes lolos `xml.dom.minidom`; `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih. Tanpa Gradle/emulator lokal; compile/test/build diverifikasi GitHub Actions.
+- **Catatan/terbuka**: uji perangkat untuk tampilan baru (terutama tinggi `=`, `0`/titik yang ikut memanjang, layar kecil/landscape, kontras putih di biru pastel) belum dilakukan. Token bot lama masih harus di-revoke di BotFather dan secret/APK lama dibersihkan (tindakan owner). Temuan audit #276 yang belum disentuh tetap: durable queue/cursor SMS & panggilan, commit JSON `MessageQueue` per add, backoff 429 memory-only, `RingVolume`, `RestoreCode`, Liveness, backup PIN/KDF, query SMS `LIKE`, `pendingInputCommand` saat logout, dan dead code. Warning Node 20 `actions/cache` serta `mapping.txt` di artifact masih muncul di CI.
+
+## Sesi #280 (2026-10-20 08:46 UTC) — palet earthy kalkulator
+- **Permintaan owner**: mockup kalkulator dari `image_6.png` dengan nuansa earthy tanpa biru: latar krem `#F7F4EB`, layar charcoal menampilkan `0` besar di kanan bawah, angka cream, seluruh fungsi/operasi (`AC`, `±`, `%`, `÷`, `×`, `−`, `+`, `.`) peach/terracotta `#E8A27A` dengan teks gelap, dan `=` forest green `#1B4D3E` berbentuk pil vertikal.
+- **Implementasi**: `colors.xml` mengubah `calc_btn_function` menjadi `#E8A27A`, `calc_btn_text` menjadi espresso `#3A2A21`, `calc_accent` menjadi `#1B4D3E`; menghapus `calc_btn_utility` dan `calc_op_text` yang tidak terpakai. `themes.xml`: `CalculatorButton.Utility` dan style operasi (di-rename dari `OperationBlue` menjadi `Operation`) sama-sama memakai drawable peach `calc_btn_function` + teks gelap; drawable `calc_btn_utility.xml` dihapus. Layout hanya mengganti referensi style; grid dan perilaku tetap.
+- **Dampak**: tidak ada perubahan logika kalkulator. Kode `1234=`, batas 12 digit, pembulatan, `±`, `%`, riwayat tanpa `=`, serta `0`/titik/`=` yang membentang dua baris tetap seperti #279. Tampilan kini tanpa aksen biru di area kalkulator.
+- **Rilis `v1.6.411`** (`versionCode` 438). Commit fitur `4577e69`; run `main` `39395588912` sukses. Commit rilis `3974ff1`; run `main` `39396125308` dan run tag `39396153662` sukses (unit test + Detekt + build + publish). Tag `v1.6.411` di `HEAD`. Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.411 dengan `redeye-v1.6.411-debug.apk` + `redeye-v1.6.411-release.apk`. Pohon app bersih.
+- **Validasi**: XML layout/colors/themes lolos `xml.dom.minidom`; `python3 tools/verifikasi-path.py` LOLOS (hanya peringatan heuristik style `CalculatorButton.Operation` yang sebenarnya dipakai layout); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih. Tanpa Gradle/emulator lokal; build diverifikasi GitHub Actions.
+- **Terbuka**: uji perangkat untuk kontras teks espresso di peach, tampilan `0` di kanan bawah, proporsi pil `=`, dan layar kecil/landscape. Token bot lama tetap harus di-revoke di BotFather; temuan audit #276 (durable queue/cursor, `MessageQueue` commit per add, backoff 429 memory-only, `RingVolume`, `RestoreCode`, Liveness, backup PIN/KDF, query SMS `LIKE`, `pendingInputCommand`, dead code) belum disentuh. Warning Node 20 `actions/cache` dan `mapping.txt` di artifact masih ada.
+
+## Sesi #281 (2026-10-20 09:07 UTC) — verifikasi mockup kalkulator
+- **Permintaan owner**: mockup Android 16 Material 3 Expressive dengan latar cream `#F7F4EB`, tanpa biru, layar charcoal hanya angka `0` besar di kanan bawah, angka cream, semua fungsi/operasi + titik peach `#E8A27A` berteks espresso, dan `=` forest green `#1B4D3E` berbentuk pil vertikal.
+- **Hasil**: spesifikasi sudah terpenuhi oleh `v1.6.411`; **tidak ada perubahan file, commit, tag, atau rilis baru**. Warna dan layout saat ini: `calc_background` `#F7F4EB`, `calc_display_bg` `#25221E`, `calc_btn_number` `#FFF9F0`, `calc_btn_function` `#E8A27A`, `calc_btn_text` `#3A2A21`, `calc_accent` `#1B4D3E`; tombol utilitas/operasi/titik memakai drawable peach yang sama; `=` memakai `rowSpan=2`.
+- **Catatan**: pada kondisi awal layar kalkulator hanya menampilkan `0`; riwayat ekspresi samar baru muncul setelah ada perhitungan, jadi bukan bagian dari tampilan awal. Tema global `themes.xml` masih menyimpan `colorPrimary` biru untuk halaman Setup, tetapi tidak terlihat/dipakai pada layar kalkulator. Bila owner ingin seluruh aplikasi bebas biru atau riwayat dihapus total, itu perubahan terpisah.
+- Validasi: tidak ada perubahan kode; `git status` bersih di `3974ff1`; build terakhir `v1.6.411` sudah sukses via GitHub Actions.
+
+## Sesi #282 (2026-10-20 09:21 UTC) — seluruh aplikasi bebas biru
+- **Permintaan owner**: `jangan biru doang` — bukan hanya kalkulator, seluruh aplikasi tidak boleh memakai biru. Konteks: `v1.6.411` sudah menghapus biru dari kalkulator, tetapi `themes.xml` global (dipakai Setup) masih `colorPrimary` biru `#2196F3`/`#1976D2`, dan ikon launcher masih memakai latar biru serta tombol oranye/abu/hijau lama.
+- **Tema global**: `colorPrimary` → `@color/calc_accent` (forest green `#1B4D3E`), `colorPrimaryVariant` → `@color/calc_accent_dark` (`#123B2F`), `colorSecondary` → `@color/calc_btn_function` (peach `#E8A27A`), `colorSecondaryVariant` → `@color/calc_btn_function_dark` (`#C97F58`), `colorOnSecondary` → `@color/calc_btn_text` (espresso `#3A2A21`). Tombol/outline Material di Setup otomatis mengikuti hijau/peach; status bar Setup memakai varian hijau.
+- **Ikon launcher**: `ic_launcher_background` jadi cream `#F7F4EB`; `ic_launcher_foreground.xml` diwarnai ulang: latar cream, badan kalkulator espresso, layar charcoal, tombol fungsi peach, angka cream, `=` forest green. Tidak ada lagi `#2196F3`, `#FF9800`, `#607D8B`, `#37474F`, atau `#4CAF50` di resource ikon.
+- **Rilis `v1.6.412`** (`versionCode` 439). Commit fitur `4190357`; run `main` `39398808188` sukses. Commit rilis `ac51fb8`; run `main` `39399395109` dan run tag `39399421434` sukses (unit test + Detekt + build + publish). Tag `v1.6.412` di `HEAD`. Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.412 dengan `redeye-v1.6.412-debug.apk` + `redeye-v1.6.412-release.apk`. Pohon app bersih.
+- **Validasi**: semua XML yang diubah lolos `xml.dom.minidom`; `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; pencarian `2196F3|1976D2|FF9800|EF6C00|607D8B|37474F|4CAF50` di `app/src/main` bersih. Tanpa Gradle/emulator lokal; build diverifikasi GitHub Actions.
+- **Catatan**: latar halaman Setup tetap mengikuti tema default terang/gelap (belum dipaksa cream); yang dihapus adalah warna biru/oranye brand dan ikon. Bila owner ingin Setup juga berlatar cream penuh, itu perubahan terpisah. Uji perangkat: tombol/outline Setup hijau, status bar hijau, dan ikon launcher baru. Token bot lama masih perlu di-revoke; temuan audit #276 belum disentuh.
+
+## Sesi #283 (2026-10-20 09:34 UTC) — peach dominan, hijau aksen
+- **Permintaan owner**: `malah jadi ijo semua` — tema global hasil sesi #282 membuat seluruh tombol Setup dan status bar hijau. Owner ingin peach tetap dominan; hijau hanya aksen.
+- **Perbaikan tema**: `colorPrimary` dikembalikan ke peach `@color/calc_btn_function` (`#E8A27A`) dengan `colorOnPrimary` espresso `@color/calc_btn_text`; `colorPrimaryVariant` memakai `@color/calc_btn_function_dark` (`#C97F58`). Hijau dipindah ke `colorSecondary`/`colorSecondaryVariant` (`calc_accent`/`calc_accent_dark`) dan `colorOnSecondary` putih. `android:statusBarColor` menjadi `@color/calc_display_bg` (charcoal) dengan `android:windowLightStatusBar=false`; tidak ada lagi status bar hijau. Tombol Material di Setup kembali peach bertulisan gelap, outline/fokus peach, hijau hanya aksen.
+- **Rilis `v1.6.413`** (`versionCode` 440). Commit fitur `09c878c`; run `main` `39400775073` sukses. Commit rilis `e5ad729`; run `main` `39401080454` dan run tag `39401106899` sukses (unit test + Detekt + build + publish). Tag `v1.6.413` di `HEAD`. Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.413 dengan `redeye-v1.6.413-debug.apk` + `redeye-v1.6.413-release.apk`. Pohon app bersih.
+- **Validasi**: XML themes/colors valid; `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih. Tanpa Gradle/emulator lokal; build diverifikasi GitHub Actions.
+- **Catatan**: latar Setup tetap default tema terang/gelap, bukan cream; yang berubah hanya warna brand/komponen. Ikon launcher tetap earthy (badan espresso, tombol peach/cream, `=` hijau). Uji perangkat: tombol Setup peach, status bar charcoal, kontras teks gelap di peach. Token bot lama masih perlu di-revoke; temuan audit #276 belum disentuh.
+
+## Sesi #284 (2026-10-20 09:48 UTC) — tombol angka putih
+- **Permintaan owner**: `tombol angka putih terus tombol = hijau terus yamg lAinnya tetap` — angka harus putih murni, `=` tetap hijau, tombol fungsi/operasi lain tidak diubah.
+- **Perubahan**: hanya `calc_btn_number` di `colors.xml` dari `#FFF9F0` (cream) menjadi `#FFFFFFFF` (putih). `calc_btn_function` peach `#E8A27A`, `calc_accent` forest green `#1B4D3E`, teks espresso, dan tema global tidak disentuh.
+- **Rilis `v1.6.414`** (`versionCode` 441). Commit fitur `e71eed7`; run `main` `39402595015` sukses. Commit rilis `1db6d71`; run `main` `39402879805` dan run tag `39402914130` sukses (unit test + Detekt + build + publish). Tag `v1.6.414` di `HEAD`. Release: https://github.com/tasirin1/Red-Eye-Mobile/releases/tag/v1.6.414 dengan `redeye-v1.6.414-debug.apk` + `redeye-v1.6.414-release.apk`. Pohon app bersih.
+- **Validasi**: `colors.xml`/`themes.xml` valid; `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih. Tanpa Gradle/emulator lokal; build diverifikasi GitHub Actions.
+- **Catatan**: ikon launcher masih memakai tombol angka cream `#FFF9F0`; yang diubah hanya tombol angka di kalkulator sesuai permintaan. Uji perangkat: kontras tombol putih di latar cream, `=` hijau, dan tombol peach. Token bot lama masih perlu di-revoke; temuan audit #276 belum disentuh.
+
+## Sesi #285 (2026-10-20 12:51 UTC) — perbaikan audit #276 (maraton, 5 rilis)
+- **Permintaan owner**: `lanjut` setelah audit read-only #276. Basis `1db6d71` (`v1.6.414`), pohon bersih. Semua klaim yang dipakai sudah diverifikasi ulang ke kode; klaim yang gugur tidak dipaksa jadi patch.
+- **Rilis berturut-turut (semua run `main` + tag sukses, Release terbit)**:
+  - `v1.6.415` (`versionCode` 442, `1d01259`): kursor SMS/panggilan hanya maju bila `sendFitted()` mengirim langsung atau antrean benar-benar persisten; `MessageQueue.addMessage()/addMessages()/persistLocked()` mengembalikan status durable; pruning foto/video/audio memakai `drop(maxKept)` sehingga membuang yang paling lama.
+  - `v1.6.416` (`versionCode` 443, `b67396e`): OTP memakai batas kata + `code`/`verify`; `refreshInstance()` tidak memegang monitor kelas saat upgrade penyimpanan (lock inversion ditutup).
+  - `v1.6.417` (`versionCode` 444, `9d0a867`): `credentialError` hanya diisi bila token/chat yang diuji sama dengan kredensial tersimpan; `/pulihkan` menerima `@username` (pola sama dengan Setup), unit test diperbarui.
+  - `v1.6.418` (`versionCode` 445, `9a48496`): overflow notifikasi prioritas lewat `emitPost()` sehingga kena dedupe/rate limit; `400` permanen tidak masuk antrean (`onPermanent` callback); `clearQueue()` mempertahankan `persistDirty` saat `commit()` gagal; `RingVolume` >12 jam hanya memulihkan bila volume alarm masih maksimum.
+  - `v1.6.419` (`versionCode` 446, `d89a892`): `/logout` mengosongkan `pendingInputCommand`; setelah `%`/`=`, mengetik angka baru membersihkan `previousNumber`/`operator`.
+- **Bukti CI**: `v1.6.415` main `39418111148` + tag `39418165631`; `v1.6.416` main `39419120468` + tag `39419149214`; `v1.6.417` main `39421949437` + tag `39422662570`; `v1.6.418` main `39423456601` + tag `39423485671`; `v1.6.419` main `39424509121` + tag `39424541635`. Unit test, Detekt, build APK, dan publish Release hijau.
+- **Klaim audit yang gugur**: overflow notifikasi tidak melewati masking OTP; `.tmp` screenshot sudah dibersihkan; `credentialError` sudah dibersihkan saat save sukses; `mapping.txt` hanya ada di artefak `apks` (bukan APK). Tidak dipaksa jadi patch.
+- **Validasi tiap rilis**: `python3 tools/verifikasi-path.py` LOLOS, `bash scripts/cek-cepat.sh` 0, `git diff --check` bersih, tanpa Gradle/SDK lokal. Peringatan heuristik yang tersisa: metode baru tanpa uji Android dan `.matches(` pada Regex statis (false-positive scanner).
+- **Tersisa / sengaja belum disentuh**: `MessageQueue` masih menulis ulang seluruh JSON per add (efisiensi; jangan lembekkan durability), backoff 429 masih memory-only, `RestoreCode` jendela sebelumnya, Liveness menandai terkirim walau schedule gagal, PIN/KDF backup, query SMS `LIKE`, dead code/tooling (`detekt` hanya newline, scanner secret bisa lolos `Regex|Pattern`), `mapping.txt` di artifact, warning Node 20 `actions/cache`, dan rotasi token bot lama oleh owner.
+- **Uji perangkat belum**: kursor SMS/panggilan saat storage gagal, OTP Inggris/`shopping`, status kredensial saat tes token salah, restore `@username`, overflow prioritas saat spam, `/clearqueue` saat commit gagal, RingVolume >12 jam, logout dengan input tertunda, dan `%` lalu angka baru.
+- **Pelajaran**: (1) `sendFitted()` butuh hasil durable, bukan sekadar "sudah masuk antrean memori"; (2) callback `onPermanent` adalah cara aman menandai `400` terminal tanpa mengubah puluhan pemanggil `sendToTelegram()`; (3) scanner `.matches(` bisa false-positive pada `Regex` statis — verifikasi manual sebelum mengubah.
+
+## Sesi #286 (2026-10-20 22:37 UTC) — audit menyeluruh putaran-6 (baca-saja)
+- **Permintaan owner**: "cek seluruh area secara menyeluruh pelan pelan teliti dan telaten temukan bug temukan kode ngga efisien temukan kode sampah dan kode ngga rapih". Basis `d89a892` (`v1.6.419`), pohon bersih. **Tidak ada file app yang diubah / commit / rilis.**
+- **Metode**: 5 sub-agen paralel (perintah Telegram, loop+media, data/jaringan/util, UI/resource/manifest, worker/receiver/CI) → 66 klaim; saya verifikasi sendiri tiap klaim berat ke baris kode (`rg`/`sed`) dan self-review `git diff 1db6d71..HEAD` (5 rilis terakhir). Klaim sub-agen TIDAK dipakai sebelum terbukti.
+- **Tinggi (2)**: (1) `MonitoringService.kt:4354-4363` + `:4383-4398` + `:4226-4236` — `smsCursor`/`callCursor` hanya maju per bagian yang BERHASIL, tetapi bagian berikutnya yang berhasil tetap menaikkan kursor melewati bagian yang gagal permanen (`400`) → SMS/panggilan itu hilang permanen; (2) `:4742-4749` + `:4794` — `sendFitted()` mengembalikan `false` untuk satu potong yang ditolak permanen (diulang tiap siklus) dan `true` bila SEMUA potongan panjang ditolak permanen (`failed.isEmpty()`) → data dianggap terkirim padahal tidak.
+- **Sedang (7)**: watchdog kamera dipasang sebelum `ImageReader`/`meteringSurface` dibuat (`CameraService.kt:253-287` vs `:191-205`) → reader/surface bocor bila timeout saat setup; geofence otomatis dimatikan total saat patroli aktif (`MonitoringService.kt:5542`) padahal patroli sendiri berhenti saat malam/jeda/lowPower (`:918`) → alert rumah/sekolah mati senyap; kursor panggilan berbasis jam dinding (`CallLogRepository.kt:18-25`) dan `TimeChangeReceiver` tidak me-reset kursor → panggilan hilang saat jam mundur; `saveCredentials` menghapus PIN akses saat token berubah (`PreferencesManager.kt:940`) sementara `SettingsBackup.BackupData` tak memuat PIN (`SettingsBackup.kt:12`) → PIN mati diam-diam setelah restore ke bot baru; fallback `MemoryPrefs` permanen tanpa hapus-ulang keyset (`PreferencesManager.kt:120-143`) + `allowBackup=false` tanpa `dataExtractionRules` (`AndroidManifest.xml:56`) → prefs terenkripsi ikut D2D tanpa kunci Keystore, app terjebak mode volatil; `sendCapturedPhoto` melepas `cameraBusy` sebelum unggah (`:6611`, `:6630-6638`) tanpa mutex → unggahan paralel; `handleTelegramCommand` ditunggu di dalam loop polling (`:1569-1662`, `:4859`) → `/stop` tertunda sampai balasan perintah sebelumnya selesai.
+- **Rendah (14)**: `Liveness.kt:146-147` mengabaikan hasil `addMessage` sehingga laporan kebangkitan dianggap terkirim walau commit gagal; `clearAudit()` (`PreferencesManager.kt:470`) + `@color/black` (`colors.xml:3`) tak terpakai; `privateOwner` dideklarasi 2× + `resolveAliasInput` 2× + `setLastUpdateIdSync` ganda (`MonitoringService.kt:1647-1673`); blok Simpan vs Tes ~150 baris duplikat (`SetupActivity.kt:552-736` vs `:969-1077`); `/audit` berjudul "max 50" tetapi `takeLast(30)` (`:2550-2551`); `/clearqueue` melaporkan drop lama seolah akibat clear (`:3588-3600`); `Result.retry()` tak pernah dipakai sehingga `setBackoffCriteria` mati (`SendMessageWorker.kt:32-37`); Tes/Copy membaca field sebelum `fieldsLoaded` (`SetupActivity.kt:969`, `:322-369`); teks Indonesia hardcode "NYALA/MATI" (`:1355`) + status a11y "off" permanen di API 24–29 (`:1664`); token bot ikut sasaran Autofill (`activity_setup.xml:43-46`); `.tmp` screenshot tak dipangkas (`MonitoringService.kt:8689`); `deleteIncomingMessage` di `finally` menghapus file backup walau unduhan gagal (`:2776`); Detekt hanya `NewLineAtEndOfFile` (`config/detekt/detekt.yml`); cek diff `verifikasi-path.py` dilewati saat push tag/ref baru (`.github/workflows/build.yml:39`), walau `cek-cepat.sh` masih memindai token di tracked tree.
+- **Klaim yang GUGUR saat diverifikasi** (jangan diangkat tanpa bukti baru): "offset update tidak pernah dikonfirmasi setelah `skipUpdateOffsetOnce`" — `continue` tetap menjalankan `finally`, offset tertulis pada poll berikutnya (satu poll ekstra); "`!!` koordinat bisa crash" — sudah dicek `nums.any { it == null }` sebelum `!!`; "`retryCount` tak dibaca" — dipakai `registerWithBudget` (`MessageQueue.kt:311-345`), meski sisa potongan multi-chunk tetap tanpa batas; "`PackageChangeReceiver` crash untuk paket tanpa launcher" — `getApplicationInfo` null ditangani (hanya label jadi nama paket); "`scheduleMessageSend` berbohong saat 3 work antre" — work yang sudah ada memang akan memproses antrean.
+- **Verifikasi**: tanpa Gradle/SDK lokal (sesuai `AGENTS.md`); `python3 scripts/check_memory.py` `LOLOS` setelah stempel sesi #274–#277 & #285 dilengkapi pada commit `6097d63`; status sudah diperbarui ke #286.
+- **Tugas terbuka**: menunggu keputusan owner — perbaiki semua Tinggi+Sedang (maraton, rilis bertahap), Tinggi saja, atau pilih nomor. Rincian bukti baris ada di laporan sesi.
+
+## Sesi #287 (2026-10-20 23:30 UTC) — perbaikan audit #286 (Tinggi + Sedang, 2 rilis)
+- **Permintaan owner**: `lanjut` setelah laporan audit #286 → menindaklanjuti opsi perbaikan Tinggi + Sedang secara maraton. Basis `d89a892` (`v1.6.419`), pohon bersih. Semua klaim yang dipakai sudah diverifikasi ulang ke kode; klaim gugur #286 tidak dipaksa jadi patch.
+- **`v1.6.420`** (`versionCode` 447, commit `22bdd19`) — dua temuan Tinggi:
+  - Kursor SMS/panggilan: keempat loop (sinkron awal SMS/panggilan dan sinkron reguler SMS/panggilan) kini `break` pada bagian pertama yang gagal, sehingga bagian berikutnya tidak bisa menaikkan kursor melewati data yang belum terkirim.
+  - `sendFitted()`: potongan tunggal yang ditolak permanen (`400` setelah fallback teks polos) kini mengembalikan `true` seperti jalur multi-potongan yang semuanya ditolak permanen; pesan sudah dicatat `noteDroppedMessage()` dan tidak diulang tiap siklus. Jalan keluar `queueOnFail=false` juga konsisten.
+- **`v1.6.421`** (`versionCode` 448, commit `67c9215`) — tujuh temuan Sedang:
+  - `CameraService.capturePhoto()`: blok watchdog dipindah ke setelah `ImageReader`/`meteringSurface` dibuat, tepat sebelum `openCamera()`.
+  - `checkGeofenceFallback()`: guard `patrolEnabled` dihapus; fallback tetap memakai throttle 15 menit dan hanya berhenti saat `monitoringPaused`.
+  - `CallLogRepository.getNewCalls()`: mode `_ID > ?` (urut `_ID ASC`) bila `afterId > 0`; mode lama berbasis `DATE` hanya untuk migrasi `afterId=0`. `MonitoringService` memakai `maxWith(compareBy { id }, { date })` untuk pagination, sortir sinkron awal, dan pembaruan kursor (hanya bila `id` lebih besar), jadi jam mundur tidak lagi menghilangkan panggilan.
+  - PIN akses: `putCredentialState()` tidak lagi `editor.remove(KEY_ACCESS_PIN)` saat token berubah; `SetupActivity` mempertahankan PIN tersimpan saat Simpan/Tes; `SettingsBackup.BackupData` + `export()` menyertakan `accessPin`; restore Setup memakai `pendingRestoreAccessPin` bila kolom PIN kosong; `/pulihkan` menerapkan `data.accessPin` setelah `saveCredentials()` lalu `refreshCreds()`.
+  - Penyimpanan: `res/xml/data_extraction_rules.xml` baru mengecualikan seluruh domain untuk `cloud-backup` dan `device-transfer`; manifest memakai `android:dataExtractionRules` + `android:fullBackupContent="false"`. `PreferencesManager.recoverEncryptedStorage()` menghapus `secure_prefs` + `encrypted_queue` + alias `MasterKey.DEFAULT_MASTER_KEY_ALIAS`, mereset singleton, dan membuat ulang penyimpanan; dipanggil dari "Hapus kredensial" hanya bila `!isStorageEncrypted`, lalu `prefs` di-rebind dan status diperbarui (string baru `setup_storage_recovered` EN/ID). Tidak ada auto-wipe saat start.
+  - Foto: `sendPhotoFile()` dibungkus `photoSendMutex.withLock { sendPhotoFileUnlocked() }`, sehingga foto baru dan flush tidak pernah mengunggah paralel.
+  - Polling: `pollTelegramCommands()` tidak lagi menunggu handler. Command/callback di-`launch` di `serviceScope`; command biasa memakai `commandLock` (FIFO), perintah kontrol `CONTROL_COMMANDS` memakai `controlLock` agar `/stop` dkk. tidak tertahan `/photo`. Offset update tetap ditulis di `finally` (at-most-once untuk command); `restoreHandled`/`consumePendingInput` ikut di dalam lock agar urutan input terjaga.
+- **CI**: `v1.6.420` main `39512482384` + tag `39512504880` success; `v1.6.421` main `39514723646` + tag `39514747391` success (unit test, Detekt, build, publish). Release `v1.6.420` dan `v1.6.421` terbit dengan 2 APK.
+- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (peringatan heuristik metode baru tanpa uji Android + `CHANGELOG` sudah dicatat); `bash scripts/cek-cepat.sh` 0; XML manifest/`data_extraction_rules.xml`/strings (EN+ID) valid via `xml.dom.minidom`; `git diff --check` bersih; brace/parens seimbang. Tanpa Gradle/SDK/emulator lokal — build diverifikasi GitHub Actions.
+- **Keputusan penting**: PIN sengaja DIPERTAHANKAN saat token berubah (bukan sekadar tidak dihapus). Dengan PIN aktif, `OwnerAccess` hanya mengakui owner ID; ini mencegah Chat ID baru otomatis menjadi owner setelah token diganti. Backup memuat PIN karena berkas backup sudah memuat token bot (blast radius setara), dan restore memulihkannya. Reset penyimpanan terenkripsi hanya lewat aksi eksplisit "Hapus kredensial" agar kegagalan Keystore sesaat tidak menghapus kredensial otomatis.
+- **Tersisa**: 14 temuan Rendah #286 belum disentuh (dead code, duplikasi Simpan/Tes, `/audit` 50 vs 30, `/clearqueue`, `Result.retry()`, Tes/Copy sebelum `fieldsLoaded`, teks hardcode/a11y, Autofill token, `.tmp` screenshot, `deleteIncomingMessage` di `finally`, Detekt, cek diff pada tag). Temuan efisiensi `MessageQueue` per-add dan backoff 429 memory-only juga masih terbuka.
+- **Uji perangkat belum**: geofence malam saat patroli nyala; panggilan saat jam dimundurkan; PIN tetap aktif setelah ganti token dan restore backup; reset penyimpanan dari "Hapus kredensial" saat status "sementara (keystore tak tersedia)"; dua foto berurutan tidak unggah paralel; `/stop` saat `/photo` berjalan; timeout kamera saat setup.
+- **Catatan**: `sendFitted()` kini punya semantik "true = tidak perlu diulang (terkirim/antre/ ditolak permanen dengan catatan)"; jangan kembalikan ke `false` untuk `400` permanen tanpa mekanisme drop yang setara.
+
+## Sesi #288 (2026-10-21 00:20 UTC) — perbaikan 14 temuan Rendah audit #286
+- **Permintaan owner**: `lanjut` kedua setelah rilis Tinggi+Sedang #287 → menuntaskan 14 temuan Rendah audit #286 secara maraton. Basis `67c9215` (`v1.6.421`), pohon bersih. Setiap klaim diverifikasi ulang ke kode sebelum dipatch.
+- **`v1.6.422`** (`versionCode` 449, commit `a434dd0`, tag `v1.6.422`):
+  - `Liveness`: laporan kebangkitan diantrekan lewat `Background.runCritical` (supaya `addMessage()` menjalankan `commit()` di thread non-main dan hasilnya bermakna); penjadwalan tetap dilakukan, tetapi `livenessReportAt`/`livenessKillsUnreported` hanya direset bila antrean benar-benar persisten.
+  - dead code: `PreferencesManager.clearAudit()` + `@color/black` dihapus (dicatat di `tools/bekas-hapusan.txt`).
+  - jalur alias: deklarasi ganda `privateOwner`/`resolveAliasInput` ternyata sudah hilang; `setLastUpdateIdSync` ganda di cabang alias dihapus karena `finally` polling sudah menyimpan offset.
+  - `/audit`: `takeLast(50)` sesuai judul "max 50".
+  - `/clearqueue`: `takeOverflowDrops()`/`takeExpiredDrops()` + teks `dropExtra` dihapus; drop lama tidak lagi dikaitkan dengan pembersihan.
+  - worker: `setBackoffCriteria` di `scheduleMessageSendNext()` dihapus karena `SendMessageWorker` tidak pernah `Result.retry()`; backoff `BootRestartWorker` tetap.
+  - Setup: Tes/Copy memakai penjaga `fieldsLoaded` (bila kredensial tersimpan); validasi awal Simpan/Tes disatukan lewat `resolveCredentialInput()` + `showToast()` (data class `CredentialInput`); teks status langsung memakai `setup_status_live_title/monitoring/sync/photo` + `setup_status_battery_fmt` (EN/ID), bukan hardcode "NYALA/MATI"; token & PIN `android:importantForAutofill="no"`.
+  - media/backup: `screenshot_*.tmp` ikut dipangkas bersama `camera_*.tmp`; file backup `/pulihkan` baru dihapus setelah unduhan sukses, bukan di `finally`.
+  - CI/Detekt: rentang `verifikasi-path.py` memakai fallback `PR_BASE` → `EVENT_BEFORE` → tag sebelumnya/`HEAD^` sehingga cek diff jalan pada push tag/ref baru; Detekt menambah `UnusedImports` + `ForbiddenComment`; impor `NetworkUtils` berlebih di `CrashReporter` dihapus.
+- **Keputusan/ditunda**: deduplikasi penuh blok Simpan vs Tes (~150 baris) TIDAK dilakukan; hanya validasi awal yang disatukan. Alur verifikasi getMe/getChat, fallback offline, dan persistensi kredensial sengaja tetap terpisah agar jalur kredensial tidak berubah tanpa uji perangkat.
+- **Klaim gugur**: "status a11y off permanen di API 24–29" — tombol memang disembunyikan di <30, tetapi status memakai `ShotAccessibilityService.isEnabled`/`AccessibilityProbe`; yang diperbaiki hanya teks hardcode.
+- **CI/rilis**: dua percobaan pertama gagal di Detekt (`RedundantSemicolon` tidak ada di 1.23.7, lalu impor mati `CrashReporter`); tag `v1.6.422`/`v1.6.423` dari run gagal dihapus dan `v1.6.422` di-tag ulang di commit final. Run `main` `39519902174` + tag `39519924143` keduanya `success` (5m6s/4m58s, unit test + Detekt + build + publish); Release `v1.6.422` terbit dengan `redeye-v1.6.422-debug.apk` + `redeye-v1.6.422-release.apk`.
+- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; XML layout/colors/strings EN+ID valid; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal (build hanya GitHub Actions).
+- **Tersisa/terbuka**: deduplikasi penuh Simpan/Tes; `MessageQueue` menulis ulang seluruh JSON per `addMessage`; backoff `429` masih memory-only. Uji perangkat belum dilakukan untuk perubahan ini.
