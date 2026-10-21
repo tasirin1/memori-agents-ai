@@ -610,3 +610,15 @@
 - **CI/rilis**: run tag `39547377959` sukses; run `main` `39547357148` menyusul sukses; Release `v1.6.427` memuat APK debug & release.
 - **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (2 peringatan heuristik); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
 - **Uji perangkat belum**: tombol Sebelumnya/Berikutnya di halaman 1/tengah/terakhir, halaman di luar total, tombol pada pesan >5 menit, dan tombol "Semua kontak" dari menu setelah pesan menu diedit.
+
+## Sesi #293 (2026-10-21 06:45 UTC) — menu command owner diringkas
+- **Permintaan owner**: mengeluh command menumpuk di menu ☰ dan ingin menu hanya berisi `help` dan `ping`.
+- **Penyebab**: `registerBotCommands()` mendaftarkan `botCommandList()` (±52 perintah) sebagai `setMyCommands` scope `chat` owner; scope publik hanya `ping`/`start`/`help` (+`login` saat PIN aktif & owner kosong). Jadi menu owner memang panjang.
+- **`v1.6.428`** (`versionCode` 455, patch `6061c24`, rilis `1a9bf13`, tag `v1.6.428`):
+  - `botCommandList()` kini hanya `help` ("Bantuan / menu tombol") dan `ping` ("Cek delay").
+  - `publicCommandList()` sengaja TIDAK diubah: tetap `ping`, `start`, `help` (dan `login` bila perlu) untuk pairing/login sebelum owner tertaut.
+  - `README.md` + `CHANGELOG.md` mencatat menu ☰ owner hanya dua perintah; perintah lain tetap bisa diketik dan pintasan tombolnya ada di `/help`.
+  - Karena `tokenHash` registrasi menyertakan `BuildConfig.VERSION_CODE`, bump versi memaksa menu didaftarkan ulang saat service start berikutnya (atau `/sembuh`).
+- **CI/rilis**: run tag `39556756140` dan `main` `39556713567` sukses (unit test + Detekt + build + publish); Release `v1.6.428` memuat APK debug & release.
+- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih.
+- **Uji perangkat belum**: buka ulang chat owner setelah update (menu harus 2 item), cek scope publik dari akun lain (tetap 3/4 item), pastikan `/help` masih membuka panel tombol dan perintah manual tetap jalan.
