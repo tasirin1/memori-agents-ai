@@ -1,15 +1,16 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (sesi #289–#302). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
+> Memori aktif (sesi #289–#305). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-22 15:50 UTC = sesi #302)
+## Status terakhir (2026-10-22 23:22 UTC = sesi #305)
 
-- Sesi #302 = **audit menyeluruh read-only putaran-9** (5 sub-agen per area + verifikasi mandiri tiap klaim; tanpa ubah kode/commit). Basis `11e2a09` (`v1.6.451`, `versionCode` 478), pohon bersih. Hasil: **1 Kritikal, 4 Tinggi, ~16 Sedang, ~20 Rendah**; rincian + klaim GUGUR di `## Sesi #302`.
+- Sesi #305 = **audit putaran-10 + eksekusi batch Kritikal/Tinggi** (1 rilis: `v1.6.458`). Basis `2e9faa7` (`v1.6.457`, `versionCode` 484) → kini `ea974b0` + tag `v1.6.458` (`versionCode` 485), pohon bersih; run `main` `39870356726` sukses, tag `39871080310` sukses + GitHub Release. Build via GitHub Actions (tanpa Gradle/SDK lokal).
+- Sesi #304 = **lanjutan audit #302: S8 + Rendah aman** (`v1.6.456`, `v1.6.457`).
 - Sesi #301 = **lanjutan maraton audit #299** (2 rilis: `v1.6.450`, `v1.6.451`). Basis `1ce96ee` (`v1.6.449`, `versionCode` 476) → kini `11e2a09` (`v1.6.451`, `versionCode` 478), pohon bersih; run `main` + tag keduanya `success`, Release 2 APK tiap tag (build via GitHub Actions, tanpa Gradle/SDK lokal).
 - Sesi #300 = **eksekusi paket perbaikan audit #299** (4 rilis: `v1.6.446`, `v1.6.447`, `v1.6.448`, `v1.6.449`). Basis `2d557f5` (`v1.6.445`, `versionCode` 472) → `1ce96ee` (`v1.6.449`, `versionCode` 476), pohon bersih; 4 run tag `success` + Release.
 - Sesi #299 = **audit menyeluruh read-only** (5 sub-agen per area + verifikasi mandiri tiap klaim; tanpa ubah kode). Hasil: 0 Kritikal, 5 Tinggi, ~18 Sedang, ~25 Rendah (daftar prioritas di `## Sesi #299`).
@@ -306,3 +307,16 @@
 - **CI/rilis**: `v1.6.456` run `39861362719` sukses + Release; `v1.6.457` run `39862370553` sukses + Release. `main` ikut sukses. Validasi tiap batch: `verifikasi-path.py --semua` LOLOS, `cek-cepat.sh` 0, `git diff --check` bersih; build via GitHub Actions.
 - **Sisa yang sengaja ditunda**: S11 masih menyimpan kredensial valid lewat tombol Tes (tetapi tidak menghapus PIN); Rendah lain — `ensureRestoreCodeSecret` commit di main (sekali buka dialog), `NotificationForwarderService` pesan Indonesia hardcode, ProGuard `-keep` service/worker/receiver luas, Dependabot hanya `github-actions`, artefak rilis tanpa `mapping.txt`, `startWakeLoop` 60 dtk, `teardownJobs` main thread, dedupe notifikasi `hashCode`, `verifikasi-path` belum cek `android:name` Application.
 - **Uji perangkat belum**: pesan mendesak saat retry tertunda (pastikan tidak dobel), SMS/panggilan saat layar mati lewat `InstantEventReceiver`, patroli setelah `/resume`, radius desimal geofence, dan pembersihan cache kamera.
+
+## Sesi #305 (2026-10-22 23:22 UTC) — audit putaran-10 + batch Kritikal/Tinggi
+- **Permintaan owner**: audit menyeluruh (5 sub-agen + verifikasi mandiri) lalu "gas" untuk eksekusi temuan Kritikal + Tinggi 1–6, rilis bertahap sesuai `AGENTS.md` §8.
+- **v1.6.458** (dari `2e9faa7` → `ea974b0`, `versionCode` 485):
+  - **Kritikal 1** `sendFitted()` kini tri-state `SendStatus.SENT/QUEUED/DROPPED`; drop permanen 400 tidak lagi dianggap terkirim, jadi kursor SMS/panggilan tidak maju dan laporan crash tidak dihapus tanpa pengiriman. Pemanggil: `/log`, sinkron awal SMS/panggilan, `checkAndSendNewData`, rekursi `sendToTelegram` (`!= DROPPED`).
+  - **Kritikal 2** offset update Telegram: kelas murni baru `utils/UpdateOffsetTracker.kt` (+ `app/src/test/.../UpdateOffsetTrackerTest.kt`, 5 tes) menyimpan offset hanya untuk prefiks pembaruan yang benar-benar selesai, berurutan, dan tidak pernah saat handler dibatalkan (`CancellationException`); pembaruan yang gagal menahan seluruh kemajuan (sticky) agar tidak ada perintah terlewat. `persistUpdateOffset()` diserialkan `offsetPersistLock`.
+  - **Tinggi 3** `NetworkUtils.isPollBlocked()` hanya menahan polling untuk 401/403; galat sisi kirim 400 ("chat not found") tidak lagi memblokir `getUpdates` 30 menit.
+  - **Tinggi 4** `MessageQueue.flushSync()` tidak lagi menunggu barrier persist 2 dtk di main thread (langsung kembali; penulisan tetap dijadwalkan ke executor latar). Membalik keputusan `v1.6.452` (yang menambah wait 2 dtk) demi menghindari ANR.
+  - **Tinggi 5** `takeScreenshotFrame()` melepas `VirtualDisplay`/`ImageReader` lewat `releaseShotSurface()` di `finally` (jalur sukses, frame kosong/timeout, dan galat), tidak lagi menumpuk sampai `onDestroy`.
+  - **Tinggi 6** `BootRestartWorker` mengembalikan `Result.success()` (bukan `failure`) setelah 5 percobaan gagal, sehingga periodic watchdog 15 menit tidak berhenti permanen.
+- **Build gagal sesaat** (`run 39869998131`): `if` tanpa `else` di dalam `synchronized{}` dianggap ekspresi (`persistUpdateOffset`); diperbaiki dengan `Unit` eksplisit (`ea974b0`).
+- **CI/rilis**: `main` `39870356726` sukses; tag `v1.6.458` `39871080310` sukses + GitHub Release 2 APK. Validasi: `verifikasi-path.py --semua` LOLOS (81 berkas, 5 peringatan nama metode baru non-logika), `cek-cepat.sh` 0, brace-balance 4 berkas 0, tanpa Gradle/SDK lokal.
+- **Sisa batch Sedang (belum)**: area yang ditandai audit antara lain `A11yMonitor` snapshot/`isLaunchable` cache negatif, `SetupActivity` (hapus kredensial/Device Admin, dialog aksesibilitas, consent notifikasi, validasi interval, PIN saved-state), `PreferencesManager` reset kursor saat kredensial berubah, `TelegramApi.callTimeout` media vs watchdog, fallback signing `app/build.gradle`, env signing/tag check workflow, dan `verifikasi-path.py` (`diff_biasa`/rentang). Rendah + uji perangkat (media upload timing, MediaProjection, binding aksesibilitas, akurasi geofence, `QUERY_ARG_LIMIT` OEM, kehilangan keystore, urutan consent notifikasi) tetap ditandai untuk uji perangkat.
