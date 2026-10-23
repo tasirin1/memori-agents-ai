@@ -1,14 +1,15 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (sesi #289–#305). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
+> Memori aktif (sesi #289–#307). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-22 23:22 UTC = sesi #305)
+## Status terakhir (2026-10-23 02:49 UTC = sesi #307)
 
+- Sesi #307 = **lanjutan audit putaran-10: batch Tinggi + Sedang jaringan/worker + tooling** (4 rilis: `v1.6.461`–`v1.6.464`). Basis `f392fad` (`v1.6.460`, `versionCode` 487) → kini `1d061fd` + tag `v1.6.464` (`versionCode` 491), pohon bersih; run `main`/tag keempat rilis semuanya sukses + GitHub Release 2 APK. Build via GitHub Actions (tanpa Gradle/SDK lokal).
 - Sesi #305 = **audit putaran-10 + batch Kritikal/Tinggi + sebagian Sedang** (2 rilis: `v1.6.458`, `v1.6.459`). Basis `2e9faa7` (`v1.6.457`, `versionCode` 484) → kini `7e102e4` + tag `v1.6.459` (`versionCode` 486), pohon bersih; run `main`/tag `v1.6.458` (`39870356726`/`39871080310`) dan `v1.6.459` (`39871959414`/`39872657407`) semuanya sukses + GitHub Release. Build via GitHub Actions (tanpa Gradle/SDK lokal).
 - Sesi #304 = **lanjutan audit #302: S8 + Rendah aman** (`v1.6.456`, `v1.6.457`).
 - Sesi #301 = **lanjutan maraton audit #299** (2 rilis: `v1.6.450`, `v1.6.451`). Basis `1ce96ee` (`v1.6.449`, `versionCode` 476) → kini `11e2a09` (`v1.6.451`, `versionCode` 478), pohon bersih; run `main` + tag keduanya `success`, Release 2 APK tiap tag (build via GitHub Actions, tanpa Gradle/SDK lokal).
@@ -338,3 +339,34 @@
 - **CI/rilis**: `main` run `39873957145` sukses; tag `v1.6.460` run `39874625607` sukses + GitHub Release berisi `redeye-v1.6.460-debug.apk` dan `redeye-v1.6.460-release.apk`. Tanpa Gradle/SDK lokal.
 - **Uji perangkat belum**: tampilan akhir tombol (putih/peach/hijau + ripple dan teks putih pada tombol `=`) perlu dicek langsung di layar; build hanya diverifikasi lewat GitHub Actions.
 - **Sisa audit putaran-10**: daftar rinci 18 Sedang masih tidak tersimpan; Rendah + uji perangkat tetap seperti sesi #305.
+
+## Sesi #307 (2026-10-23 02:49 UTC) — lanjutan audit putaran-10: batch Tinggi/Sedang/tooling (4 rilis)
+- **Permintaan owner**: `lanjut` melanjutkan perbaikan temuan audit secara maraton, rilis bertahap. Basis `f392fad` (`v1.6.460`, `versionCode` 487); antrean CI bersih sebelum mulai. Semua build diverifikasi GitHub Actions (tanpa Gradle/SDK/emulator lokal).
+- **v1.6.461** (`a543182`, `versionCode` 488):
+  - `/sms` diperbaiki: `utils/SmsCommandParser.kt` memilih pemisah nomor/pesan dari token pertama yang sudah lengkap (minimal 7 digit), lalu fallback nomor berspasi dengan grup terakhir ≥2 digit; menutup regresi `08123456789 2 orang` → nomor `081234567892`/teks `orang`, sekaligus kasus `0812 3456 7890 2 orang`. Tes baru `SmsCommandParserTest` (9 kasus).
+  - `ContentQuery.query(..., strict=true)` meneruskan galat dan menganggap cursor null sebagai gagal; `SmsRepository.getNewSms`/`CallLogRepository.getNewCalls` memakai strict, sehingga `initialSyncDone` tidak diset saat riwayat gagal dibaca.
+  - Urutan cek boot: `BootRestartWorker` memeriksa `isStorageEncrypted` sebelum consent; `BootReceiver` menjadwalkan worker (bukan membatalkan watchdog) saat storage tidak terenkripsi.
+  - `UpdateOffsetTracker` dirombak: set `failed` per-id menggantikan `blocked` permanen; jalur update `seen` tidak lagi `finish(id,true)`; update gagal di-`forgetSeen` agar bisa diulang; tes tracker diperluas (retry setelah gagal, update setelah gagal menunggu).
+  - Polling `getUpdates` sukses tidak lagi menghapus `credentialError` sisi kirim; pemulihan hanya lewat kirim sukses/`sweepAuthBlock`/ganti kredensial.
+- **v1.6.462** (`32d4ddc`, `versionCode` 489):
+  - `MessageQueue.addMessage`/`addMessages` mode volatil mengembalikan `true` bila item benar-benar bertahan di antrean, sehingga `sendFitted` tidak `DROPPED` dan worker dijadwalkan.
+  - `QueuedMessage.bootAt` + `MessageQueue.bootWallAt()`/`isFresh()`: pesan dari boot sebelumnya memakai waktu dinding; fallback "clock jump" hanya untuk item lama `bootAt=0`, sehingga pesan kedaluwarsa tidak lagi dipertahankan setelah reboot walau uptime baru lebih panjang.
+  - Restore Telegram memakai `SettingsBackup.looksStructurallyValid()` (bukan prefix), file rusak tidak menghabiskan percobaan PIN.
+  - Pencarian riwayat nomor pendek tidak lagi menjalankan fuzzy `LIKE '%...%'`; fuzzy hanya untuk nomor ≥10 digit.
+  - Simpan Setup dengan kolom PIN kosong mempertahankan PIN tersimpan (konsisten dengan tombol Tes).
+  - `clearCredentials` ikut membersihkan trail 24 jam, home/school (lat/lon `Long.MIN_VALUE`, radius/state 0), `clearAuditLog()`, watch keywords/numbers.
+- **v1.6.463** (`5040278`, `versionCode` 490):
+  - `/login` dan `/start` tanpa argumen dijalankan di coroutine `serviceScope` dengan `commandLock` + `offsetDeferred`; loop polling tidak lagi tertahan HTTP login. `/start <arg>` (pairing) dan hint PIN tetap seperti semula.
+  - Callback menu tidak lagi memegang `controlLock` selama `answerCallback`/`editMenuMessage`/`sendToTelegram`; lock hanya untuk `armInput` dan eksekusi `handleTelegramCommand`, sehingga tombol lambat tidak memblokir polling.
+  - `SendMessageWorker` punya tenggat total 8 menit + tenggat per chunk (`sendChunked(deadlineAt)`); sisa chunk diantrekan dan dijadwalkan ulang, menghindari batas ±10 menit WorkManager.
+  - `MessageScheduler.scheduleMessageSendNext` mereservasi slot atomik dan berhenti di `MAX_OUTSTANDING_SEND` (3); slot dikembalikan bila enqueue gagal.
+- **v1.6.464** (`1d061fd`, `versionCode` 491):
+  - Workflow rilis menambah `fail_on_unmatched_files: true`, tag tanpa APK gagal tegas.
+  - README dikoreksi: retry jaringan workflow = satu kali ulang (total dua percobaan), bukan 3x.
+- **CI/rilis**: `main`/tag `v1.6.461` (`39887285377`/`39887888198`), `v1.6.462` (`39888638177`/`39889090733`), `v1.6.463` (`39890035199`/`39890431306`), `v1.6.464` (`39891015079`/`39891562225`) semuanya `success`; tiap tag menerbitkan Release berisi APK debug + release berversi. Unit test, Detekt, build, dan publish hijau.
+- **Validasi tiap batch**: `python3 tools/verifikasi-path.py --semua` LOLOS (83 berkas; peringatan non-fatal metode baru tanpa uji Android: `forgetSeen`, `bootWallAt`, `isFresh`, `clearAuditLog`, `handleOwnerLogin`, dll.), `bash scripts/cek-cepat.sh` 0, `git diff --check` bersih, YAML workflow valid via PyYAML.
+- **Ditunda dengan alasan**:
+  - **CHANGELOG duplikat**: header `## [1.6.4]` kedua (sekitar baris 4154) isinya duplikat rinci dari `## [1.4.4]` (targetSdk 35/AGP 8.5.2, device_admin, dedupe panggilan, dll.), sementara `[1.6.4]` pertama (per-chunk markers) berasal dari `1e0b01e`. Tidak diubah agar tidak menulis ulang sejarah; perlu keputusan owner/penulis changelog.
+  - **Belum dipatch**: `clearQueue` saat commit gagal (butuh perubahan signature + keputusan UI), hitungan drop dobel (detail audit tidak tersimpan; kandidat `evictOldestLocked` menghitung overflow + priority), riwayat notifikasi dobel, race kamera, I/O main thread Setup/A11y — semuanya perlu bukti/uji perangkat.
+  - **Uji perangkat** tetap seperti sesi #305 (keystore rusak, WorkManager 10 menit, MediaProjection, binding aksesibilitas, akurasi geofence, `QUERY_ARG_LIMIT` OEM).
+- **Pelajaran**: `verifikasi-path` bisa melaporkan "Metode baru" untuk metode lama yang tersentuh diff; peringatan itu non-fatal. `scheduleMessageSendNext` kini menghitung setiap work yang di-append, jadi `onSendRunFinished` harus tetap dipanggil di `finally` worker (sudah).
