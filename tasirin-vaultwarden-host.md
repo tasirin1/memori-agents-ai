@@ -7,18 +7,19 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-23 04:29 UTC = sesi #72)
+## Status terakhir (2026-10-23 06:31 UTC = sesi #73)
 
-- Sesi #72: maraton perbaikan temuan audit (lanjutan) sampai daftar temuan konkret habis. HEAD app `4599631`, `main` sinkron `origin/main`, working tree bersih.
-- Fix utama (semua sudah commit + push `main`, build tidak dipantau sesuai aturan #14): anti-loop restart, rollback restore via `TgBackup.pulihkanDbLama`, serialisasi backup via `TgBackup.kunciBackup`, lifecycle dialog web-vault, web-vault "false latest" (`wvPayloadAda`), START_STICKY via `server_diminta`, penolakan antrean pool melempar `RejectedExecutionException` + helper boolean melepas flag, retry checksum (408/429/5xx), `clearLog` menghapus `logFileBuf` + `.log.1`, auto-backup hanya setelah Start diterima, izin storage legacy Android 11+, target terkunci tak memanggil `latestVersion()`, sinkron checkbox PIN.
-- Guard/verifikator: `tools/verifikasi-patch.py` menormalkan rentang di dispatch/schedule/push pertama (`rentang_normal`).
-- Kebersihan: `AutoUpdate.cek` mencatat kegagalan (tak telan sunyi), throttle smoke test mati dihapus, memo versi binary atomis (`MemoVersi`), overload/konstanta mati `TgBackup`/`TlsCert` dihapus, cap versi web-vault hanya tag Vaultwarden (bukan versi Bitwarden dari `vw-version.json`), `Updater.detectVersion` satu pintu pembersihan proses (finally), teks UI PIN Indonesia hardcode jadi `R.string.pin_proses_gagal`.
-- Verifikasi lokal: `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas), `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih. Status CI tidak dipantau (aturan #14).
-- Sebelumnya (sesi #71, 2026-10-17 12:31 UTC): aturan maraton + sub-agen ditulis ke `AGENTS.md` (`744ffd0`).
+- Sesi #73: maraton perbaikan temuan audit sampai daftar konkret habis (aturan #17). HEAD app `e1ff2cd`, `main` sinkron `origin/main`, working tree bersih.
+- Perbaikan keamanan/stabilitas (semua sudah commit + push `main`): PIN pendek tak mematikan proteksi, snapshot password backup, hapus WAL/SHM per berkas, urutan penanda stop, `stopSelf(startId)`, kunci data Start vs restore, pool tugas paralel, validasi tag upstream, symlink kanonis, hash ulang di dalam kunci unduh, semua baris `--version`, `stopAndWait` menunggu `starting`, fallback binary 6 jam, validasi admin token + setelan tersimpan saat `onPause`, guard lifecycle dialog, reset TLS serial dengan Start, PIN bot hanya dari chat pribadi (deteksi per chat, bukan seluruh config), cek ruang sebelum restore.
+- CI: workflow APK tanpa job `perlu`/`assembleDebug`, `cancel-in-progress` dimatikan, unggah `--clobber` + verifikasi ukuran; gate `cek-cepat` memeriksa staged + tracked (tak buta di runner); `.gitignore` aset CI; verifikator melewati `build/` dan mengabaikan komentar/Javadoc; `cacert.pem` dipin SHA-256; `restore-keys` cache cargo diperbaiki.
+- Commit penting: `b7aa881` (#18/#19), `3c8f9f9` (#20), `1fc7b55` (#21), `7b2033e` (#22), `1683e59` (#23), `9edcbaf` (#24/#25), `14332fb` (#26), `a73fbae` (#21 lanjutan: deteksi grup per chat), `e1ff2cd` (judul dialog restore). Rentang #1–#17 ada di `git log` sejak `8d731c0`.
+- Verifikasi lokal: `verifikasi-patch --semua` LOLOS (38 berkas), `cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test penuh di CI, tidak dipantau (aturan #14).
+- Catatan: pin SHA-256 `cacert.pem` sengaja menggagalkan build bila curl.se merilis bundel baru — perbarui hash setelah memeriksa perubahan. Grup Telegram kini hanya menerima notifikasi/backup + perintah tanpa PIN; PIN-gated commands wajib dari chat pribadi (README EN/ID/RU sudah diperbarui).
 
 ## Tugas terbuka
 
-- Refactor sisa teks UI berbahasa Inggris yang masih hardcode di `SettingsActivity`/`MainActivity`/`LogActivity` jadi resource (butuh harness pembuktian setara sesuai `SOUL.md`; bukan bug, murni i18n). Tidak dikerjakan pada sesi #72 karena risiko/churn besar tanpa compile lokal.
+- Refactor sisa teks UI berbahasa Inggris yang masih hardcode di `SettingsActivity`/`MainActivity`/`LogActivity` jadi resource (butuh harness pembuktian setara sesuai `SOUL.md`; bukan bug, murni i18n). Belum dikerjakan karena risiko/churn besar tanpa compile lokal.
+- `build-binary.yml` masih memakai helper unggah aset inline (satu-satunya; workflow APK sudah `--clobber`). Tidak dijadikan skrip bersama agar tak menambah run binary berat tanpa perlu.
 
 ## Cara pakai file ini
 
@@ -78,3 +79,20 @@
 - Kode mati: `TlsCert.extensionsBlock(List)` satu-argumen, `TgBackup.deriveKey` 2-/3-argumen, `TgBackup.TG_INTERVAL_MS` dihapus; nama `deriveKey`/`extensionsBlock` TIDAK masuk `bekas-hapusan.txt` karena masih ada overload (pindah, bukan hapus total).
 - Verifikasi: `verifikasi-patch.py --semua` LOLOS (38 berkas), `cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test/lint penuh diserahkan ke CI; run tidak dipantau sesuai aturan #14.
 - Sisa: hanya refactor i18n teks Inggris hardcode (dibutuhkan harness bukti setara; dicatat sebagai tugas terbuka, bukan bug).
+
+## Sesi #73 — 2026-10-23 06:31 UTC (maraton audit #18–#26 + lanjutan, selesai)
+- Permintaan owner: lanjutkan maraton perbaikan temuan audit (aturan #13/#17) — satu temuan satu perbaikan akar, langsung commit + push `main`, tanpa memantau build (aturan #14).
+- Basis awal: lanjutan sesi #72 (`4599631`); sesi ini menutup temuan #18–#26 plus dua temuan susulan. HEAD akhir `e1ff2cd`, `main` sinkron `origin/main`, working tree bersih.
+- Temuan & akar perbaikan:
+  - #18/#19 (`b7aa881`): admin token <8 tak lagi bisa Start (validasi di `inputStartValid` + cek defensif `saveAndStart`); folder/port/token valid disimpan saat `onPause` (bukan hanya saat Start), ditunda bila backup/restore jalan (`TgBackup.tugasDataJalan()` + test). `SettingsActivity` mengabaikan tulis saat `tugasBerjalan`.
+  - #20 (`3c8f9f9`): `TgBackup.resetSertifikat` memegang `ServerService.KUNCI_DATA` yang sama dengan Start/restore dan memeriksa ulang status di dalam kunci; `TlsCert.resetTls` mengunci `KUNCI_ENSURE`. Start yang ditunda kini berpesan "restore/reset sedang berjalan".
+  - #21 (`1fc7b55`): perintah ber-PIN dari grup/username ditolak (PIN di grup terbaca anggota; `PinGate` bersama bisa dikunci orang lain). Grup tetap menerima notifikasi/backup + perintah tanpa PIN. README EN/ID/RU diperbarui.
+  - #22 (`7b2033e`): workflow APK — job `perlu` selalu-yes dihapus, `assembleDebug` mubazir dihapus, `cancel-in-progress:false` agar publish tak terpotong, unggah `gh release upload --clobber` + retry + verifikasi ukuran aset.
+  - #23 (`1683e59`): gate `cek-cepat` memeriksa staged + semua tracked (dulu `git diff --cached` kosong di CI), pola `.aab`/`.so`/`.a`/`.dex`/`assets/bin`/`vw_version.txt`/`.env.*`; `.gitignore` aset CI; verifikator melewati `build`/`.gradle`, ABI hanya `abiFilters`, komentar/Javadoc tak dihitung sebagai pemanggil hidup.
+  - #24/#25 (`9edcbaf`): `cacert.pem` curl.se dipin SHA-256 `796f1389...e3cbe` sebelum `include_str!`; `restore-keys` cargo diganti prefiks `vw-cargo-armv7-` (dulu tak pernah cocok).
+  - #26 (`14332fb`): restore cek ruang sebelum server dihentikan — total isi zip tak terkompresi + salinan pengaman DB + 5 MB; tolak isi > `BATAS_UNZIP_RESTORE` lebih awal. Helper `ukuranIsiZip` + test.
+  - #21 lanjutan (`a73fbae`): `authDangerous` menerima ID chat; grup dideteksi per chat (ID negatif), bukan `chatResmiAdalahGrup(ctx)` seluruh config — config campuran (pribadi + grup) tetap bisa memerintah dari chat pribadi. `pengirimId`→`idRuang`.
+  - #112 (`e1ff2cd`): judul dialog `"Restore dari Telegram"` → `"Restore from Telegram"` (satu-satunya teks UI Indonesia).
+- Klaim audit yang diverifikasi ulang: `Updater.sha256Hex` **dipakai** (3 referensi), tak ada metode privat/field privat tanpa rujukan, dan tak ada overload mati di `Updater` — klaim "dead overloads/sha256Hex" tidak terbukti; tidak ada perubahan kode untuk itu.
+- Verifikasi lokal tiap commit: `python3 tools/verifikasi-patch.py` (+ `--semua` LOLOS 38 berkas), `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test/lint penuh hanya di CI dan tidak dipantau.
+- Catatan operasional: push `.github/workflows/build-binary.yml` (Audit 109) memicu build binary berat ~15 menit; pin CA akan sengaja gagal bila curl.se merilis bundel baru (perbarui hash setelah memeriksa). Sisa tugas terbuka tetap refactor i18n teks Inggris hardcode (bukan bug; ditunda karena churn besar tanpa compile lokal).
