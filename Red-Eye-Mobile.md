@@ -370,3 +370,19 @@
   - **Belum dipatch**: `clearQueue` saat commit gagal (butuh perubahan signature + keputusan UI), hitungan drop dobel (detail audit tidak tersimpan; kandidat `evictOldestLocked` menghitung overflow + priority), riwayat notifikasi dobel, race kamera, I/O main thread Setup/A11y — semuanya perlu bukti/uji perangkat.
   - **Uji perangkat** tetap seperti sesi #305 (keystore rusak, WorkManager 10 menit, MediaProjection, binding aksesibilitas, akurasi geofence, `QUERY_ARG_LIMIT` OEM).
 - **Pelajaran**: `verifikasi-path` bisa melaporkan "Metode baru" untuk metode lama yang tersentuh diff; peringatan itu non-fatal. `scheduleMessageSendNext` kini menghitung setiap work yang di-append, jadi `onSendRunFinished` harus tetap dipanggil di `finally` worker (sudah).
+
+## Sesi #308 (2026-10-23 03:20 UTC) — penguatan pemulihan Keystore (v1.6.465)
+- **Permintaan owner**: "mau" atas tawaran memperkuat jalur "keystore rusak" (bukan signing key rilis, melainkan Android Keystore/`EncryptedSharedPreferences`), basis `1d061fd` (`v1.6.464`, `versionCode` 491), antrean CI bersih.
+- **Akar masalah**: `PreferencesManager.openPrefs()` langsung jatuh ke `MemoryPrefs` pada kegagalan pertama (mis. Keystore belum siap saat boot), lalu `saveCredentials()` gagal permanen dengan pesan "penyimpanan tak tersedia"; satu-satunya jalan keluar adalah hapus kredensial (yang selalu menghapus prefs + alias kunci).
+- **Perubahan** (`42528da` + `4c4dd07`, `versionCode` 492):
+  - `openPrefs()` mencoba 3x, tiap kegagalan me-reset `sharedMasterKey` agar `MasterKey` baru dibuat; baru setelah itu fallback volatil.
+  - `upgradeToPersistent()` dipecah ke `attemptUpgradeToPersistent()` dan diulang 2x dengan `MasterKey` baru; dipakai jalur buka Setup (`refreshInstance`) dan simpan kredensial, sehingga kunci yang sempat tak tersedia pulih **tanpa hapus data**.
+  - `recoverEncryptedStorage()` dihapus → `resetEncryptedStorage()` eksplisit (selalu destruktif) + enum `StorageRecovery { FAILED, RESET }` di level kelas; hanya dipakai jalur hapus kredensial. Kegagalan reset dilaporkan terpisah (`setup_storage_reset_failed`), tidak lagi disamakan dengan "kredensial dihapus".
+  - Diagnosa: `PreferencesManager.storageFailureReason` (nama exception + pesan disanitasi ≤120 char) tampil di status Setup (`setup_status_storage_plain_reason`) dan laporan galat Telegram (`Penyimpanan: volatil (<alasan>)`).
+  - String `setup_save_no_storage` + `storage_fallback_text` (EN/ID) kini menyebut langkah perbaikan: simpan ulang, atau tahan tombol Simpan untuk reset.
+  - `tools/bekas-hapusan.txt` + `recoverEncryptedStorage` (nama lama yang sengaja dihapus).
+- **Build gagal sesaat** (`39893683365` main / `39893710621` tag): `enum class StorageRecovery` diletakkan di dalam `companion object` sehingga `PreferencesManager.StorageRecovery` unresolved; diperbaiki dengan memindahkannya ke level kelas (`4c4dd07`), lalu tag `v1.6.465` di-force ke commit perbaikan (release sebelumnya tidak terbit).
+- **CI/rilis**: `main` `39894056445` sukses; tag `39894080829` sukses + GitHub Release `v1.6.465` berisi `redeye-v1.6.465-debug.apk` dan `redeye-v1.6.465-release.apk`.
+- **Validasi**: `python3 tools/verifikasi-path.py --semua` LOLOS (83 berkas; peringatan non-fatal metode baru tanpa uji Android), `bash scripts/cek-cepat.sh` 0, `git diff --check` bersih, XML `values`/`values-in` valid via `xml.dom.minidom`. Tanpa Gradle/SDK lokal.
+- **Uji perangkat belum**: skenario kunci Keystore benar-benar invalidasi setelah reboot/restore, keystore belum siap saat boot, dan pemulihan tanpa hapus hanya bisa dipastikan di HP; build diverifikasi via GitHub Actions.
+- **Sisa audit**: tetap seperti sesi #307 (CHANGELOG duplikat, `clearQueue` commit gagal, hitungan drop, riwayat notifikasi dobel, race kamera, I/O main thread Setup/A11y) + uji perangkat.
