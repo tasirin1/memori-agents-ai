@@ -7,7 +7,14 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-23 = sesi #74)
+## Status terakhir (2026-10-23 = sesi #75)
+
+- Sesi #75: menutup peringatan gerbang Verifikasi Patch pada sesi #74. HEAD app `9abad46` (`test: uji editMessageKb abaikan masukan tak sah`), `main` sinkron `origin/main`, working tree bersih.
+- Akar: `TgBackup.editMessageKb()` (statis baru, glue Android) belum disebut di `app/src/test`, jadi `cek_uji_baru` memberi peringatan "metode statis baru tanpa jejak di app/src/test". Peringatan hanya muncul pada cek berbasis diff push, bukan `--semua`.
+- Perbaikan: tes JVM `editMessageKb_abaikanMasukanTakSah` memanggil `editMessageKb(null, ...)` dan ID 0 — membuktikan guard fail-safe (Context hilang / ID tak sah tidak melempar ke pemanggil bot). Tanpa perubahan kode produksi.
+- Verifikasi lokal: `verifikasi-patch --rentang HEAD~1...HEAD` LOLOS tanpa peringatan, `cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test penuh di CI, tidak dipantau (aturan #14).
+
+## Status sebelumnya (2026-10-23 = sesi #74)
 
 - Sesi #74: kontrol Telegram jadi menu tombol berjenjang (mirip Red-Eye). HEAD app `f651695`, `main` sinkron `origin/main`, working tree bersih.
 - `TgBot`: `/help` membuka panel tombol (Status, Kontrol, Backup, Update, Sertifikat, Info) dengan callback navigasi `m:<panel>` + tombol Kembali; panel diedit di tempat (`TgBackup.editMessageKb` → `editMessageText`, fallback kirim baru). Keyboard lama (callback `/perintah`) tetap jalan.
