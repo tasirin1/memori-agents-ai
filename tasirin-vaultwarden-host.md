@@ -7,7 +7,27 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-23 = sesi #75)
+## Status terakhir (2026-10-23 = sesi #76) — maraton perbaikan audit (6 Tinggi + 6 Sedang/Rendah)
+
+- Permintaan owner: "mau" — mulai maraton perbaikan temuan audit (aturan #13/#17): satu temuan satu perbaikan akar, langsung commit + push `main`, tanpa memantau build (aturan #14). HEAD akhir `0bf6b29`, `main` sinkron `origin/main`, working tree bersih.
+- Audit awal sesi (5 sub-agen + verifikasi mandiri) melaporkan 6 Tinggi / 22 Sedang / ~18 Rendah; tidak ada Kritikal. Sesi ini menutup 6 Tinggi + 6 temuan lanjutan:
+  - `1845c3e` (Tinggi): `ServerService.watchProcess` cabang stop-disengaja kini membersihkan SEMUA state (`process`, `running`, penanda, wakelock, flush log, status "Stopped"); dulu watcher menang balapan → `running=true` menggantung.
+  - `e845bb4` (Tinggi): restart karena IP LAN berubah memakai `restart()`/`ACTION_RESTART` (hentikan proses lalu start), bukan `scheduleRestart()` yang no-op saat proses hidup; `runningLanHost` langsung diperbarui agar tick berikut tak memicu restart kedua.
+  - `b8ac6ea` (Tinggi): zip backup yang memuat `tls/ca-key.pem`+`tls/key.pem` dibangun di cache privat app saat akan dienkripsi (dulu plaintext sempat di `/sdcard/.../backups`, dan tertinggal bila enkripsi gagal); `.enc` tetap di folder backups + retensi.
+  - `101a8e9` (Tinggi): `SettingsActivity.refreshRingkasan` mem-posting dirinya ke UI thread bila dipanggil dari worker (dua `catch` di `runBusy` dulu menyentuh View dari worker → `CalledFromWrongThreadException`).
+  - `b368db0` (Tinggi): lockout PIN berlaku saat jam masih 1970 — stempel kecil tak lagi dianggap sisa era elapsed (dulu 5 PIN salah tidak dikunci); test `PinCryptoTest.kunciJam1970TetapMengunci`.
+  - `d2f3d0d` (Tinggi): `TgBot.httpPostForm` mencatat ringkasan galat Telegram (401/409/429 + kelas exception) sekali per jenis; `ringkasGalatTelegram` murni (tanpa `org.json`) hanya mengambil `error_code`+`description` agar token di URL tak bocor ke log.
+  - `d7243b9`: tanda air jam Telegram tak bisa "diracuni" lompatan ke masa depan (dulu bot bisu sampai tahun itu tiba); `wallBolehMaju` + pembersihan nilai racun di `muatWallMaks`/`pollOnce`; test `wallBolehMaju_tolakJam1970DanLompatanRaksasa`.
+  - `9742599`: Start saat restore memegang `KUNCI_DATA` diulang tiap 5 dtk (maks 60x) lewat `restartTunda`, bukan hilang diam-diam; Stop tetap membatalkan.
+  - `37e02c5`: `.enc` yang gagal round-trip dihapus di `finally` (dulu menumpuk & mengusir backup sah lewat retensi).
+  - `f73d386`: retensi backup hanya jalan setelah zip lolos verifikasi (dulu backup korup tetap mengusir backup lama).
+  - `59f0602`: `maybeAutoBackup` melewati cepat bila `tugasDataJalan()` (dulu menunggu DB 30 dtk lalu pesan "gagal + saran koneksi" menyesatkan & menahan 1 slot `BG_LAMA`).
+  - `0bf6b29`: `KEY_START_TERTUNDA` dihapus begitu `ServerService.start()` diterima (dulu menunggu `running` yang asinkron → flag awet → server menyala sendiri tiap app dibuka setelah Stop). `b431e80`: sidik menu bot memakai `responsOk` (toleran spasi).
+- Klaim sub-agen yang SAYA TOLAK setelah verifikasi: (a) "Activity context ditahan worker panjang" — lambda `runBusy` sudah menangkap `this` lewat `appendUiLog`/`toast`, jadi mengganti argumen ke `getApplicationContext()` tidak melepas Activity; (b) "admin token <8 hanya di Settings" — sudah ditutup sesi #73 (`inputStartValid` + cek defensif `saveAndStart`).
+- Verifikasi lokal tiap commit: `python3 tools/verifikasi-patch.py` LOLOS, `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test/lint penuh hanya di CI dan tidak dipantau.
+- Sisa terbuka: temuan Sedang/Rendah lain dari laporan audit sesi ini (yang belum tersentuh) + refactor i18n teks Inggris hardcode (bukan bug).
+
+## Status sebelumnya (2026-10-23 = sesi #75)
 
 - Sesi #75: menutup peringatan gerbang Verifikasi Patch pada sesi #74. HEAD app `9abad46` (`test: uji editMessageKb abaikan masukan tak sah`), `main` sinkron `origin/main`, working tree bersih.
 - Akar: `TgBackup.editMessageKb()` (statis baru, glue Android) belum disebut di `app/src/test`, jadi `cek_uji_baru` memberi peringatan "metode statis baru tanpa jejak di app/src/test". Peringatan hanya muncul pada cek berbasis diff push, bukan `--semua`.
