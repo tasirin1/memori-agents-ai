@@ -7,7 +7,15 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-23 06:31 UTC = sesi #73)
+## Status terakhir (2026-10-23 = sesi #74)
+
+- Sesi #74: kontrol Telegram jadi menu tombol berjenjang (mirip Red-Eye). HEAD app `f651695`, `main` sinkron `origin/main`, working tree bersih.
+- `TgBot`: `/help` membuka panel tombol (Status, Kontrol, Backup, Update, Sertifikat, Info) dengan callback navigasi `m:<panel>` + tombol Kembali; panel diedit di tempat (`TgBackup.editMessageKb` → `editMessageText`, fallback kirim baru). Keyboard lama (callback `/perintah`) tetap jalan.
+- Tombol ber-PIN meminta PIN lewat balasan chat 5 menit (`KEY_TG_PENDING_PREFIX` per chat, `pendingMasihBerlaku` fail-closed saat jam mundur, sesi dihapus sebelum eksekusi). Grup tak pernah membuat sesi PIN. `/ca`+`/cabackup` masuk `perintahPerluPin` (hapus pesan ber-PIN + prompt tombol).
+- `keyboardPerintah` + 2 tes lamanya dihapus dan dicatat di `tools/bekas-hapusan.txt`; tes baru `rakitKeyboard`, `panelMenuValid`, `keyboardMenu`, `perintahPerluPin`, `pendingMasihBerlaku`, `bangunParamEdit`. README EN/ID/RU + CHANGELOG diperbarui.
+- Verifikasi lokal: `verifikasi-patch --semua` LOLOS (38 berkas; 1 peringatan non-fatal `editMessageKb` tanpa tes JVM karena butuh Context), `cek-cepat.sh` 0, `git diff --check` bersih. Build/test penuh di CI, tidak dipantau (aturan #14).
+
+## Status sebelumnya (2026-10-23 06:31 UTC = sesi #73)
 
 - Sesi #73: maraton perbaikan temuan audit sampai daftar konkret habis (aturan #17). HEAD app `e1ff2cd`, `main` sinkron `origin/main`, working tree bersih.
 - Perbaikan keamanan/stabilitas (semua sudah commit + push `main`): PIN pendek tak mematikan proteksi, snapshot password backup, hapus WAL/SHM per berkas, urutan penanda stop, `stopSelf(startId)`, kunci data Start vs restore, pool tugas paralel, validasi tag upstream, symlink kanonis, hash ulang di dalam kunci unduh, semua baris `--version`, `stopAndWait` menunggu `starting`, fallback binary 6 jam, validasi admin token + setelan tersimpan saat `onPause`, guard lifecycle dialog, reset TLS serial dengan Start, PIN bot hanya dari chat pribadi (deteksi per chat, bukan seluruh config), cek ruang sebelum restore.
