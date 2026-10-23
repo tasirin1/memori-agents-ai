@@ -7,16 +7,18 @@
 - Repo: `tasirin1/tasirin-vaultwarden-host` — host Vaultwarden Android (minSdk 21, targetSdk 28).
 - Aturan main (ringkas dari `AGENTS.md`): DILARANG KERAS build/test/lint lokal dalam bentuk apa pun; verifikasi lokal hanya baca kode, `grep`/`rg`, `git diff`/`log`, parse XML; satu-satunya build/test/rilis via push ke `main` + GitHub Actions; semua Bahasa Indonesia; commit `feat:`/`fix:`/`docs:`/`chore:`/`perf:`; tiap selesai perbaikan langsung commit + push.
 
-## Status terakhir (2026-10-17 12:31 UTC = sesi #71)
+## Status terakhir (2026-10-23 04:29 UTC = sesi #72)
 
-- Sesi #71: aturan maraton perbaikan + audit sub-agen ditulis ke `AGENTS.md` repo ini (aturan 17–18) atas permintaan owner; tetap terikat aturan #13 (langsung push) & #14 (dilarang memantau build). Versi kanonik di `SOUL.md` memori agen.
-- Commit docs-only `744ffd0` (push `origin main`, tanpa bump versi/tag — `versionCode` epoch-otomatis, commit `*.md` dilewati CI).
-- Guard: `python3 tools/verifikasi-patch.py` LOLOS (1 berkas) + `bash scripts/cek-cepat.sh` exit 0 + `git diff --check` bersih.
-- Sebelumnya (sesi #70 + lanjutan, 2026-10-15 03:20 UTC): workflow `verifikasi-patch.yml` digabung jadi job pertama `build-apk.yml` + `build-binary.yml` (`a2f3b35`).
+- Sesi #72: maraton perbaikan temuan audit (lanjutan) sampai daftar temuan konkret habis. HEAD app `4599631`, `main` sinkron `origin/main`, working tree bersih.
+- Fix utama (semua sudah commit + push `main`, build tidak dipantau sesuai aturan #14): anti-loop restart, rollback restore via `TgBackup.pulihkanDbLama`, serialisasi backup via `TgBackup.kunciBackup`, lifecycle dialog web-vault, web-vault "false latest" (`wvPayloadAda`), START_STICKY via `server_diminta`, penolakan antrean pool melempar `RejectedExecutionException` + helper boolean melepas flag, retry checksum (408/429/5xx), `clearLog` menghapus `logFileBuf` + `.log.1`, auto-backup hanya setelah Start diterima, izin storage legacy Android 11+, target terkunci tak memanggil `latestVersion()`, sinkron checkbox PIN.
+- Guard/verifikator: `tools/verifikasi-patch.py` menormalkan rentang di dispatch/schedule/push pertama (`rentang_normal`).
+- Kebersihan: `AutoUpdate.cek` mencatat kegagalan (tak telan sunyi), throttle smoke test mati dihapus, memo versi binary atomis (`MemoVersi`), overload/konstanta mati `TgBackup`/`TlsCert` dihapus, cap versi web-vault hanya tag Vaultwarden (bukan versi Bitwarden dari `vw-version.json`), `Updater.detectVersion` satu pintu pembersihan proses (finally), teks UI PIN Indonesia hardcode jadi `R.string.pin_proses_gagal`.
+- Verifikasi lokal: `python3 tools/verifikasi-patch.py --semua` LOLOS (38 berkas), `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih. Status CI tidak dipantau (aturan #14).
+- Sebelumnya (sesi #71, 2026-10-17 12:31 UTC): aturan maraton + sub-agen ditulis ke `AGENTS.md` (`744ffd0`).
 
 ## Tugas terbuka
 
-- (belum ada)
+- Refactor sisa teks UI berbahasa Inggris yang masih hardcode di `SettingsActivity`/`MainActivity`/`LogActivity` jadi resource (butuh harness pembuktian setara sesuai `SOUL.md`; bukan bug, murni i18n). Tidak dikerjakan pada sesi #72 karena risiko/churn besar tanpa compile lokal.
 
 ## Cara pakai file ini
 
@@ -67,3 +69,12 @@
 - Perubahan (`744ffd0`, push `origin main`, docs-only tanpa bump/tag): `AGENTS.md` +aturan 17 (**mode perbaiki = maraton** — kerjakan temuan audit sampai habis, satu temuan satu perbaikan akar, langsung commit + push `main` per aturan #13, tanpa memantau build per #14, build gagal didahulukan) +aturan 18 (**audit menyeluruh = 2–5 sub-agen paralel per area + verifikasi mandiri** tiap klaim berat ke kode `rg`/`sed` sebelum masuk laporan/patch; temuan wajib `file:baris` + dampak + skenario pemicu + level bahaya).
 - Kanonik lintas repo: `SOUL.md` (memori agen) seksi "Aturan maraton perbaikan & sub-agen"; salinan di `AGENTS.md` Red-Eye-Mobile §5, netradar 14–15, tasirin-download-manager 21–22.
 - Validasi tanpa toolchain Android: `python3 tools/verifikasi-patch.py` LOLOS (1 berkas), `bash scripts/cek-cepat.sh` exit 0, `git diff --check` bersih.
+
+## Sesi #72 — 2026-10-23 04:29 UTC (maraton perbaikan temuan audit, selesai)
+- Permintaan owner: "lanjut" — meneruskan maraton perbaikan temuan audit (aturan 13/17): satu temuan satu perbaikan akar, langsung commit + push, tanpa memantau build (aturan 14).
+- Basis awal sesi: HEAD `2078c70`; temuan konkret tersisa: `AutoUpdate` gagal sunyi, throttle smoke test mati, balapan memo versi, kode mati (`extensionsBlock`/`deriveKey`/`TG_INTERVAL_MS`), teks UI PIN hardcode Indonesia, blok destroy ganda, namespace `KEY_WV_FROM`.
+- Commit sesi ini: `6c47f9e` (AutoUpdate catat gagal), `34def45` (hapus throttle smoke mati), `2078c70` (memo atomis `MemoVersi` + uji antar-thread), `5ca9e59` (hapus overload/konstanta mati), `3d41b37` (cap web-vault hanya tag Vaultwarden), `2740d7b` (satu pintu pembersihan `detectVersion`), `4599631` (teks PIN → resource).
+- Bukti namespace: `versiWvUntukCap` dulu menulis versi web-vault Bitwarden (`vw-version.json`) ke `KEY_WV_FROM` saat `latest == null`, padahal perbandingan "sudah terbaru" memakai tag Vaultwarden — namespace tercampur dan UI menampilkan versi salah. Kini cap hanya tag Vaultwarden; cek `latest == null` tetap memakai keberadaan payload (`wvPayloadAda`) sehingga tidak ada unduhan ulang 35 MB tambahan. Test `capWvHanyaTagVaultwarden` (nama lama `capWvRedirectDariJson` dicatat di `tools/bekas-hapusan.txt`).
+- Kode mati: `TlsCert.extensionsBlock(List)` satu-argumen, `TgBackup.deriveKey` 2-/3-argumen, `TgBackup.TG_INTERVAL_MS` dihapus; nama `deriveKey`/`extensionsBlock` TIDAK masuk `bekas-hapusan.txt` karena masih ada overload (pindah, bukan hapus total).
+- Verifikasi: `verifikasi-patch.py --semua` LOLOS (38 berkas), `cek-cepat.sh` exit 0, `git diff --check` bersih. Build/test/lint penuh diserahkan ke CI; run tidak dipantau sesuai aturan #14.
+- Sisa: hanya refactor i18n teks Inggris hardcode (dibutuhkan harness bukti setara; dicatat sebagai tugas terbuka, bukan bug).
