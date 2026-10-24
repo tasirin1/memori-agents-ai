@@ -1,15 +1,15 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (sesi #289–#313). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
+> Memori aktif (sesi #295–#314). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#294; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-24 05:05 UTC = sesi #313)
+## Status terakhir (2026-10-24 06:05 UTC = sesi #314)
 
-- Sesi #313 = **audit menyeluruh putaran-13 (read-only)** pada `63010b1`/`v1.6.471`; tree bersih, 5 run CI terakhir sukses. 3 sub-agen + verifikasi mandiri. Temuan: 2 Sedang (respons auth lama memblokir kredensial baru; peringatan drop notifikasi bisa hilang saat flush), 2 Rendah bersyarat kegagalan commit (mutasi queue dapat muncul lagi setelah restart; migrasi chat ID dapat dianggap sukses walau commit gagal). Tidak ada patch. Rincian di `## Sesi #313`.
+- Sesi #314 = **perbaikan seluruh 4 temuan audit #313**, basis `63010b1`/`v1.6.471` → `95c3fde`/`v1.6.475`; tree aplikasi bersih di `main`. Keempatnya sudah dirilis bertahap: auth stale (`v1.6.472`), counter notifikasi drop (`v1.6.473`), persistensi queue (`v1.6.474`), dan migrasi chat ID (`v1.6.475`). Main/tag CI semua sukses; Release `v1.6.475` memuat dua APK. Rincian di `## Sesi #314`.
 - Sesi #312 = **perbaikan temuan audit #311** (2 rilis). Basis `1481bd7` (`v1.6.469`, `versionCode` 496) → kini `63010b1` + tag `v1.6.471` (`versionCode` 498), pohon aplikasi bersih. Rilis `v1.6.470` memperbaiki benturan key deduplikasi notifikasi SHA-256; `v1.6.471` menghapus `SettingsBackup.looksLikeBackup()` yang tidak terpakai dan memasukkannya ke daftar bekas hapusan. Build main/tag kedua rilis sukses + Release debug/release APK.
 - Catatan struktur besar `MonitoringService.kt` **belum direfactor**: audit hanya membuktikan ukuran/cakupan tanggung jawab, bukan satu bug; ekstraksi lintas banyak state/method perlu refactor arsitektur tersendiri dan pembuktian perilaku.
 - Sesi #307 = **lanjutan audit putaran-10: batch Tinggi + Sedang jaringan/worker + tooling** (4 rilis: `v1.6.461`–`v1.6.464`). Basis `f392fad` (`v1.6.460`, `versionCode` 487) → kini `1d061fd` + tag `v1.6.464` (`versionCode` 491), pohon bersih; run `main`/tag keempat rilis semuanya sukses + GitHub Release 2 APK. Build via GitHub Actions (tanpa Gradle/SDK lokal).
@@ -54,115 +54,13 @@
 - Pelajaran baru (sesi #242): `check_memory.py` mewajibkan nomor sesi **NAIK** sesuai urutan di berkas (bukan terbaru-di-atas) — menaruh sesi baru di atas sesi lama = `[FAIL] nomor sesi tidak urut`. Taruh sesi baru di paling bawah (setelah sesi tertinggi), lalu arsipkan yang tertua dari atas.
 - Pelajaran baru (sesi #238): `verifikasi-path.py` + `cek-cepat.sh` BUKAN kompiler — galat anotasi/kompilasi hanya tertangkap CI; sekarang anotasi ganda berturut-turut dijaga `cek-cepat.sh`.
 - Pelajaran lama: `sed` busybox TIDAK mendukung alamat `0,/regex/` (diam-diam no-op, exit 0) — jangan pakai untuk memindahkan judul seksi `[Unreleased]` di CHANGELOG; pakai tool edit.
-- Arsip memori: sesi #249–#275 diarsipkan sesi #295; sesi #157–#217 diarsipkan sesi #238; sesi #247 diarsipkan sesi #267; sesi #218–#219 diarsipkan sesi #239; sesi #221 diarsipkan sesi #241; sesi #222 diarsipkan sesi #242; sesi #223 diarsipkan sesi #243; sesi #224 diarsipkan sesi #244; sesi #225 diarsipkan sesi #245; sesi #226 diarsipkan sesi #246; sesi #227–#229 diarsipkan sesi #248; sesi #230–#232 diarsipkan sesi #252; sesi #233 diarsipkan sesi #253; sesi #234 diarsipkan sesi #254; sesi #235 diarsipkan sesi #255; sesi #236 diarsipkan sesi #256; sesi #237 diarsipkan sesi #257; sesi #238 diarsipkan sesi #258; sesi #239 diarsipkan sesi #259; sesi #240 diarsipkan sesi #260; sesi #241 diarsipkan sesi #261; sesi #242 diarsipkan sesi #262; sesi #243 diarsipkan sesi #263; sesi #244 diarsipkan sesi #264; sesi #245 diarsipkan sesi #265; sesi #246 diarsipkan sesi #266; file aktif memuat 20 sesi (#249–#268); sesi #248 diarsipkan sesi #268. Pengarsipan sesi #276–#288 (2026-10-21 23:55 UTC, perawatan memori tanpa sesi kerja) menyisakan 10 sesi (#289–#298).
+- Arsip memori: sesi #249–#275 diarsipkan sesi #295; sesi #157–#217 diarsipkan sesi #238; sesi #247 diarsipkan sesi #267; sesi #218–#219 diarsipkan sesi #239; sesi #221 diarsipkan sesi #241; sesi #222 diarsipkan sesi #242; sesi #223 diarsipkan sesi #243; sesi #224 diarsipkan sesi #244; sesi #225 diarsipkan sesi #245; sesi #226 diarsipkan sesi #246; sesi #227–#229 diarsipkan sesi #248; sesi #230–#232 diarsipkan sesi #252; sesi #233 diarsipkan sesi #253; sesi #234 diarsipkan sesi #254; sesi #235 diarsipkan sesi #255; sesi #236 diarsipkan sesi #256; sesi #237 diarsipkan sesi #257; sesi #238 diarsipkan sesi #258; sesi #239 diarsipkan sesi #259; sesi #240 diarsipkan sesi #260; sesi #241 diarsipkan sesi #261; sesi #242 diarsipkan sesi #262; sesi #243 diarsipkan sesi #263; sesi #244 diarsipkan sesi #264; sesi #245 diarsipkan sesi #265; sesi #246 diarsipkan sesi #266; file aktif memuat 20 sesi (#249–#268); sesi #248 diarsipkan sesi #268. Pengarsipan sesi #276–#288 (2026-10-21 23:55 UTC, perawatan memori tanpa sesi kerja) menyisakan 10 sesi (#289–#298); sesi #289–#294 diarsipkan sesi #314, menyisakan 19 sesi aktif (#295–#314; beberapa nomor sesi terdahulu memang tidak tercatat).
 - Anomali arsip (dibiarkan): sesi #191–#200 tercatat DUA KALI (timestamp beda, 2026-10-15 vs 2026-10-16) karena penomoran sesi pernah kembar; jangan renumber ulang, cukup sadari saat forensik.
 
 ## Cara pakai file ini
 
 - Awal sesi: baca file ini saja (jangan baca arsip kecuali perlu).
 - Akhir sesi: tambah `## Sesi #N+1 — YYYY-MM-DD HH:MM UTC — selesai` (stempel `date -u`), update "Status terakhir", commit + push. Bila sesi > 20, pindahkan sesi tertua ke arsip.
-
-## Sesi #289 (2026-10-21 00:55 UTC) — login gate setelah logout
-- **Permintaan owner**: setelah penjelasan bahwa `/logout` mencabut owner global, owner minta: "aku mau kalo belum login ngga kirim apa apa hanya kirim pengarahan login". Basis `a434dd0` (`v1.6.422`), pohon bersih.
-- **Definisi "belum login"**: PIN akses aktif + owner ID 0 (kondisi setelah `/logout`). Jalur `/login <PIN>` dan pairing `/start` (saat PIN kosong) tetap terbuka; Setup Test/Send Status manual tidak digating karena dipakai sebelum owner tertaut.
-- **`v1.6.423`** (`versionCode` 450, patch `b9df99e`, rilis `e02604d`, tag `v1.6.423`):
-  - `MonitoringService.awaitingOwnerLogin()` + `loginHintText()`; `sendToTelegram()` langsung `return false` saat menunggu login (tidak kirim, tidak antre).
-  - Perintah Telegram selain `/login`/`/start` saat menunggu login dibalas `sendDirect()` berisi pengarahan login, lalu `continue` (tidak diproses).
-  - `/logout` memanggil `messageQueue.clearQueue()` + `MessageScheduler.cancelMessageSend(this)` agar antrean lama tidak terkirim setelah login.
-  - `sendPhotoFileUnlocked()`, `sendAudioFile()`, `sendVideoFile()`: saat menunggu login, file dihapus dan mengembalikan `DROPPED` (tidak disimpan untuk dikirim kemudian).
-  - `SendMessageWorker.guardPreconditions()` + loop per pesan: saat menunggu login, antrean dibersihkan dan worker berhenti.
-  - `NotificationForwarderService.forwardLocked()`: notifikasi dibuang saat menunggu login (tidak dikirim/diantre).
-  - `CrashReporter`: laporan crash tidak dikirim saat menunggu login; komentar lama "always allow crash reports" dihapus.
-  - `README.md` + `CHANGELOG.md` diperbarui: setelah logout tidak ada laporan/foto/video/rekaman/notifikasi/antrean; hanya pengarahan login; monitoring tetap jalan dan laporan masuk lagi setelah login.
-- **CI/rilis**: `main` `39523529227` sukses; run rilis `main` `39523955950` + tag `39523977781` sukses (unit test + Detekt + build + publish); Release `v1.6.423` terbit dengan `redeye-v1.6.423-debug.apk` + `redeye-v1.6.423-release.apk`.
-- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (4 peringatan heuristik metode baru tanpa uji Android); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
-- **Uji perangkat belum**: logout saat antrean berisi pesan; SMS/panggilan/notifikasi masuk setelah logout (harus senyap); foto/video/rekaman setelah logout (file harus dibuang); login lagi (laporan harus jalan); Setup Test/Status sebelum login; perintah selain `/login` saat logout harus dibalas pengarahan, bukan diproses.
-- **Catatan desain**: gate memakai `preferencesManager.ownerUserId == 0L && accessPin.isNotEmpty()` agar setup tanpa PIN (mode pairing lama) tidak ikut terkunci; bila owner ingin mode tanpa PIN juga senyap sampai pairing, ubah definisi gate dan panduan pairing.
-
-## Sesi #290 (2026-10-21 04:20 UTC) — maraton Tinggi+Sedang audit #287 (2 rilis)
-- **Permintaan owner**: `lanjut` untuk mengeksekusi temuan Tinggi + Sedang audit #287 secara maraton, rilis bertahap. Basis `e02604d` (`v1.6.423`), pohon bersih; CI antrean bersih sebelum mulai (`39523977781` / `39523955950` sukses).
-- **`v1.6.424`** (`versionCode` 451, patch `69f8a57`, rilis `f3b0803`, tag `v1.6.424`):
-  - T1 kehilangan data saat logout: `sendFitted()` dan `sendDailyDigest()` langsung `return false` saat `awaitingOwnerLogin()`, jadi kursor SMS/panggilan tidak maju dan data tidak masuk antrean yang nanti dibuang `SendMessageWorker`.
-  - T4 `CrashReporter`: balasan 400 `migrate_to_chat_id` (jalur HTML dan fallback teks) memakai `NetworkUtils.adoptMigratedChat()` sebelum `setCredentialError("400")`; laporan tetap di file dan dikirim ke Chat ID baru.
-  - S7 `SendMessageWorker`: balasan 403 diperiksa; bila body menandakan grup pindah, `adoptMigratedChat()` dan pesan dianggap `Failed` (dikirim ulang ke chat baru), bukan langsung `AuthFailed(403)`. Helper baru `classify403()`.
-  - S8: sisa chunk yang diantrekan karena 429 memanggil `NetworkUtils.noteRateLimited()` agar jalur kirim lain ikut menunggu.
-  - S5/S6 `MessageQueue`: `readLocked()` menangkap kegagalan `getString` → mode volatil + jadwal coba lagi 60 dtk (tidak melempar ke pemanggil); `tryRestorePersistent()` membatalkan restore bila baca masih gagal agar blob lama tidak ditimpa; `reopenAfterStorageReset()` dipanggil `PreferencesManager.recoverEncryptedStorage()` agar antrean memakai prefs baru setelah "Hapus kredensial".
-  - T2/T3/S10 tooling: `verifikasi-path.py` + `cek-cepat.sh` tidak lagi melewati baris `Regex(`/`Pattern.compile`; mode `--semua` memindai token di seluruh pohon terlacak (`git grep`, diuji dengan file token sintetis lalu dihapus); rentang diff tak valid memakai `git show --patch HEAD`; `masih_didefinisikan()` hanya mencocokkan deklarasi `fun`, bukan pemanggilan. `.gitignore` menambah `__pycache__/` + `*.pyc`.
-- **`v1.6.425`** (`versionCode` 452, patch `086e225`, rilis `5c584e8`, tag `v1.6.425`):
-  - S13 `CameraService`: `forceReset()` menangkap `activeRecorder?.surface` dan melepasnya; `finishWithError()` melepas recorder/surface di luar guard `sessionSeq`, sehingga sesi yang digantikan watchdog tidak meninggalkan Surface/MediaRecorder.
-  - S14 `Background`: executor khusus receiver (`RedEyeRecv`, 1 thread) terpisah dari `critical`, jadi receiver tidak mengantre di belakang unggahan panjang tetapi tetap serial antar-receiver.
-  - S15 `NotificationForwarderService.forwardLocked()`: `CancellationException` mengembalikan pesan ke antrean + menjadwalkan kirim sebelum rethrow.
-  - S17 `SmsRepository`/`CallLogRepository`: query exact memakai varian nomor `norm`, `+norm`, `wantAlt`, `+wantAlt` (bukan hanya `norm`), sehingga tidak selalu jatuh ke LIKE + paging 4×500.
-  - S18 `AndroidManifest.xml`: `BootReceiver`, `TimeChangeReceiver`, `PackageChangeReceiver` jadi `android:exported="false"` (broadcast sistem tetap diterima; broadcast eksplisit dari app lain diblokir).
-  - S11 dokumentasi: `README.md` menyatakan PIN ikut backup terenkripsi dan PIN backup minimal 6 digit (sesuai `MIN_BACKUP_PIN`); `PRIVACY.md` tidak lagi menyatakan PIN dikecualikan dari backup atau dihapus saat token berubah.
-- **Ditunda dengan alasan**: S12 (masking OTP 4–12 digit terlalu luas) adalah trade-off privasi/produk yang disengaja #277, butuh keputusan owner; S16 (inisialisasi `PreferencesManager` di main thread) butuh refactor + uji perangkat; S19 (`sendFitted` membuang permanen setelah batas retry) adalah keputusan #287 yang terdokumentasi. `MessageQueue` tetap menulis ulang JSON penuh per `addMessage`; backoff 429 masih memory-only.
-- **CI/rilis**: run `main` + tag `v1.6.424` (`39542644334` / `39542664987`) sukses; run `main` + tag `v1.6.425` (`39543414376` / `39543442234`) sukses (unit test + Detekt + build + publish). Kedua Release memuat APK debug & release berversi. Build lokal tidak dijalankan (tanpa SDK/Gradle/emulator).
-- **Validasi tiap batch**: `python3 tools/verifikasi-path.py` LOLOS (hanya peringatan heuristik metode baru tanpa uji Android); `bash scripts/cek-cepat.sh` 0; XML `AndroidManifest.xml` valid via `xml.dom.minidom`; `git diff --check` bersih; `--semua` dan rentang `0000000...HEAD` diuji.
-- **Uji perangkat belum**: logout saat antrean berisi data (data harus muncul setelah login, tidak hilang); upgrade grup saat kirim 400/403 (chat baru dipakai); "Hapus kredensial" saat antrean terisi; video yang di-force-reset (Surface tidak bocor); notifikasi saat service dibatalkan; boot/timezone/package broadcast di perangkat nyata setelah `exported=false`; pencarian SMS/panggilan dengan format `+62`/`0`/tanpa awalan.
-
-## Sesi #291 (2026-10-21 04:55 UTC) — fitur daftar semua kontak
-- **Permintaan owner**: menanyakan apakah sudah ada fitur "tampilkan semua kontak"; setelah dijelaskan bahwa `/contacts` hanya mencari (maks 10), owner memilih opsi 1: `/contacts` tanpa argumen + `/contacts <halaman>`.
-- **`v1.6.426`** (`versionCode` 453, patch `bb91c79`, rilis `ddb7c13`, tag `v1.6.426`):
-  - `ContactsPaging` (`utils/ContactsPaging.kt`): `PAGE_SIZE = 30`, `pageArg()` memetakan argumen kosong → halaman 1, angka 1–999 → halaman, sedangkan nama/nomor telepon (≥4 digit atau berawalan `0`) → pencarian. Diuji JVM di `ContactsPagingTest`.
-  - `handleContactsCommand()`: izin `READ_CONTACTS` dicek lebih dulu; argumen halaman memanggil `showContactsPage()`; argumen lain tetap memakai `searchContacts()` lama (maks 10).
-  - `showContactsPage()`: `countContacts()` menghitung total baris `Phone.CONTENT_URI`, `listContactsPage()` mengambil 30 baris sesuai offset (lewati baris sebelum offset, tanpa Bundle LIMIT/OFFSET agar aman di API 24+), nama/nomor dipotong 60/40 karakter, header menampilkan `halaman X/Y (N nomor)`, footer navigasi `⬅️ /contacts N-1` / `➡️ /contacts N+1`. Halaman di luar total dan daftar kosong punya pesan sendiri.
-  - Menu Komunikasi: tombol baru **📇 Semua kontak** (`x:contacts 1`) di samping **👥 Cari kontak**; baris **📜 Riwayat nomor** dipindah ke baris sendiri. Deskripsi `BotCommand` dan prompt/note `TextInput` diperbarui.
-  - `README.md` + `CHANGELOG.md` diperbarui.
-- **Desain/pagani**: offset dihitung dari baris mentah; baris tanpa nama/nomor tetap ditampilkan sebagai `(tanpa nama)`/`(tanpa nomor)` agar offset antarhalaman konsisten. Tidak ada deduplikasi nomor ganda (satu baris = satu nomor kontak). Nomor telepon 3 digit (mis. `123`) akan dianggap halaman; nomor ≥4 digit tetap pencarian.
-- **CI/rilis**: run `main` `39546159104` + tag `39546180039` sukses (unit test + Detekt + build + publish); Release `v1.6.426` memuat APK debug & release berversi.
-- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (7 peringatan heuristik metode baru tanpa uji Android); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
-- **Uji perangkat belum**: izin Kontak ditolak/diberi; kontak >30 (navigasi halaman 1↔2 dan halaman terakhir); `/contacts 999` saat total halaman lebih kecil; pencarian nama dan nomor 4+ digit; tombol **📇 Semua kontak**; kontak tanpa nama/nomor; perubahan kontak saat halaman dibuka.
-
-## Sesi #292 (2026-10-21 05:05 UTC) — navigasi kontak berbasis tombol
-- **Permintaan owner**: memastikan fitur daftar kontak "semuanya berbasis tombol". Sebelumnya entri lewat tombol, tetapi navigasi halaman masih teks `/contacts N`.
-- **`v1.6.427`** (`versionCode` 454, patch `fbd1153`, rilis `7fd52ed`, tag `v1.6.427`):
-  - `showContactsPage()` mengirim inline keyboard `⬅️ Sebelumnya` / `Berikutnya ➡️` dengan callback `x:contacts <halaman>`; halaman pertama hanya tombol berikutnya, halaman terakhir hanya tombol sebelumnya, satu halaman tanpa tombol.
-  - Halaman di luar total menampilkan tombol `⬅️ Halaman <totalPages>` agar bisa langsung kembali.
-  - Teks `/contacts <halaman>` tetap diterima sebagai alternatif; pencarian nama/nomor tetap lewat tombol **👥 Cari kontak** + input teks karena nama tidak bisa dienumerasi tombol.
-  - `README.md` + `CHANGELOG.md` diperbarui.
-- **Catatan perilaku**: callback `x:contacts N` tergolong `SENSITIVE_COMMANDS`, jadi tunduk pada gerbang umur `MUTATING_MAX_AGE_SEC = 300` detik; tombol pada pesan daftar yang lebih lama dari 5 menit akan ditolak dengan "Menu kedaluwarsa". Ini konsisten dengan tombol sensitif lain, bukan bug.
-- **CI/rilis**: run tag `39547377959` sukses; run `main` `39547357148` menyusul sukses; Release `v1.6.427` memuat APK debug & release.
-- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS (2 peringatan heuristik); `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih; tanpa Gradle/SDK/emulator lokal.
-- **Uji perangkat belum**: tombol Sebelumnya/Berikutnya di halaman 1/tengah/terakhir, halaman di luar total, tombol pada pesan >5 menit, dan tombol "Semua kontak" dari menu setelah pesan menu diedit.
-
-## Sesi #293 (2026-10-21 06:45 UTC) — menu command owner diringkas
-- **Permintaan owner**: mengeluh command menumpuk di menu ☰ dan ingin menu hanya berisi `help` dan `ping`.
-- **Penyebab**: `registerBotCommands()` mendaftarkan `botCommandList()` (±52 perintah) sebagai `setMyCommands` scope `chat` owner; scope publik hanya `ping`/`start`/`help` (+`login` saat PIN aktif & owner kosong). Jadi menu owner memang panjang.
-- **`v1.6.428`** (`versionCode` 455, patch `6061c24`, rilis `1a9bf13`, tag `v1.6.428`):
-  - `botCommandList()` kini hanya `help` ("Bantuan / menu tombol") dan `ping` ("Cek delay").
-  - `publicCommandList()` sengaja TIDAK diubah: tetap `ping`, `start`, `help` (dan `login` bila perlu) untuk pairing/login sebelum owner tertaut.
-  - `README.md` + `CHANGELOG.md` mencatat menu ☰ owner hanya dua perintah; perintah lain tetap bisa diketik dan pintasan tombolnya ada di `/help`.
-  - Karena `tokenHash` registrasi menyertakan `BuildConfig.VERSION_CODE`, bump versi memaksa menu didaftarkan ulang saat service start berikutnya (atau `/sembuh`).
-- **CI/rilis**: run tag `39556756140` dan `main` `39556713567` sukses (unit test + Detekt + build + publish); Release `v1.6.428` memuat APK debug & release.
-- **Validasi**: `python3 tools/verifikasi-path.py` LOLOS; `bash scripts/cek-cepat.sh` 0; `git diff --check` bersih.
-- **Uji perangkat belum**: buka ulang chat owner setelah update (menu harus 2 item), cek scope publik dari akun lain (tetap 3/4 item), pastikan `/help` masih membuka panel tombol dan perintah manual tetap jalan.
-
-## Sesi #294 (2026-10-21 08:10 UTC) — fitur 1/3/4: pemakaian aplikasi, proteksi tamper, pantau kata (3 rilis)
-- **Permintaan owner**: implementasi fitur monitoring berbasis Aksesibilitas: (1) pemakaian aplikasi/screen time real-time + alert, (3) proteksi tamper (aksesibilitas/admin/uninstall/sumber tak dikenal/opsi pengembang), dan (4) alert kata kunci di aplikasi terpilih. Rilis bertahap, build hanya GitHub Actions, tanpa SDK/Gradle/emulator lokal.
-- **Basis**: `1a9bf13` (`v1.6.428`), pohon bersih. Tiga rilis berurutan; tiap rilis ditunggu CI `main` + tag sampai Release terbit sebelum lanjut.
-- **`v1.6.429`** (`versionCode` 456, patch `41a5fd7`, perbaikan kompilasi `665af93`, tag `v1.6.429`, run tag `39563127571` sukses):
-  - `A11yMonitor` baru: melacak app foreground via `TYPE_WINDOW_STATE_CHANGED`, agregat harian per paket (durasi, jumlah buka, buka terakhir, pemakaian malam), sesi layar mati/nyala, alert app pertama kali dibuka + alert app dibuka malam (maks 1/30 menit).
-  - `A11yUsageMath` + `A11yUsageMathTest` untuk irisan waktu malam; `PreferencesManager` menyimpan agregat JSON, daftar app dikenal, status alert, dan kesehatan Aksesibilitas.
-  - `ShotAccessibilityService` memanggil monitor; `MonitoringService` menambah `/appalert on|off|status`, fallback `/layar` tanpa Usage Access, baris status/ringkas, dan `checkAccessibilityHealth()` (alert bila layanan dimatikan, cooldown 6 jam).
-  - Setup menampilkan tombol Aksesibilitas di semua versi (fitur jalan sejak API 24; screenshot tetap API 30+); string/README/CHANGELOG diperbarui.
-  - CI pertama gagal kompilasi: `a11yKnownApps()` mengembalikan `Set` (bukan mutable), `TimeFmt.dayKey()` butuh timestamp, dan `ShotAccessibilityService.isEnabled(this)` di dalam `buildString` menunjuk `StringBuilder`. Diperbaiki (`MutableSet`, `dayKey(System.currentTimeMillis())`, `this@MonitoringService`), lalu tag dihapus/dibuat ulang pada commit fix.
-- **`v1.6.430`** (`versionCode` 457, patch `ea156bd`, rilis `41ce241`, tag `v1.6.430`, run main `39564778217` + tag `39564805090` sukses):
-  - `TamperGuard` + `TamperGuardTest`: klasifikasi layar sensitif (Aksesibilitas, admin perangkat, detail/hapus aplikasi sendiri, sumber tak dikenal, opsi pengembang), hanya untuk paket Settings/installer/OEM security yang dikenal atau class sensitif.
-  - `shot_accessibility.xml` kini `canRetrieveWindowContent="true"`; saat layar sensitif terdeteksi, `A11yMonitor` mengambil teks layar terbatas (maks 160 node/80 teks) lalu menutup layar dengan `GLOBAL_ACTION_HOME` dan mengirim alert (cooldown 5 menit per alasan).
-  - `/lindungi on|off|status` (default nyala), tombol menu **🛡️ Proteksi**, status di `/status` + `/ringkas`, dan `checkAccessibilityHealth()` tidak berjalan saat proteksi dimatikan.
-  - Blokir hanya saat monitoring aktif/consented; app detail aplikasi lain tidak diblokir. Untuk mengubah setelan HP anak, owner harus `/lindungi off` dulu (didokumentasikan di README).
-- **`v1.6.431`** (`versionCode` 458, patch `09c8a7e`, rilis `38f25b2`, tag `v1.6.431`, run main `39565884669` + tag `39565911206` sukses):
-  - `AppWatch` + `AppWatchTest`: parser kata yang sama dengan `/watch` (pisah koma/spasi/titik koma, minimal 3 karakter, maks 10), pencocokan case-insensitive, dan filter paket sensitif (bank/pay/wallet/password manager/browser/settings/system UI/e-wallet Indonesia).
-  - `/watch` di `MonitoringService` memakai `AppWatch` (SMS/notifikasi dan fitur baru berbagi logika).
-  - `A11yMonitor` menerima `TYPE_WINDOW_CONTENT_CHANGED` untuk app terpilih; snapshot layar dibatasi, `isPassword` pada node mana pun membuat seluruh layar dilewati; scan maks tiap 3 detik per app.
-  - Alert hanya berisi label app + kata yang cocok + waktu; tidak menyimpan/mengirim isi pesan. Cooldown 15 menit per app+kata, maks 30 alert/hari (in-memory).
-  - `/pantauapp on|off|status|daftar|tambah <app|paket>|hapus <app|paket>`; default 15 app chat/sosial (WhatsApp, Telegram, Instagram, Facebook/Messenger, TikTok, Snapchat, X, Discord, LINE, Viber, Signal, Google/Samsung/AOSP Messages); `on` butuh kata `/watch` dan memakai default bila daftar kosong; `tambah/hapus` menerima label atau nama paket.
-  - Menu **🕵️ Pantau app**, baris status `/status`, README/CHANGELOG/string Aksesibilitas EN+ID diperbarui.
-- **Keputusan privasi**: P4 opt-in (default mati), P3 default nyala. Teks layar P4 hanya di memori untuk mencocokkan; tidak ada penyimpanan isi pesan. Password field, banking/payment/wallet, browser, Settings/System UI, dan aplikasi sendiri selalu dilewati walau ditambahkan manual. P3 hanya membaca teks pada layar Settings/installer yang sensitif.
-- **Catatan tooling**: metode bantu label app dinamai `appLabelFor()` karena `appLabel` ada di `tools/bekas-hapusan.txt` dan `verifikasi-path.py` menolak pemanggilan nama itu.
-- **Validasi tiap rilis**: XML 23 berkas valid via `xml.dom.minidom`; `git diff --check` bersih; `bash scripts/cek-cepat.sh` 0; `python3 tools/verifikasi-path.py` LOLOS (hanya peringatan heuristik metode baru tanpa uji Android + pola `.split`), `grep` token/chat ID hanya menemukan nama konstanta, bukan nilai secret. Tanpa Gradle/SDK/emulator lokal — build diverifikasi GitHub Actions.
-- **Release**: `v1.6.429`, `v1.6.430`, `v1.6.431` masing-masing terbit dengan `redeye-vX.Y.Z-debug.apk` + `redeye-vX.Y.Z-release.apk` (state `uploaded`).
-- **Uji perangkat belum**: tracking app saat layar mati/nyala dan lintas launcher; alert app pertama/malam; blokir tiap layar tamper di OEM Samsung/Xiaomi/OPPO/vivo; P4 di WhatsApp/Telegram/Instagram (pesan baru, layar password, banking, browser); `tambah/hapus` label app dengan nama mirip; batas 30 alert/hari; perilaku setelah service di-restart (cooldown in-memory reset).
 
 ## Sesi #295 (2026-10-21 10:35 UTC) — audit putaran-7 + maraton perbaikan (2 rilis)
 - **Permintaan owner**: audit menyeluruh repo (bug/kode tidak efisien/kode sampah) lalu `lanjut` → mode perbaiki maraton sesuai `AGENTS.md` §5 + rilis §8.
@@ -434,3 +332,13 @@
 - **Kerapian**: tidak ditemukan dead helper baru. Catatan lama `MonitoringService.kt` tetap sangat besar (9.695 baris/217 fungsi privat); audit statis tidak menemukan batas aman untuk pemindahan kecil tanpa mengubah arsitektur.
 - **Validasi audit**: `git status --short` kosong; `git diff --check` bersih; grep `BOT_TOKEN|CHAT_ID` hanya menemukan nama konstanta/regex, tidak ada token asli. Tidak menjalankan tes/Gradle lokal. Run GitHub Actions terakhir tag `v1.6.471` sukses.
 - **Status akhir**: audit selesai baca-saja; 2 temuan Sedang dan 2 temuan Rendah bersyarat diserahkan untuk sesi perbaikan berikutnya.
+
+## Sesi #314 (2026-10-24 06:05 UTC) — perbaikan empat temuan audit #313
+- **Permintaan owner**: "perbaiki semuanya" untuk empat temuan audit menyeluruh #313. Basis `63010b1` (`v1.6.471`, `versionCode` 498), tree bersih.
+- **`v1.6.472`** (`versionCode` 499, patch `38c6542`, rilis `396cc6b`): respons 401/403 hanya menulis/menghapus status auth jika token + chat ID request masih sama dengan kredensial tersimpan; diterapkan pada worker, monitoring, notification forwarder, CrashReporter, dan Setup. Mencegah request lama memblokir kredensial baru.
+- **`v1.6.473`** (`versionCode` 500, patch `358d738` + penguatan race `277b27e`, catatan changelog `bb0b3b1`, rilis `6b8cc77`): counter notifikasi drop tidak dihapus saat startup; flush menghapus counter hanya setelah `MessageQueue.addMessage()` sukses, memulihkannya saat gagal, dan melacak count in-flight supaya shutdown tidak menghilangkan count.
+- **`v1.6.474`** (`versionCode` 501, patch `7128294`, rilis `fb58a45`): `removeMessages()` melaporkan hasil dan mencoba persist tiga kali; worker mengulang flush pada jalur penting. `registerWithBudget()` tidak lagi melaporkan drop jika mutasi retry gagal tersimpan dan memulihkan state semula.
+- **`v1.6.475`** (`versionCode` 502, patch `1c43d71`, rilis `95c3fde`): `setChatIdSync()` mengembalikan hasil `commit()`; `NetworkUtils.adoptMigratedChat()` hanya clear error/refresh/announce dan sukses jika ID baru tersimpan.
+- **CI/rilis**: main patch `40065318591`, `40066146467`, `40066396105`, `40067286958`, `40068031225` sukses. Main/tag rilis `v1.6.472` (`40065666840`/`40065683679`), `v1.6.473` (`40066747061`/`40066761477`), `v1.6.474` (`40067583534`/`40067597312`), dan `v1.6.475` (`40068344320`/`40068356405`) semua sukses; Release `v1.6.475` memuat debug + release APK.
+- **Validasi**: `python3 tools/verifikasi-path.py --semua`, `bash scripts/cek-cepat.sh`, `git diff --check`, dan pemeriksaan token lolos; peringatan verifikasi path hanya heuristik metode baru tanpa jejak uji. Tidak menjalankan Gradle/SDK lokal; build dan tes unit/Detekt diverifikasi melalui GitHub Actions.
+- **Status akhir**: repo aplikasi bersih di `main`, tag terakhir `v1.6.475`, `versionCode` 502; keempat temuan #313 tertutup. Uji perangkat/storage failure tetap belum dilakukan.
