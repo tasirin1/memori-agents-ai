@@ -1,14 +1,16 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (sesi #289–#311). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
+> Memori aktif (sesi #289–#312). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-24 04:25 UTC = sesi #311)
+## Status terakhir (2026-10-24 04:56 UTC = sesi #312)
 
+- Sesi #312 = **perbaikan temuan audit #311** (2 rilis). Basis `1481bd7` (`v1.6.469`, `versionCode` 496) → kini `63010b1` + tag `v1.6.471` (`versionCode` 498), pohon aplikasi bersih. Rilis `v1.6.470` memperbaiki benturan key deduplikasi notifikasi SHA-256; `v1.6.471` menghapus `SettingsBackup.looksLikeBackup()` yang tidak terpakai dan memasukkannya ke daftar bekas hapusan. Build main/tag kedua rilis sukses + Release debug/release APK.
+- Catatan struktur besar `MonitoringService.kt` **belum direfactor**: audit hanya membuktikan ukuran/cakupan tanggung jawab, bukan satu bug; ekstraksi lintas banyak state/method perlu refactor arsitektur tersendiri dan pembuktian perilaku.
 - Sesi #307 = **lanjutan audit putaran-10: batch Tinggi + Sedang jaringan/worker + tooling** (4 rilis: `v1.6.461`–`v1.6.464`). Basis `f392fad` (`v1.6.460`, `versionCode` 487) → kini `1d061fd` + tag `v1.6.464` (`versionCode` 491), pohon bersih; run `main`/tag keempat rilis semuanya sukses + GitHub Release 2 APK. Build via GitHub Actions (tanpa Gradle/SDK lokal).
 - Sesi #305 = **audit putaran-10 + batch Kritikal/Tinggi + sebagian Sedang** (2 rilis: `v1.6.458`, `v1.6.459`). Basis `2e9faa7` (`v1.6.457`, `versionCode` 484) → kini `7e102e4` + tag `v1.6.459` (`versionCode` 486), pohon bersih; run `main`/tag `v1.6.458` (`39870356726`/`39871080310`) dan `v1.6.459` (`39871959414`/`39872657407`) semuanya sukses + GitHub Release. Build via GitHub Actions (tanpa Gradle/SDK lokal).
 - Sesi #304 = **lanjutan audit #302: S8 + Rendah aman** (`v1.6.456`, `v1.6.457`).
@@ -410,3 +412,12 @@
 - **Kandidat tidak dinaikkan**: hitungan drop antrean (`MessageQueue.kt:644-649`) mengambil nilai lalu mengosongkan counter sebelum keberhasilan persist; jalur biasa mengirim notifikasi drop dan mengantrekan fallback bila kirim gagal, jadi tidak cukup bukti untuk klaim kehilangan laporan sebagai bug umum. Potensi hanya pada kegagalan storage beruntun. Klaim worker/network lain juga tidak terbukti.
 - **Validasi audit**: `git status --short` kosong; grep pola token numerik tidak menemukan kredensial. Run CI terakhir pada tag `v1.6.469` sukses (build GitHub Actions; tanpa build lokal).
 - **Status akhir**: audit baca-saja selesai. Temuan utama `NotificationForwarderService.kt:403`; kode mati di `SettingsBackup.kt:16`; catatan struktur besar di `MonitoringService.kt`. Tidak ada patch atau rilis aplikasi.
+
+
+## Sesi #312 (2026-10-24 04:56 UTC) — perbaikan audit #311 (v1.6.470–v1.6.471)
+- **Permintaan owner**: `perbaiki` temuan audit menyeluruh. Basis `1481bd7` (`v1.6.469`, `versionCode` 496), branch `main`, working tree awal bersih.
+- **v1.6.470** (`c78e07f` perbaikan + `92a38bf` rilis, `versionCode` 497): `NotificationForwarderService.emitPost()` kini menyusun key deduplikasi dari SHA-256 atas package/title/body dengan panjang byte berawalan 4 byte per bagian; tabrakan `String.hashCode()` seperti `Aa`/`BB` tak lagi menekan notifikasi berbeda. Changelog diperbarui. CI main `40062698133` dan `40062966601` sukses; CI tag `40063367767` sukses; Release berisi kedua APK.
+- **v1.6.471** (`ad5ebc1` cleanup + `63010b1` rilis, `versionCode` 498): helper `SettingsBackup.looksLikeBackup()` tanpa pemanggil dihapus; nama dimasukkan ke `tools/bekas-hapusan.txt`; pemeriksaan tetap memakai `looksStructurallyValid()`. CI main `40063506351` dan `40063834021` sukses; CI tag `40064223206` sukses; Release berisi kedua APK.
+- **Validasi**: `python3 tools/verifikasi-path.py --semua` LOLOS, `bash scripts/cek-cepat.sh` 0, `git diff --check` bersih; kait pre-push berjalan pada tiap push. Tidak ada Gradle/SDK lokal. Antrean terakhir hanya run sukses; working tree repo aplikasi bersih pada `63010b1`.
+- **Belum dikerjakan**: pemecahan `MonitoringService.kt` (9.695 baris/217 fungsi privat) bukan bug terlokalisasi; class berbagi banyak state dan helper. Memecahnya secara aman memerlukan refactor arsitektur terpisah dengan pembuktian byte/token dan review sendiri, bukan perubahan kecil tanpa risiko.
+- **Status akhir**: dua temuan langsung ditutup dan dirilis; debt pemisahan `MonitoringService` tetap terbuka, tanpa patch/branch tambahan.
