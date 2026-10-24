@@ -1,13 +1,13 @@
 # Memori Sesi — Red Eye Mobile
 
-> Memori aktif (sesi #289–#307). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
+> Memori aktif (sesi #289–#311). Arsip: `archive/Red-Eye-Mobile-arsip.md` (sesi #2–#288; rincian batch pengarsipan ada di baris "Arsip memori" bawah).
 
 ## Proyek
 
 - Repo: `tasirin1/Red-Eye-Mobile` — aplikasi Android (build SELALU di GitHub Actions; lokal hanya edit + cek sintaks ringan + validasi XML).
 - Branch: `main`. Aturan main (ringkas dari `AGENTS.md`): jangan install SDK lokal; jangan commit secret (bot token/chat ID); changelog Keep a Changelog untuk perubahan perilaku/build/workflow; rilis via bump `versionCode`/`versionName` + tag `vX.Y.Z`.
 
-## Status terakhir (2026-10-23 02:49 UTC = sesi #307)
+## Status terakhir (2026-10-24 04:25 UTC = sesi #311)
 
 - Sesi #307 = **lanjutan audit putaran-10: batch Tinggi + Sedang jaringan/worker + tooling** (4 rilis: `v1.6.461`–`v1.6.464`). Basis `f392fad` (`v1.6.460`, `versionCode` 487) → kini `1d061fd` + tag `v1.6.464` (`versionCode` 491), pohon bersih; run `main`/tag keempat rilis semuanya sukses + GitHub Release 2 APK. Build via GitHub Actions (tanpa Gradle/SDK lokal).
 - Sesi #305 = **audit putaran-10 + batch Kritikal/Tinggi + sebagian Sedang** (2 rilis: `v1.6.458`, `v1.6.459`). Basis `2e9faa7` (`v1.6.457`, `versionCode` 484) → kini `7e102e4` + tag `v1.6.459` (`versionCode` 486), pohon bersih; run `main`/tag `v1.6.458` (`39870356726`/`39871080310`) dan `v1.6.459` (`39871959414`/`39872657407`) semuanya sukses + GitHub Release. Build via GitHub Actions (tanpa Gradle/SDK lokal).
@@ -399,3 +399,14 @@
 - **Validasi lokal**: `python3 tools/verifikasi-path.py --semua` dan `bash scripts/cek-cepat.sh` lolos; `git diff --check` bersih; XML `values`/`values-in` valid; `bash -n builder.sh` lolos. Guard memberi peringatan nonfatal untuk metode yang tidak punya uji langsung; tidak dijalankan tes unit atau Gradle lokal sesuai instruksi sesi.
 - **Sisa**: catatan rendah bahwa `MonitoringService.kt` sangat besar tidak direfactor; tidak ada batas modul yang aman untuk patch kecil, perlu pekerjaan refactor terpisah dengan verifikasi perilaku. Uji perangkat untuk pemulihan storage/keberhasilan commit tetap belum dilakukan.
 - **Status akhir**: working tree repo aplikasi bersih di `main`, tag terakhir `v1.6.469`; GitHub Release berisi `redeye-v1.6.469-debug.apk` dan `redeye-v1.6.469-release.apk`.
+
+
+## Sesi #311 (2026-10-24 04:25 UTC) — audit menyeluruh putaran-12 (read-only)
+- **Permintaan owner**: cek seluruh area pelan-pelan dan teliti untuk bug, inefisiensi, kode mati, dan kerapian. Basis `1481bd7` (`v1.6.469`, `versionCode` 496); working tree bersih. Antrean 10 run GitHub Actions terakhir sukses; audit tidak mengubah repo aplikasi.
+- **Metode**: 3 sub-agen meninjau UI/data, services, serta workers/network/repository/receivers; saya meninjau sendiri utils, manifest/build/workflow, dan memverifikasi klaim kandidat langsung ke baris kode. Klaim lain tidak dinaikkan tanpa bukti. Tidak menjalankan Gradle/SDK lokal atau tes.
+- **Terverifikasi**: `NotificationForwarderService.kt:403-414` membuat key deduplikasi dari `hashCode()` + panjang judul/isi. Dua teks berbeda dengan hash Java sama dan panjang sama (contoh judul `Aa`/`BB`) di paket sama dalam 10 detik dianggap duplikat; pesan kedua hanya masuk riwayat `/lastnotif`, tidak diteruskan. Dampak rendah, tetapi nyata.
+- **Kode tak terpakai**: `SettingsBackup.looksLikeBackup()` (`SettingsBackup.kt:16-19`) tidak punya pemanggil di `app/src/main` maupun `app/src/test`; struktur backup kini diperiksa helper lain `looksStructurallyValid()`. Kandidat cleanup rendah.
+- **Catatan keterawatan**: `MonitoringService.kt` memiliki 9.695 baris dan 217 fungsi private; menggabungkan polling/perintah, pemantauan, kamera, audio/video, kontak, dan jalur lain dalam satu kelas. Ini bukan bukti bug atau masalah kecepatan runtime, tetapi membuat perubahan/peninjauan lebih sulit; ekstraksi aman sebaiknya jadi pekerjaan refactor terpisah.
+- **Kandidat tidak dinaikkan**: hitungan drop antrean (`MessageQueue.kt:644-649`) mengambil nilai lalu mengosongkan counter sebelum keberhasilan persist; jalur biasa mengirim notifikasi drop dan mengantrekan fallback bila kirim gagal, jadi tidak cukup bukti untuk klaim kehilangan laporan sebagai bug umum. Potensi hanya pada kegagalan storage beruntun. Klaim worker/network lain juga tidak terbukti.
+- **Validasi audit**: `git status --short` kosong; grep pola token numerik tidak menemukan kredensial. Run CI terakhir pada tag `v1.6.469` sukses (build GitHub Actions; tanpa build lokal).
+- **Status akhir**: audit baca-saja selesai. Temuan utama `NotificationForwarderService.kt:403`; kode mati di `SettingsBackup.kt:16`; catatan struktur besar di `MonitoringService.kt`. Tidak ada patch atau rilis aplikasi.
